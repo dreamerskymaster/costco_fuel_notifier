@@ -8,7 +8,6 @@ import gspread
 
 # --- CONFIGURATION ---
 ZIP_CODES = ["06460", "06854", "06901", "10801"] 
-TOP_TIER_BRANDS = ["Costco", "Shell", "Mobil", "Exxon", "Sunoco", "BP", "Valero", "Citgo"]
 
 # Pulling credentials from Environment Variables (GitHub Secrets)
 RECEIVER_EMAIL = os.environ.get("RECEIVER_EMAIL")
@@ -24,13 +23,13 @@ LOCATION_QUERY_PRICES = "query LocationBySearchTerm($brandId: Int, $cursor: Stri
 
 async def fetch_gas_prices():
     """
-    Fetches regular gas prices for configured ZIP codes via GasBuddy GraphQL API.
+    Fetches regular gas prices for configured ZIP codes via GasBuddy GraphQL API without brand restrictions.
 
     Establishes an HTTP session with browser headers to extract the CSRF token from GasBuddy,
-    queries the GraphQL endpoint for Top Tier brands, and constructs Waze deep links for navigation.
+    queries the GraphQL endpoint for all local gas stations, and constructs Waze deep links for navigation.
 
     Returns:
-        list[dict]: Deduplicated list of fuel station dictionaries sorted by price.
+        list[dict]: Deduplicated list of all local fuel station dictionaries sorted by price.
     """
     session = requests.Session()
     headers = {
@@ -69,8 +68,6 @@ async def fetch_gas_prices():
                 res = r.json().get("data", {}).get("locationBySearchTerm", {}).get("stations", {}).get("results", [])
                 for station in res:
                     name = station.get("name") or (station.get("address") or {}).get("line1", "Unknown Station")
-                    if not any(brand.lower() in name.lower() for brand in TOP_TIER_BRANDS):
-                        continue
                     prices = station.get("prices", [])
                     reg_gas = next((p for p in prices if p.get("fuelProduct") == "regular_gas"), None)
                     if not reg_gas:
@@ -92,7 +89,7 @@ async def fetch_gas_prices():
                         except Exception:
                             pass
                     
-                    search_query = urllib.parse.quote(f"{name} {zip_code}")
+                    search_query = urllib.parse.quote_plus(f"{name} {zip_code}")
                     waze_link = f"https://waze.com/ul?q={search_query}&navigate=yes"
                     
                     stations_data.append({
