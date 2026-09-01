@@ -1,0 +1,6 @@
+py_gasbuddy
+gspread
+google-auth
+requests
+backoff
+aiofiles
