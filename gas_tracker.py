@@ -1,5 +1,6 @@
 import os
 import asyncio
+import urllib.parse
 from datetime import datetime, timezone, timedelta
 import requests
 from py_gasbuddy import GasBuddy
@@ -25,8 +26,8 @@ async def fetch_gas_prices():
     """
     Fetches regular gas prices for configured ZIP codes via GasBuddy GraphQL API.
 
-    Establishes an HTTP session with browser headers to extract the CSRF token from GasBuddy
-    and queries the GraphQL endpoint for Top Tier brands and Costco fuel.
+    Establishes an HTTP session with browser headers to extract the CSRF token from GasBuddy,
+    queries the GraphQL endpoint for Top Tier brands, and constructs Waze deep links for navigation.
 
     Returns:
         list[dict]: Deduplicated list of fuel station dictionaries sorted by price.
@@ -90,6 +91,10 @@ async def fetch_gas_prices():
                                 is_stale = True
                         except Exception:
                             pass
+                    
+                    search_query = urllib.parse.quote(f"{name} {zip_code}")
+                    waze_link = f"https://waze.com/ul?q={search_query}&navigate=yes"
+                    
                     stations_data.append({
                         "name": name,
                         "zip": zip_code,
@@ -97,7 +102,8 @@ async def fetch_gas_prices():
                         "price": price,
                         "formatted_price": formatted_price,
                         "stale": is_stale,
-                        "last_updated": readable_time
+                        "last_updated": readable_time,
+                        "waze_link": waze_link
                     })
         except Exception as e:
             print(f"Failed fetching data for {zip_code}: {e}")
@@ -160,11 +166,11 @@ def send_email(stations):
         print("No stations found.")
         return
         
-    # Create a clean text summary
+    # Create a clean text summary with Waze navigation links
     summary = ""
     for s in stations[:10]:
         stale = " ⚠️ (Stale >12h)" if s["stale"] else ""
-        summary += f"• {s['name']} ({s['zip']}): {s['formatted_price']} | {s['distance']} mi | Updated: {s['last_updated']}{stale}\n\n"
+        summary += f"• {s['name']} ({s['zip']}): {s['formatted_price']} | {s['distance']} mi | Updated: {s['last_updated']}{stale}\n  🚗 Navigate: {s['waze_link']}\n\n"
     
     # Send form data to FormSubmit's AJAX API
     url = f"https://formsubmit.co/ajax/{RECEIVER_EMAIL}"
@@ -186,6 +192,7 @@ def send_email(stations):
             print(f"FormSubmit Notice: {res_data.get('message')}")
     except Exception as e:
         print(f"Failed to send email: {e}")
+
 
 async def main():
     print("Fetching gas prices...")
