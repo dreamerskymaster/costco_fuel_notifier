@@ -11,7 +11,9 @@ TOP_TIER_BRANDS = ["Costco", "Shell", "Mobil", "Exxon", "Sunoco", "BP", "Valero"
 
 # Pulling credentials from Environment Variables (GitHub Secrets)
 RECEIVER_EMAIL = os.environ.get("RECEIVER_EMAIL")
-SHEET_NAME = "Fuel Trends"
+SHEET_NAME = os.environ.get("SHEET_NAME", "Fuel Trends")
+SHEET_URL = os.environ.get("SHEET_URL")
+SHEET_ID = os.environ.get("SHEET_ID")
 SERVICE_ACCOUNT_FILE = "service_account.json"
 
 
@@ -117,7 +119,14 @@ def log_to_sheets(stations):
     try:
         # Authenticate and open the sheet
         gc = gspread.service_account(filename=SERVICE_ACCOUNT_FILE)
-        sheet = gc.open(SHEET_NAME).sheet1
+        
+        sheet = None
+        if SHEET_URL:
+            sheet = gc.open_by_url(SHEET_URL).sheet1
+        elif SHEET_ID:
+            sheet = gc.open_by_key(SHEET_ID).sheet1
+        else:
+            sheet = gc.open(SHEET_NAME).sheet1
         
         # Log the absolute cheapest station of the day for trend tracking
         best = stations[0]
@@ -130,9 +139,10 @@ def log_to_sheets(stations):
         sheet.append_row(row)
         print("Successfully logged lowest price to Google Sheets.")
     except gspread.exceptions.SpreadsheetNotFound:
-        print(f"Error: Google Sheet '{SHEET_NAME}' not found. Ensure the sheet is named exactly '{SHEET_NAME}' and shared as Editor with your service account email.")
+        print(f"Error: Google Sheet '{SHEET_NAME}' not found via Drive search. If shared, provide SHEET_URL or SHEET_ID.")
     except Exception as e:
         print(f"Could not write to Google Sheets: {e}")
+
 
 def send_email(stations):
     """
