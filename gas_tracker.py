@@ -105,6 +105,12 @@ async def fetch_gas_prices():
     return sorted_stations
 
 def log_to_sheets(stations):
+    """
+    Logs the lowest fuel price of the day to the 'Fuel Trends' Google Sheet.
+
+    Args:
+        stations (list[dict]): List of station objects sorted by price.
+    """
     if not stations:
         return
         
@@ -123,6 +129,8 @@ def log_to_sheets(stations):
         ]
         sheet.append_row(row)
         print("Successfully logged lowest price to Google Sheets.")
+    except gspread.exceptions.SpreadsheetNotFound:
+        print(f"Error: Google Sheet '{SHEET_NAME}' not found. Ensure the sheet is named exactly '{SHEET_NAME}' and shared as Editor with your service account email.")
     except Exception as e:
         print(f"Could not write to Google Sheets: {e}")
 
@@ -130,7 +138,7 @@ def send_email(stations):
     """
     Sends a digest of top fuel prices to RECEIVER_EMAIL via FormSubmit web API.
 
-    FormSubmit forwards HTTP POST data to the receiver's inbox without requiring
+    FormSubmit forwards form data to the receiver's inbox without requiring
     SMTP credentials or Gmail app passwords.
 
     Args:
@@ -140,23 +148,30 @@ def send_email(stations):
         print("No stations found.")
         return
         
-    # Create a clean text summary (FormSubmit renders text better than custom HTML)
+    # Create a clean text summary
     summary = ""
     for s in stations[:10]:
         stale = " ⚠️ (Stale >12h)" if s["stale"] else ""
         summary += f"• {s['name']} ({s['zip']}): {s['formatted_price']} | {s['distance']} mi | Updated: {s['last_updated']}{stale}\n\n"
     
-    # Send the data to FormSubmit's API
+    # Send form data to FormSubmit's AJAX API
     url = f"https://formsubmit.co/ajax/{RECEIVER_EMAIL}"
     payload = {
         "_subject": "Fuel Update: NYC Commute Route",
         "Top_10_Cheapest_Stations": summary,
         "_template": "box" # Wraps the email in a clean visual border
     }
+    headers = {
+        "Referer": "https://formsubmit.co"
+    }
     
     try:
-        response = requests.post(url, json=payload)
-        print(f"Email dispatched via FormSubmit: {response.status_code}")
+        response = requests.post(url, data=payload, headers=headers)
+        res_data = response.json()
+        if res_data.get("success") == "true":
+            print("Digest email sent successfully via FormSubmit.")
+        else:
+            print(f"FormSubmit Notice: {res_data.get('message')}")
     except Exception as e:
         print(f"Failed to send email: {e}")
 
@@ -168,3 +183,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
