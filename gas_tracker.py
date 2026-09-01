@@ -141,7 +141,9 @@ def log_to_sheets(stations):
     except gspread.exceptions.SpreadsheetNotFound:
         print(f"Error: Google Sheet '{SHEET_NAME}' not found via Drive search. If shared, provide SHEET_URL or SHEET_ID.")
     except Exception as e:
-        print(f"Could not write to Google Sheets: {e}")
+        err_msg = e.__cause__ if hasattr(e, "__cause__") and e.__cause__ else e
+        print(f"Could not write to Google Sheets: {err_msg}")
+
 
 
 def send_email(stations):
