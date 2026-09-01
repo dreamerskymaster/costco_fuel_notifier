@@ -111,14 +111,26 @@ async def fetch_gas_prices():
 
 def log_to_sheets(stations):
     """
-    Logs the lowest fuel price of the day to the 'Fuel Trends' Google Sheet.
+    Logs the lowest fuel price of the day to Google Sheets if it has changed since the last check.
 
     Args:
         stations (list[dict]): List of station objects sorted by price.
+
+    Returns:
+        bool: True if a new price/station was logged or if it's a new day; False if unchanged.
     """
     if not stations:
-        return
+        return False
         
+    best = stations[0]
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    row = [
+        today_str, 
+        best["name"], 
+        best["zip"], 
+        best["formatted_price"]
+    ]
+
     try:
         # Authenticate and open the sheet
         gc = gspread.service_account(filename=SERVICE_ACCOUNT_FILE)
@@ -131,22 +143,30 @@ def log_to_sheets(stations):
         else:
             sheet = gc.open(SHEET_NAME).sheet1
         
-        # Log the absolute cheapest station of the day for trend tracking
-        best = stations[0]
-        row = [
-            datetime.now().strftime("%Y-%m-%d"), 
-            best["name"], 
-            best["zip"], 
-            best["formatted_price"]
-        ]
+        all_rows = sheet.get_all_values()
+        
+        # Check if the last recorded price/station/date matches current best
+        if len(all_rows) > 1: # Header exists
+            last_row = all_rows[-1]
+            last_date = last_row[0] if len(last_row) > 0 else ""
+            last_name = last_row[1] if len(last_row) > 1 else ""
+            last_price = last_row[3] if len(last_row) > 3 else ""
+            
+            # If price and station match previous record on the same day, no change
+            if last_date == today_str and last_price == best["formatted_price"] and last_name == best["name"]:
+                print(f"Price unchanged ({best['formatted_price']} at {best['name']}). Skipping sheet append.")
+                return False
+
         sheet.append_row(row)
-        print("Successfully logged lowest price to Google Sheets.")
+        print("Successfully logged new price to Google Sheets.")
+        return True
     except gspread.exceptions.SpreadsheetNotFound:
         print(f"Error: Google Sheet '{SHEET_NAME}' not found via Drive search. If shared, provide SHEET_URL or SHEET_ID.")
+        return True # Default to True so email delivers even if sheets logging is skipped
     except Exception as e:
         err_msg = e.__cause__ if hasattr(e, "__cause__") and e.__cause__ else e
         print(f"Could not write to Google Sheets: {err_msg}")
-
+        return True
 
 
 def send_email(stations):
@@ -172,7 +192,7 @@ def send_email(stations):
     # Send form data to FormSubmit's AJAX API
     url = f"https://formsubmit.co/ajax/{RECEIVER_EMAIL}"
     payload = {
-        "_subject": "Fuel Update: NYC Commute Route",
+        "_subject": "Fuel Update : Norwalk",
         "Top_10_Cheapest_Stations": summary,
         "_template": "box" # Wraps the email in a clean visual border
     }
@@ -194,9 +214,20 @@ def send_email(stations):
 async def main():
     print("Fetching gas prices...")
     stations = await fetch_gas_prices()
-    log_to_sheets(stations)
-    send_email(stations)
+    if not stations:
+        print("No stations found.")
+        return
+        
+    price_changed = log_to_sheets(stations)
+    
+    force_email = os.environ.get("FORCE_EMAIL", "false").lower() == "true"
+    if price_changed or force_email:
+        print("Price change detected (or FORCE_EMAIL active). Sending email digest...")
+        send_email(stations)
+    else:
+        print("Fuel price unchanged since last check. Email notification skipped to prevent inbox clutter.")
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 

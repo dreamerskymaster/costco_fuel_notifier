@@ -2,7 +2,8 @@ name: Daily Gas Price Tracker
 
 on:
   schedule:
-    - cron: '30 10 * * 1-5'
+    - cron: '0 */3 * * *'
+
   workflow_dispatch:
 
 jobs:
