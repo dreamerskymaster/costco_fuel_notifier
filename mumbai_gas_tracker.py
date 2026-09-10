@@ -277,15 +277,15 @@ def send_mumbai_digest_email(petrol_stations, diesel_stations):
         print("Error: SENDER_EMAIL or SENDER_PASSWORD not configured.")
         return
 
-    recipient = RECEIVER_EMAIL
-    if not recipient:
+    recipient_list = [r.strip() for r in RECEIVER_EMAIL.split(",") if r.strip()]
+    if not recipient_list:
         print("Error: RECEIVER_EMAIL not set.")
         return
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = "⛽ Versova to Ghansoli Commute Fuel Digest & Vehicle Care"
     msg["From"] = SENDER_EMAIL
-    msg["To"] = recipient
+    msg["To"] = ", ".join(recipient_list)
 
     # Calculate full tank estimates for Hyundai Venue (45L)
     lowest_petrol = petrol_stations[0] if petrol_stations else {"listed_price": 103.95, "formatted_price": "₹103.95/L"}
@@ -385,7 +385,7 @@ def send_mumbai_digest_email(petrol_stations, diesel_stations):
           
           <!-- Footer -->
           <div style="padding: 12px 16px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; text-align: center;">
-            Mumbai Fuel Notifier • Customized commute mailer for {recipient}
+            Mumbai Fuel Notifier • Customized commute mailer for {", ".join(recipient_list)}
           </div>
         </div>
       </body>
@@ -398,9 +398,9 @@ def send_mumbai_digest_email(petrol_stations, diesel_stations):
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=15)
         server.starttls()
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
-        server.sendmail(SENDER_EMAIL, recipient, msg.as_string())
+        server.sendmail(SENDER_EMAIL, recipient_list, msg.as_string())
         server.quit()
-        print(f"Personalized Mumbai commute digest email sent successfully via SMTP to {recipient}.")
+        print(f"Personalized Mumbai commute digest email sent successfully via SMTP to {', '.join(recipient_list)}.")
         return True
     except Exception as e:
         print(f"Failed to send personalized Mumbai digest email: {e}")
