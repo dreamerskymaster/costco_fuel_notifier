@@ -13,11 +13,16 @@ import gspread
 ZIP_CODES = ["06460", "06854", "06901", "10801"] 
 
 # Pulling credentials from Environment Variables (GitHub Secrets)
-SENDER_EMAIL = os.environ.get("SENDER_EMAIL")
-SENDER_PASSWORD = os.environ.get("SENDER_PASSWORD")
-RECEIVER_EMAIL = os.environ.get("RECEIVER_EMAIL") or SENDER_EMAIL
-SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+SENDER_EMAIL = (os.environ.get("SENDER_EMAIL") or "").strip()
+SENDER_PASSWORD = (os.environ.get("SENDER_PASSWORD") or "").strip()
+RECEIVER_EMAIL = (os.environ.get("RECEIVER_EMAIL") or "").strip() or SENDER_EMAIL
+
+raw_smtp_server = (os.environ.get("SMTP_SERVER") or "").strip()
+SMTP_SERVER = raw_smtp_server if raw_smtp_server else "smtp.gmail.com"
+
+raw_smtp_port = (os.environ.get("SMTP_PORT") or "").strip()
+SMTP_PORT = int(raw_smtp_port) if raw_smtp_port.isdigit() else 587
+
 SHEET_NAME = os.environ.get("SHEET_NAME", "Fuel Trends")
 SHEET_URL = os.environ.get("SHEET_URL")
 SHEET_ID = os.environ.get("SHEET_ID")
