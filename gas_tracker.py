@@ -43,15 +43,15 @@ def get_card_optimization(station_name, listed_price):
     is_costco = "costco" in station_name.lower()
     
     if is_costco:
-        card_name = "Citi Costco Visa (4%)"
+        card_name = "Citi Costco (4%)"
         reward_pct = "4%"
         discount_rate = 0.04
         card_note = "Visa Only"
     else:
-        card_name = "Citi Costco Visa (4%) [or Amex BCE 3%]"
+        card_name = "Citi 4% / Amex 3%"
         reward_pct = "4%"
         discount_rate = 0.04
-        card_note = "Primary 4% / Secondary 3%"
+        card_note = "Citi 4% or Amex 3%"
         
     net_price = round(listed_price * (1 - discount_rate), 2)
     formatted_net = f"${net_price:.2f}"
@@ -222,6 +222,7 @@ def log_to_sheets(stations):
 def send_email_smtp(summary, stations):
     """
     Sends email via standard SMTP (e.g. Gmail SMTP with App Password).
+    Renders a responsive HTML template optimized for both Mobile and Web Desktop clients.
     """
     if not SENDER_EMAIL or not SENDER_PASSWORD:
         return False
@@ -232,7 +233,7 @@ def send_email_smtp(summary, stations):
         return False
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = "Fuel Update : Norwalk (Optimized Card Discounts)"
+    msg["Subject"] = "⛽ Fuel Update : Norwalk (Optimized Card Discounts)"
     msg["From"] = SENDER_EMAIL
     msg["To"] = recipient
 
@@ -240,41 +241,76 @@ def send_email_smtp(summary, stations):
     text_content = f"Fuel Price Digest & Card Optimization:\n\n{summary}"
     msg.attach(MIMEText(text_content, "plain"))
 
-    # Optional HTML version for rich styling
+    # Responsive HTML table rows
     html_rows = ""
-    for s in stations[:10]:
-        stale = " ⚠️ (Stale >12h)" if s["stale"] else ""
+    for idx, s in enumerate(stations[:10]):
+        stale = " ⚠️ (>12h)" if s["stale"] else ""
+        bg_color = "#f8fafc" if idx % 2 == 1 else "#ffffff"
+        
         html_rows += f"""
-        <tr style="border-bottom: 1px solid #eee;">
-            <td style="padding: 10px; font-weight: bold;">{s['name']} ({s['zip']})</td>
-            <td style="padding: 10px; color: #777; text-decoration: line-through;">{s['formatted_price']}</td>
-            <td style="padding: 10px; font-size: 13px; color: #1976d2; font-weight: bold;">{s['best_card']}</td>
-            <td style="padding: 10px; color: #2e7d32; font-weight: bold; font-size: 15px;">{s['formatted_net_price']} <span style="font-size: 11px; color: #388e3c;">(-4%)</span></td>
-            <td style="padding: 10px;"><a href="{s['waze_link']}" style="background-color: #33ccff; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold;">🚗 Navigate</a></td>
+        <tr style="background-color: {bg_color}; border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 10px 8px; font-weight: 600; color: #0f172a; font-size: 13px;">
+                {s['name']}<br><span style="font-size: 11px; color: #64748b; font-weight: normal;">ZIP: {s['zip']}</span>
+            </td>
+            <td style="padding: 10px 8px; color: #94a3b8; text-decoration: line-through; font-size: 12px; white-space: nowrap;">
+                {s['formatted_price']}
+            </td>
+            <td style="padding: 10px 8px; font-size: 12px; color: #0284c7; font-weight: 600; white-space: nowrap;">
+                {s['best_card']}
+            </td>
+            <td style="padding: 10px 8px; white-space: nowrap;">
+                <span style="color: #15803d; font-weight: 700; font-size: 15px;">{s['formatted_net_price']}</span>
+                <span style="background-color: #dcfce7; color: #166534; font-size: 10px; padding: 2px 5px; border-radius: 4px; font-weight: 600; margin-left: 2px;">-4%</span>
+            </td>
+            <td style="padding: 10px 8px; text-align: right; white-space: nowrap;">
+                <a href="{s['waze_link']}" style="background-color: #0288d1; color: #ffffff; padding: 6px 12px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; white-space: nowrap; font-size: 12px;">🚗 Navigate</a>
+            </td>
         </tr>
         """
     
     html_content = f"""
+    <!DOCTYPE html>
     <html>
-      <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <h2 style="color: #1976d2; margin-bottom: 5px;">⛽ Daily Fuel Price Digest</h2>
-        <p style="font-size: 13px; color: #555; background-color: #e3f2fd; padding: 10px; border-radius: 6px; border-left: 4px solid #1976d2;">
-          💳 <strong>Credit Card Savings Applied</strong>: Net prices reflect your highest reward back using <strong>Citi Costco Anywhere Visa (4%)</strong> [or <strong>Amex Blue Cash Everyday 3%</strong>].
-        </p>
-        <table style="width: 100%; border-collapse: collapse; max-width: 680px; margin-top: 15px;">
-          <thead>
-            <tr style="background-color: #f5f5f5; text-align: left;">
-              <th style="padding: 10px;">Station</th>
-              <th style="padding: 10px;">Listed</th>
-              <th style="padding: 10px;">Best Card</th>
-              <th style="padding: 10px;">Net Price</th>
-              <th style="padding: 10px;">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {html_rows}
-          </tbody>
-        </table>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #334155; margin: 0; padding: 12px; background-color: #f8fafc;">
+        <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+          <!-- Header -->
+          <div style="background: linear-gradient(135deg, #0284c7, #2563eb); padding: 18px 20px; color: #ffffff;">
+            <h2 style="margin: 0; font-size: 19px; font-weight: 700;">⛽ Daily Fuel Price Digest</h2>
+            <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.9;">Lowest regular gas prices across your commute route</p>
+          </div>
+
+          <!-- Savings Banner -->
+          <div style="padding: 12px 16px; background-color: #f0f9ff; border-bottom: 1px solid #e0f2fe; color: #0369a1; font-size: 12px; line-height: 1.5;">
+            💳 <strong>Credit Card Savings Applied</strong>: Net prices include your highest reward back using <strong>Citi Costco Visa (4%)</strong> [or <strong>Amex Blue Cash Everyday (3%)</strong>].
+          </div>
+
+          <!-- Responsive Table Container -->
+          <div style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 500px;">
+              <thead>
+                <tr style="background-color: #f1f5f9; border-bottom: 2px solid #e2e8f0; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
+                  <th style="padding: 10px 8px;">Station</th>
+                  <th style="padding: 10px 8px;">Listed</th>
+                  <th style="padding: 10px 8px;">Best Card</th>
+                  <th style="padding: 10px 8px;">Net Price</th>
+                  <th style="padding: 10px 8px; text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {html_rows}
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Footer -->
+          <div style="padding: 12px 16px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; text-align: center;">
+            Costco & Fuel Notifier • Auto-generated digest
+          </div>
+        </div>
       </body>
     </html>
     """
