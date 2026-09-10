@@ -57,10 +57,12 @@ The **Costco & Fuel Notifier** is an automated pipeline designed to monitor loca
 
 ---
 
-## 3. Email Delivery System (FormSubmit)
-- **Endpoint**: `https://formsubmit.co/ajax/{RECEIVER_EMAIL}`
-- **Security**: Dispatched as form POST data with `Referer: https://formsubmit.co` header.
-- **Content**: Formatted top 10 cheapest stations digest with Waze navigation links.
+## 3. Email Delivery System (SMTP & FormSubmit Fallback)
+- **Primary Engine**: Standard SMTP (`smtplib`) over TLS (`smtp.gmail.com:587`). Dispatches both HTML and plain-text digests directly into the recipient's inbox.
+- **Fallback Endpoint**: `https://formsubmit.co/ajax/{RECEIVER_EMAIL}` if SMTP credentials are not configured.
+- **Security**: Authenticates with `SENDER_EMAIL` and Gmail App Password (`SENDER_PASSWORD`).
+- **Content**: Rich HTML table and formatted text of top 10 cheapest stations with active Waze navigation buttons.
+
 
 ---
 

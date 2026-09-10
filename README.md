@@ -43,14 +43,18 @@ An automated, daily gas price tracker built with Python and GitHub Actions. It m
 3. Add your service account email (`bmwnotifier@northeasternskymaster.iam.gserviceaccount.com`) as an **Editor**.
 
 ### 3. GitHub Repository Secrets
-In your GitHub repository, navigate to **Settings > Secrets and variables > Actions** and add these two secrets:
+In your GitHub repository, navigate to **Settings > Secrets and variables > Actions** and add these secrets:
 
 | Secret Name | Description | Example / Value |
 | :--- | :--- | :--- |
+| `SENDER_EMAIL` | Sender email address (e.g. Gmail) | `yourname@gmail.com` |
+| `SENDER_PASSWORD` | 16-character Gmail App Password | `abcd efgh ijkl mnop` |
 | `RECEIVER_EMAIL` | Email address to receive daily fuel digests | `ajithsri2000@gmail.com` |
 | `GCP_SERVICE_ACCOUNT` | Entire raw JSON content of your Service Account Key | `{"type": "service_account", ...}` |
 
+*(Optional)*: Add `SMTP_SERVER` (default `smtp.gmail.com`) and `SMTP_PORT` (default `587`).
 *(Optional)*: Add `SHEET_URL` if you wish to link directly to a specific spreadsheet URL.
+
 
 ---
 

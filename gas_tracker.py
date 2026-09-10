@@ -2,6 +2,9 @@ import os
 import asyncio
 import urllib.parse
 from datetime import datetime, timezone, timedelta
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import requests
 from py_gasbuddy import GasBuddy
 import gspread
@@ -10,7 +13,11 @@ import gspread
 ZIP_CODES = ["06460", "06854", "06901", "10801"] 
 
 # Pulling credentials from Environment Variables (GitHub Secrets)
-RECEIVER_EMAIL = os.environ.get("RECEIVER_EMAIL")
+SENDER_EMAIL = os.environ.get("SENDER_EMAIL")
+SENDER_PASSWORD = os.environ.get("SENDER_PASSWORD")
+RECEIVER_EMAIL = os.environ.get("RECEIVER_EMAIL") or SENDER_EMAIL
+SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
 SHEET_NAME = os.environ.get("SHEET_NAME", "Fuel Trends")
 SHEET_URL = os.environ.get("SHEET_URL")
 SHEET_ID = os.environ.get("SHEET_ID")
@@ -169,12 +176,79 @@ def log_to_sheets(stations):
         return True
 
 
+def send_email_smtp(summary, stations):
+    """
+    Sends email via standard SMTP (e.g. Gmail SMTP with App Password).
+    """
+    if not SENDER_EMAIL or not SENDER_PASSWORD:
+        return False
+
+    recipient = RECEIVER_EMAIL or SENDER_EMAIL
+    if not recipient:
+        print("SMTP Error: No recipient email specified.")
+        return False
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = "Fuel Update : Norwalk"
+    msg["From"] = SENDER_EMAIL
+    msg["To"] = recipient
+
+    # Plain text version
+    text_content = f"Fuel Price Digest - Top Stations:\n\n{summary}"
+    msg.attach(MIMEText(text_content, "plain"))
+
+    # Optional HTML version for rich styling
+    html_rows = ""
+    for s in stations[:10]:
+        stale = " ⚠️ (Stale >12h)" if s["stale"] else ""
+        html_rows += f"""
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px; font-weight: bold;">{s['name']} ({s['zip']})</td>
+            <td style="padding: 10px; color: #2e7d32; font-weight: bold;">{s['formatted_price']}</td>
+            <td style="padding: 10px; font-size: 12px; color: #555;">{s['last_updated']}{stale}</td>
+            <td style="padding: 10px;"><a href="{s['waze_link']}" style="background-color: #33ccff; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold;">🚗 Navigate</a></td>
+        </tr>
+        """
+    
+    html_content = f"""
+    <html>
+      <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+        <h2 style="color: #1976d2;">⛽ Daily Fuel Price Digest</h2>
+        <table style="width: 100%; border-collapse: collapse; max-width: 600px;">
+          <thead>
+            <tr style="background-color: #f5f5f5; text-align: left;">
+              <th style="padding: 10px;">Station</th>
+              <th style="padding: 10px;">Price</th>
+              <th style="padding: 10px;">Updated</th>
+              <th style="padding: 10px;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {html_rows}
+          </tbody>
+        </table>
+      </body>
+    </html>
+    """
+    msg.attach(MIMEText(html_content, "html"))
+
+    try:
+        print(f"Connecting to SMTP server {SMTP_SERVER}:{SMTP_PORT}...")
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=15)
+        server.starttls()
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.sendmail(SENDER_EMAIL, recipient, msg.as_string())
+        server.quit()
+        print(f"Digest email sent successfully via SMTP to {recipient}.")
+        return True
+    except Exception as e:
+        print(f"Failed to send email via SMTP: {e}")
+        return False
+
+
 def send_email(stations):
     """
-    Sends a digest of top fuel prices to RECEIVER_EMAIL via FormSubmit web API.
-
-    FormSubmit forwards form data to the receiver's inbox without requiring
-    SMTP credentials or Gmail app passwords.
+    Sends a digest of top fuel prices to RECEIVER_EMAIL via SMTP or FormSubmit fallback.
 
     Args:
         stations (list[dict]): List of station objects sorted by price.
@@ -182,33 +256,45 @@ def send_email(stations):
     if not stations:
         print("No stations found.")
         return
-        
-    # Create a clean text summary with Waze navigation links
+
     summary = ""
     for s in stations[:10]:
         stale = " ⚠️ (Stale >12h)" if s["stale"] else ""
         summary += f"• {s['name']} ({s['zip']}): {s['formatted_price']} | {s['distance']} mi | Updated: {s['last_updated']}{stale}\n  🚗 Navigate: {s['waze_link']}\n\n"
-    
-    # Send form data to FormSubmit's AJAX API
-    url = f"https://formsubmit.co/ajax/{RECEIVER_EMAIL}"
+
+    # Try SMTP first if credentials are set
+    if SENDER_EMAIL and SENDER_PASSWORD:
+        if send_email_smtp(summary, stations):
+            return
+
+    # Fallback to FormSubmit AJAX API
+    recipient = RECEIVER_EMAIL
+    if not recipient:
+        print("Error: RECEIVER_EMAIL environment variable is not set.")
+        return
+
+    print(f"Attempting email dispatch via FormSubmit to {recipient}...")
+    url = f"https://formsubmit.co/ajax/{recipient}"
     payload = {
         "_subject": "Fuel Update : Norwalk",
         "Top_10_Cheapest_Stations": summary,
-        "_template": "box" # Wraps the email in a clean visual border
+        "_template": "box"
     }
     headers = {
-        "Referer": "https://formsubmit.co"
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Referer": "https://formsubmit.co",
+        "Origin": "https://formsubmit.co"
     }
-    
+
     try:
-        response = requests.post(url, data=payload, headers=headers)
+        response = requests.post(url, data=payload, headers=headers, timeout=15)
         res_data = response.json()
-        if res_data.get("success") == "true":
+        if str(res_data.get("success")).lower() == "true":
             print("Digest email sent successfully via FormSubmit.")
         else:
-            print(f"FormSubmit Notice: {res_data.get('message')}")
+            print(f"FormSubmit Notice ({response.status_code}): {res_data.get('message')}")
     except Exception as e:
-        print(f"Failed to send email: {e}")
+        print(f"Failed to send email via FormSubmit: {e}")
 
 
 async def main():
@@ -217,15 +303,18 @@ async def main():
     if not stations:
         print("No stations found.")
         return
-        
+
     price_changed = log_to_sheets(stations)
-    
+
+    # Allow email dispatch on every run by default or via FORCE_EMAIL / ALWAYS_SEND_EMAIL
+    always_send = os.environ.get("ALWAYS_SEND_EMAIL", "true").lower() == "true"
     force_email = os.environ.get("FORCE_EMAIL", "false").lower() == "true"
-    if price_changed or force_email:
-        print("Price change detected (or FORCE_EMAIL active). Sending email digest...")
+
+    if price_changed or force_email or always_send:
+        print("Sending daily fuel price digest email...")
         send_email(stations)
     else:
-        print("Fuel price unchanged since last check. Email notification skipped to prevent inbox clutter.")
+        print("Fuel price unchanged since last check. Email notification skipped.")
 
 if __name__ == "__main__":
     asyncio.run(main())
