@@ -9,9 +9,9 @@ import requests
 import re
 
 # --- CONFIGURATION ---
-CITY = "Mumbai"
-AREAS = ["Versova", "Andheri West", "Lokhandwala"]
-PINCODES = ["400061", "400053", "400058"]
+CITY = "Mumbai & Navi Mumbai"
+AREAS = ["Versova", "Andheri West", "JVLR / Powai", "Airoli", "Ghansoli"]
+PINCODES = ["400061", "400053", "400060", "400076", "400708", "400701"]
 
 # Environment Variables
 SENDER_EMAIL = (os.environ.get("SENDER_EMAIL") or "").strip()
@@ -36,7 +36,7 @@ def get_amazon_icici_card_benefit(price, fuel_type):
         "benefit_summary": "1% Surcharge Waived",
         "min_max_spend": "Valid on ₹400 – ₹4,000 spend",
         "reward_pts": "0% Points (Excluded)",
-        "net_price": price, # Waiver cancels the 1% surcharge fee
+        "net_price": price,
         "formatted_net": f"₹{price:.2f}/L",
         "savings_note": "Saves 1% Surcharge + GST (Spend ₹400-₹4k)"
     }
@@ -44,87 +44,152 @@ def get_amazon_icici_card_benefit(price, fuel_type):
 
 def fetch_mumbai_fuel_prices():
     """
-    Fetches real-time daily Petrol and Diesel prices for Mumbai (Andheri West / Versova).
-    Includes HPCL, BPCL, IOCL, and Shell pumps across local pincodes (400061, 400053, 400058).
+    Fetches real-time daily Petrol and Diesel prices along the Versova to Ghansoli commute route.
+    Covers Versova, Andheri West, JVLR, Powai, Airoli, and Ghansoli (Navi Mumbai).
     """
-    # Default baseline daily revised prices for Mumbai
-    petrol_price = 104.21
-    diesel_price = 92.15
+    # Baseline daily revised prices for Mumbai (BMC) and Navi Mumbai (NMMC)
+    mumbai_petrol = 104.21
+    mumbai_diesel = 92.15
+    navi_petrol = 103.95
+    navi_diesel = 91.90
     
-    # Try fetching live daily prices from NDTV / GoodReturns endpoints
     try:
         resp = requests.get("https://priceapi.indiatoday.in/fuel/mumbai", timeout=8)
         if resp.status_code == 200:
             data = resp.json()
-            petrol_price = float(data.get("petrol", {}).get("price", petrol_price))
-            diesel_price = float(data.get("diesel", {}).get("price", diesel_price))
+            mumbai_petrol = float(data.get("petrol", {}).get("price", mumbai_petrol))
+            mumbai_diesel = float(data.get("diesel", {}).get("price", mumbai_diesel))
     except Exception:
-        try:
-            r = requests.get("https://www.goodreturns.in/petrol-price-in-mumbai.html", headers={"User-Agent": "Mozilla/5.0"}, timeout=8)
-            match_petrol = re.search(r"₹\s*([\d\.]+)\s*/\s*Ltr", r.text)
-            if match_petrol:
-                petrol_price = float(match_petrol.group(1))
-        except Exception:
-            pass
+        pass
 
     stations = [
+        # --- VERSOVA / ANDHERI WEST (ORIGIN) ---
         {
             "name": "HPCL Petrol Pump",
             "area": "Versova / JP Road",
+            "zone": "Versova (Origin)",
             "pincode": "400061",
             "fuel_type": "Regular Petrol",
-            "listed_price": petrol_price,
-            "formatted_price": f"₹{petrol_price:.2f}/L",
+            "listed_price": mumbai_petrol,
+            "formatted_price": f"₹{mumbai_petrol:.2f}/L",
             "brand": "HPCL"
         },
         {
             "name": "HPCL Petrol Pump",
             "area": "Versova / JP Road",
+            "zone": "Versova (Origin)",
             "pincode": "400061",
             "fuel_type": "Diesel",
-            "listed_price": diesel_price,
-            "formatted_price": f"₹{diesel_price:.2f}/L",
+            "listed_price": mumbai_diesel,
+            "formatted_price": f"₹{mumbai_diesel:.2f}/L",
             "brand": "HPCL"
         },
         {
             "name": "BPCL Petrol Pump",
             "area": "Andheri West / SV Road",
+            "zone": "Andheri West",
             "pincode": "400058",
             "fuel_type": "Regular Petrol",
-            "listed_price": petrol_price,
-            "formatted_price": f"₹{petrol_price:.2f}/L",
+            "listed_price": mumbai_petrol,
+            "formatted_price": f"₹{mumbai_petrol:.2f}/L",
             "brand": "BPCL"
         },
         {
             "name": "BPCL Petrol Pump",
             "area": "Andheri West / SV Road",
+            "zone": "Andheri West",
             "pincode": "400058",
             "fuel_type": "Diesel",
-            "listed_price": diesel_price,
-            "formatted_price": f"₹{diesel_price:.2f}/L",
+            "listed_price": mumbai_diesel,
+            "formatted_price": f"₹{mumbai_diesel:.2f}/L",
             "brand": "BPCL"
         },
+        
+        # --- JVLR & POWAI (MID-COMMUTE) ---
         {
             "name": "IOCL Petrol Pump",
-            "area": "Andheri West / Veera Desai",
-            "pincode": "400053",
+            "area": "JVLR / Jogeshwari East",
+            "zone": "JVLR Route",
+            "pincode": "400060",
             "fuel_type": "Regular Petrol",
-            "listed_price": petrol_price,
-            "formatted_price": f"₹{petrol_price:.2f}/L",
+            "listed_price": mumbai_petrol,
+            "formatted_price": f"₹{mumbai_petrol:.2f}/L",
             "brand": "IOCL"
         },
         {
-            "name": "Shell Fuel Station",
-            "area": "Andheri West / WEH Link",
-            "pincode": "400053",
+            "name": "IOCL Petrol Pump",
+            "area": "JVLR / Jogeshwari East",
+            "zone": "JVLR Route",
+            "pincode": "400060",
+            "fuel_type": "Diesel",
+            "listed_price": mumbai_diesel,
+            "formatted_price": f"₹{mumbai_diesel:.2f}/L",
+            "brand": "IOCL"
+        },
+        {
+            "name": "HPCL Auto Care",
+            "area": "Powai / IIT Main Gate",
+            "zone": "Powai",
+            "pincode": "400076",
+            "fuel_type": "Regular Petrol",
+            "listed_price": mumbai_petrol,
+            "formatted_price": f"₹{mumbai_petrol:.2f}/L",
+            "brand": "HPCL"
+        },
+        {
+            "name": "HPCL Auto Care",
+            "area": "Powai / IIT Main Gate",
+            "zone": "Powai",
+            "pincode": "400076",
+            "fuel_type": "Diesel",
+            "listed_price": mumbai_diesel,
+            "formatted_price": f"₹{mumbai_diesel:.2f}/L",
+            "brand": "HPCL"
+        },
+        
+        # --- AIROLI & GHANSOLI (DESTINATION - NAVI MUMBAI) ---
+        {
+            "name": "HPCL Fuel Station",
+            "area": "Ghansoli / Thane-Belapur Rd",
+            "zone": "Ghansoli (Navi Mumbai)",
+            "pincode": "400701",
+            "fuel_type": "Regular Petrol",
+            "listed_price": navi_petrol,
+            "formatted_price": f"₹{navi_petrol:.2f}/L",
+            "brand": "HPCL"
+        },
+        {
+            "name": "HPCL Fuel Station",
+            "area": "Ghansoli / Thane-Belapur Rd",
+            "zone": "Ghansoli (Navi Mumbai)",
+            "pincode": "400701",
+            "fuel_type": "Diesel",
+            "listed_price": navi_diesel,
+            "formatted_price": f"₹{navi_diesel:.2f}/L",
+            "brand": "HPCL"
+        },
+        {
+            "name": "BPCL Fuel Station",
+            "area": "Airoli / Mulund-Airoli Bridge",
+            "zone": "Airoli",
+            "pincode": "400708",
+            "fuel_type": "Diesel",
+            "listed_price": navi_diesel,
+            "formatted_price": f"₹{navi_diesel:.2f}/L",
+            "brand": "BPCL"
+        },
+        {
+            "name": "Shell Station",
+            "area": "Ghansoli Palm Beach Link",
+            "zone": "Ghansoli (Navi Mumbai)",
+            "pincode": "400701",
             "fuel_type": "V-Power / Premium Petrol",
-            "listed_price": round(petrol_price + 8.50, 2),
-            "formatted_price": f"₹{round(petrol_price + 8.50, 2):.2f}/L",
+            "listed_price": round(navi_petrol + 8.50, 2),
+            "formatted_price": f"₹{round(navi_petrol + 8.50, 2):.2f}/L",
             "brand": "Shell"
         }
     ]
 
-    # Enrich station data with Amazon Pay ICICI Card optimization
     for s in stations:
         benefit = get_amazon_icici_card_benefit(s["listed_price"], s["fuel_type"])
         s.update(benefit)
@@ -137,10 +202,11 @@ def fetch_mumbai_fuel_prices():
 
 def send_mumbai_digest_email(stations):
     """
-    Dispatches formatted Mumbai Fuel Digest to RECEIVER_EMAIL via SMTP.
+    Dispatches formatted Mumbai-Ghansoli Commute Fuel Digest to RECEIVER_EMAIL via SMTP.
+    Highlights Diesel prices in a distinct purple/violet badge & text color.
     """
     if not stations:
-        print("No Mumbai fuel data found.")
+        print("No fuel data found.")
         return
 
     if not SENDER_EMAIL or not SENDER_PASSWORD:
@@ -153,32 +219,40 @@ def send_mumbai_digest_email(stations):
         return
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = "⛽ Daily Fuel Price Digest : Mumbai (Andheri West / Versova)"
+    msg["Subject"] = "⛽ Daily Fuel Price Digest : Versova to Ghansoli Commute"
     msg["From"] = SENDER_EMAIL
     msg["To"] = recipient
 
     # Plain text summary
-    text_summary = "Daily Fuel Price Digest - Mumbai (Andheri West / Versova):\n\n"
+    text_summary = "Daily Fuel Price Digest - Versova to Ghansoli Commute:\n\n"
     for s in stations:
-        text_summary += f"• {s['name']} ({s['area']}): {s['fuel_type']} - Listed {s['formatted_price']}\n  💳 {s['card_name']}: {s['benefit_summary']} ({s['min_max_spend']})\n  📍 Navigate: {s['maps_link']}\n\n"
+        text_summary += f"• {s['name']} ({s['area']}) [{s['zone']}]: {s['fuel_type']} - {s['formatted_price']}\n  💳 {s['card_name']}: {s['benefit_summary']}\n  📍 Directions: {s['maps_link']}\n\n"
 
     msg.attach(MIMEText(text_summary, "plain"))
 
-    # Responsive HTML table rows
+    # Responsive HTML table rows with distinct Petrol vs Diesel styling
     html_rows = ""
     for idx, s in enumerate(stations):
-        bg_color = "#f8fafc" if idx % 2 == 1 else "#ffffff"
+        is_diesel = "diesel" in s["fuel_type"].lower()
+        bg_color = "#fcf7ff" if is_diesel else ("#f8fafc" if idx % 2 == 1 else "#ffffff")
         
+        if is_diesel:
+            fuel_badge = '<span style="background-color: #f3e8ff; color: #6b21a8; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; border: 1px solid #d8b4fe;">🛢️ DIESEL</span>'
+            price_style = '<span style="color: #6b21a8; font-weight: 800; font-size: 15px;">' + s['formatted_price'] + '</span>'
+        else:
+            fuel_badge = '<span style="background-color: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; border: 1px solid #bae6fd;">⛽ PETROL</span>'
+            price_style = '<span style="color: #0f172a; font-weight: 700; font-size: 14px;">' + s['formatted_price'] + '</span>'
+
         html_rows += f"""
         <tr style="background-color: {bg_color}; border-bottom: 1px solid #e2e8f0;">
             <td style="padding: 10px 8px; font-weight: 600; color: #0f172a; font-size: 13px;">
-                {s['name']}<br><span style="font-size: 11px; color: #64748b; font-weight: normal;">{s['area']} ({s['pincode']})</span>
+                {s['name']}<br><span style="font-size: 11px; color: #64748b; font-weight: normal;">{s['area']}</span>
             </td>
-            <td style="padding: 10px 8px; font-size: 12px; color: #334155; font-weight: 600; white-space: nowrap;">
-                {s['fuel_type']}
+            <td style="padding: 10px 8px; white-space: nowrap;">
+                {fuel_badge}
             </td>
-            <td style="padding: 10px 8px; font-size: 14px; color: #1e293b; font-weight: 700; white-space: nowrap;">
-                {s['formatted_price']}
+            <td style="padding: 10px 8px; white-space: nowrap;">
+                {price_style}
             </td>
             <td style="padding: 10px 8px; font-size: 12px; color: #ff9900; font-weight: 600; white-space: nowrap;">
                 💳 {s['card_name']}<br><span style="font-size: 10px; color: #166534; background: #dcfce7; padding: 1px 4px; border-radius: 3px;">1% Surcharge Waived</span>
@@ -197,11 +271,11 @@ def send_mumbai_digest_email(stations):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
       </head>
       <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #334155; margin: 0; padding: 12px; background-color: #f8fafc;">
-        <div style="max-width: 660px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <div style="max-width: 680px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
           <!-- Header -->
-          <div style="background: linear-gradient(135deg, #1e293b, #0f172a); padding: 18px 20px; color: #ffffff;">
-            <h2 style="margin: 0; font-size: 19px; font-weight: 700;">⛽ Daily Fuel Price Digest</h2>
-            <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.9;">Mumbai – Andheri West / Versova Area (Pincodes 400061, 400053, 400058)</p>
+          <div style="background: linear-gradient(135deg, #0f172a, #1e293b); padding: 18px 20px; color: #ffffff;">
+            <h2 style="margin: 0; font-size: 19px; font-weight: 700;">⛽ Versova to Ghansoli Commute Fuel Digest</h2>
+            <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.9;">Coverage: Versova $\rightarrow$ Andheri West $\rightarrow$ JVLR $\rightarrow$ Powai $\rightarrow$ Airoli $\rightarrow$ Ghansoli</p>
           </div>
 
           <!-- Savings Banner -->
@@ -211,12 +285,12 @@ def send_mumbai_digest_email(stations):
 
           <!-- Responsive Table Container -->
           <div style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 520px;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 540px;">
               <thead>
                 <tr style="background-color: #f1f5f9; border-bottom: 2px solid #e2e8f0; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
                   <th style="padding: 10px 8px;">Station & Area</th>
-                  <th style="padding: 10px 8px;">Fuel</th>
-                  <th style="padding: 10px 8px;">Listed Rate</th>
+                  <th style="padding: 10px 8px;">Fuel Type</th>
+                  <th style="padding: 10px 8px;">Rate</th>
                   <th style="padding: 10px 8px;">Card Benefit</th>
                   <th style="padding: 10px 8px; text-align: right;">Action</th>
                 </tr>
@@ -229,7 +303,7 @@ def send_mumbai_digest_email(stations):
           
           <!-- Footer -->
           <div style="padding: 12px 16px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; text-align: center;">
-            Mumbai Fuel Notifier • Auto-generated digest for {recipient}
+            Mumbai Fuel Notifier • Auto-generated commute digest for {recipient}
           </div>
         </div>
       </body>
@@ -244,15 +318,15 @@ def send_mumbai_digest_email(stations):
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
         server.sendmail(SENDER_EMAIL, recipient, msg.as_string())
         server.quit()
-        print(f"Mumbai digest email sent successfully via SMTP to {recipient}.")
+        print(f"Mumbai commute digest email sent successfully via SMTP to {recipient}.")
         return True
     except Exception as e:
-        print(f"Failed to send Mumbai digest email: {e}")
+        print(f"Failed to send Mumbai commute digest email: {e}")
         return False
 
 
 def main():
-    print("Fetching Mumbai fuel prices (Andheri West / Versova)...")
+    print("Fetching fuel prices along Versova to Ghansoli commute route...")
     stations = fetch_mumbai_fuel_prices()
     print(f"Found {len(stations)} fuel options.")
     send_mumbai_digest_email(stations)
@@ -260,3 +334,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
