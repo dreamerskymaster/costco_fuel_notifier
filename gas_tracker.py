@@ -36,22 +36,35 @@ LOCATION_QUERY_PRICES = "query LocationBySearchTerm($brandId: Int, $cursor: Stri
 def get_card_optimization(station_name, listed_price):
     """
     Calculates the best credit card and net discounted price based on user's Obsidian Vault card portfolio:
-    - Citi Costco Anywhere Visa: 4% cash back on gas worldwide (first $7,000/yr). Accepted at Costco Gas (Visa only).
-    - Amex Blue Cash Everyday: 3% cash back on US gas (first $6,000/yr). Not accepted at Costco Gas.
-    - Bank of America Visa Signature: 1% backup.
+    1. Costco Gas:
+       - Citi Costco Anywhere Visa: 4% cash back (Costco fuel pumps ONLY accept Visa).
+       - Amex & Mastercard: NOT accepted at US Costco fuel pumps.
+    2. Standalone Gas Stations (Mobil, Shell, CITGO, Speedway, 7-Eleven, Cumberland Farms, Global, BP, Exxon):
+       - Citi Costco Anywhere Visa: 4% cash back (Primary, up to $7,000/yr).
+       - Amex Blue Cash Everyday: 3% cash back (Secondary, up to $6,000/yr).
+    3. Supermarket / Superstore Gas Pumps (Stop & Shop, Kroger, Sam's Club, BJ's, Walmart):
+       - Excluded from 4% Citi and 3% Amex bonus categories by issuer MCC rules. Earns base 1%.
     """
-    is_costco = "costco" in station_name.lower()
+    name_lower = station_name.lower()
+    
+    is_costco = "costco" in name_lower
+    is_grocery_superstore = any(brand in name_lower for brand in ["stop & shop", "stop and shop", "kroger", "sam's", "sams", "bj's", "bjs", "walmart", "target", "shoprite", "giant"])
     
     if is_costco:
         card_name = "Citi Costco (4%)"
         reward_pct = "4%"
         discount_rate = 0.04
         card_note = "Visa Only"
+    elif is_grocery_superstore:
+        card_name = "Base Rate (1%)"
+        reward_pct = "1%"
+        discount_rate = 0.01
+        card_note = "Supermarket Gas Excluded from 4%/3%"
     else:
         card_name = "Citi 4% / Amex 3%"
         reward_pct = "4%"
         discount_rate = 0.04
-        card_note = "Citi 4% or Amex 3%"
+        card_note = "Standalone Gas Station"
         
     net_price = round(listed_price * (1 - discount_rate), 2)
     formatted_net = f"${net_price:.2f}"
