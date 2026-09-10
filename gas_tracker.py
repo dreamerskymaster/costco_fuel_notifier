@@ -33,6 +33,38 @@ import re
 
 LOCATION_QUERY_PRICES = "query LocationBySearchTerm($brandId: Int, $cursor: String, $fuel: Int, $lat: Float, $lng: Float, $maxAge: Int, $search: String) { locationBySearchTerm(lat: $lat, lng: $lng, search: $search) { stations(brandId: $brandId cursor: $cursor fuel: $fuel lat: $lat lng: $lng maxAge: $maxAge) { results { address { line1 } id name prices { cash { nickname postedTime price } credit { nickname postedTime price } fuelProduct longName } priceUnit currency id latitude longitude } } trends { areaName country today todayLow trend } } }"
 
+def get_card_optimization(station_name, listed_price):
+    """
+    Calculates the best credit card and net discounted price based on user's Obsidian Vault card portfolio:
+    - Citi Costco Anywhere Visa: 4% cash back on gas worldwide (first $7,000/yr). Accepted at Costco Gas (Visa only).
+    - Amex Blue Cash Everyday: 3% cash back on US gas (first $6,000/yr). Not accepted at Costco Gas.
+    - Bank of America Visa Signature: 1% backup.
+    """
+    is_costco = "costco" in station_name.lower()
+    
+    if is_costco:
+        card_name = "Citi Costco Visa (4%)"
+        reward_pct = "4%"
+        discount_rate = 0.04
+        card_note = "Visa Only"
+    else:
+        card_name = "Citi Costco Visa (4%) [or Amex BCE 3%]"
+        reward_pct = "4%"
+        discount_rate = 0.04
+        card_note = "Primary 4% / Secondary 3%"
+        
+    net_price = round(listed_price * (1 - discount_rate), 2)
+    formatted_net = f"${net_price:.2f}"
+    
+    return {
+        "best_card": card_name,
+        "reward_pct": reward_pct,
+        "discount_rate": discount_rate,
+        "net_price": net_price,
+        "formatted_net_price": formatted_net,
+        "card_note": card_note
+    }
+
 async def fetch_gas_prices():
     """
     Fetches regular gas prices for configured ZIP codes via GasBuddy GraphQL API without brand restrictions.
@@ -104,12 +136,18 @@ async def fetch_gas_prices():
                     search_query = urllib.parse.quote_plus(f"{name} {zip_code}")
                     waze_link = f"https://waze.com/ul?q={search_query}&navigate=yes"
                     
+                    card_opt = get_card_optimization(name, price)
+                    
                     stations_data.append({
                         "name": name,
                         "zip": zip_code,
                         "distance": station.get("distance", "N/A"),
                         "price": price,
                         "formatted_price": formatted_price,
+                        "best_card": card_opt["best_card"],
+                        "net_price": card_opt["net_price"],
+                        "formatted_net_price": card_opt["formatted_net_price"],
+                        "card_note": card_opt["card_note"],
                         "stale": is_stale,
                         "last_updated": readable_time,
                         "waze_link": waze_link
@@ -194,12 +232,12 @@ def send_email_smtp(summary, stations):
         return False
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = "Fuel Update : Norwalk"
+    msg["Subject"] = "Fuel Update : Norwalk (Optimized Card Discounts)"
     msg["From"] = SENDER_EMAIL
     msg["To"] = recipient
 
     # Plain text version
-    text_content = f"Fuel Price Digest - Top Stations:\n\n{summary}"
+    text_content = f"Fuel Price Digest & Card Optimization:\n\n{summary}"
     msg.attach(MIMEText(text_content, "plain"))
 
     # Optional HTML version for rich styling
@@ -209,8 +247,9 @@ def send_email_smtp(summary, stations):
         html_rows += f"""
         <tr style="border-bottom: 1px solid #eee;">
             <td style="padding: 10px; font-weight: bold;">{s['name']} ({s['zip']})</td>
-            <td style="padding: 10px; color: #2e7d32; font-weight: bold;">{s['formatted_price']}</td>
-            <td style="padding: 10px; font-size: 12px; color: #555;">{s['last_updated']}{stale}</td>
+            <td style="padding: 10px; color: #777; text-decoration: line-through;">{s['formatted_price']}</td>
+            <td style="padding: 10px; font-size: 13px; color: #1976d2; font-weight: bold;">{s['best_card']}</td>
+            <td style="padding: 10px; color: #2e7d32; font-weight: bold; font-size: 15px;">{s['formatted_net_price']} <span style="font-size: 11px; color: #388e3c;">(-4%)</span></td>
             <td style="padding: 10px;"><a href="{s['waze_link']}" style="background-color: #33ccff; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: bold;">🚗 Navigate</a></td>
         </tr>
         """
@@ -218,13 +257,17 @@ def send_email_smtp(summary, stations):
     html_content = f"""
     <html>
       <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <h2 style="color: #1976d2;">⛽ Daily Fuel Price Digest</h2>
-        <table style="width: 100%; border-collapse: collapse; max-width: 600px;">
+        <h2 style="color: #1976d2; margin-bottom: 5px;">⛽ Daily Fuel Price Digest</h2>
+        <p style="font-size: 13px; color: #555; background-color: #e3f2fd; padding: 10px; border-radius: 6px; border-left: 4px solid #1976d2;">
+          💳 <strong>Credit Card Savings Applied</strong>: Net prices reflect your highest reward back using <strong>Citi Costco Anywhere Visa (4%)</strong> [or <strong>Amex Blue Cash Everyday 3%</strong>].
+        </p>
+        <table style="width: 100%; border-collapse: collapse; max-width: 680px; margin-top: 15px;">
           <thead>
             <tr style="background-color: #f5f5f5; text-align: left;">
               <th style="padding: 10px;">Station</th>
-              <th style="padding: 10px;">Price</th>
-              <th style="padding: 10px;">Updated</th>
+              <th style="padding: 10px;">Listed</th>
+              <th style="padding: 10px;">Best Card</th>
+              <th style="padding: 10px;">Net Price</th>
               <th style="padding: 10px;">Action</th>
             </tr>
           </thead>
@@ -265,7 +308,7 @@ def send_email(stations):
     summary = ""
     for s in stations[:10]:
         stale = " ⚠️ (Stale >12h)" if s["stale"] else ""
-        summary += f"• {s['name']} ({s['zip']}): {s['formatted_price']} | {s['distance']} mi | Updated: {s['last_updated']}{stale}\n  🚗 Navigate: {s['waze_link']}\n\n"
+        summary += f"• {s['name']} ({s['zip']}): Listed {s['formatted_price']} | 💳 Net {s['formatted_net_price']} ({s['best_card']})\n  Updated: {s['last_updated']}{stale}\n  🚗 Navigate: {s['waze_link']}\n\n"
 
     # Try SMTP first if credentials are set
     if SENDER_EMAIL and SENDER_PASSWORD:
@@ -281,7 +324,7 @@ def send_email(stations):
     print(f"Attempting email dispatch via FormSubmit to {recipient}...")
     url = f"https://formsubmit.co/ajax/{recipient}"
     payload = {
-        "_subject": "Fuel Update : Norwalk",
+        "_subject": "Fuel Update : Norwalk (Optimized Card Discounts)",
         "Top_10_Cheapest_Stations": summary,
         "_template": "box"
     }
