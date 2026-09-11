@@ -1,100 +1,75 @@
-# ⛽ Costco & Fuel Price Notifier
+# ⛽ Fuel Notifier & Reward Optimizer (US & Mumbai)
 
-An automated, daily gas price tracker built with Python and GitHub Actions. It monitors live regular gas prices across local commute routes, logs daily price trends to a Google Sheet, and emails a formatted top-10 digest equipped with **one-tap Waze navigation deep links**.
-
----
-
-## 🌟 Key Features
-
-- 📍 **Commute Route Coverage**: Queries real-time gas prices for configured ZIP codes (`06460`, `06854`, `06901`, `10801`).
-- ⛽ **All Local Brands**: Captures pricing for all local stations (Costco, Stop & Shop, CITGO, Shell, Mobil, Speedway, 7-Eleven, Cumberland Farms, etc.).
-- 🚗 **Waze Deep Links**: Generates URL-encoded Waze navigation links (`https://waze.com/ul?q=...&navigate=yes`) for instant one-tap navigation.
-- 📊 **Google Sheets Trend Tracking**: Automatically logs the absolute cheapest daily gas price into a `Fuel Trends` Google Sheet via Service Account credentials.
-- 📬 **FormSubmit Integration**: Delivers clean daily digest emails without requiring SMTP server configuration or Gmail App Passwords.
-- ⏰ **Automated Schedule**: Executes automatically Monday through Friday at 10:30 AM UTC via GitHub Actions.
+A production-grade, dual-pipeline automated fuel price tracker and credit card reward optimizer built with Python and GitHub Actions. It monitors live fuel prices across daily commute corridors in the **US (Connecticut)** and **India (Mumbai)**, optimizes credit card rewards, and delivers mobile-responsive HTML email digests.
 
 ---
 
-## 📋 System Requirements & Dependencies
+## 🚀 Dual Pipeline Architecture
 
-- Python 3.10+
-- Dependencies listed in `requirements.txt`:
-  - `py_gasbuddy`
-  - `gspread`
-  - `google-auth`
-  - `requests`
-  - `backoff`
-  - `aiofiles`
+| Pipeline | Coverage Corridor | Key Features | Primary Rewards Logic | Schedule |
+| :--- | :--- | :--- | :--- | :--- |
+| **US Tracker** (`gas_tracker.py`) | ZIPs `06460`, `06854`, `06901`, `10801` (CT) | GasBuddy scraping, Google Sheets trend logging, Waze 1-tap navigation links | **Citi Costco Visa**: 4% at Costco & standalone gas<br>**Amex BCE**: 3% at standalone gas<br>*(Supermarket gas 1% base)* | 3-hour interval daily |
+| **Mumbai Tracker** (`mumbai_gas_tracker.py`) | Versova → Andheri West → JVLR → Powai → Airoli → Ghansoli | Sorted Petrol & Diesel, Purple Diesel highlights, Nitrogen tyre availability, Hyundai Venue 2019 care card | **Amazon Pay ICICI Card**: 1% fuel surcharge waiver on ₹400–₹4,000 spend (saves surcharge + 18% GST) | Daily @ 7:00 AM IST (`30 1 * * *`) |
 
 ---
 
-## 🚀 Quick Setup & Configuration
+## 🔑 Environment Variables & GitHub Secrets
 
-### 1. Google Cloud Service Account Setup
-1. Go to [Google Cloud Console](https://console.cloud.google.com/).
-2. Create or select your project (e.g. `northeasternskymaster`).
-3. Enable both the **Google Sheets API** and **Google Drive API**.
-4. Create a **Service Account** (e.g. `bmwnotifier@northeasternskymaster.iam.gserviceaccount.com`).
-5. Generate and download a **JSON Key**.
+Configure the following secrets in **Settings > Secrets and variables > Actions**:
 
-### 2. Google Sheet Setup
-1. Create a Google Sheet named **`Fuel Trends`**.
-2. Click **Share** in the top-right corner.
-3. Add your service account email (`bmwnotifier@northeasternskymaster.iam.gserviceaccount.com`) as an **Editor**.
-
-### 3. GitHub Repository Secrets
-In your GitHub repository, navigate to **Settings > Secrets and variables > Actions** and add these secrets:
-
-| Secret Name | Description | Example / Value |
-| :--- | :--- | :--- |
-| `SENDER_EMAIL` | Sender email address (e.g. Gmail) | `yourname@gmail.com` |
-| `SENDER_PASSWORD` | 16-character Gmail App Password | `abcd efgh ijkl mnop` |
-| `RECEIVER_EMAIL` | Email address to receive daily fuel digests | `ajithsri2000@gmail.com` |
-| `GCP_SERVICE_ACCOUNT` | Entire raw JSON content of your Service Account Key | `{"type": "service_account", ...}` |
-
-*(Optional)*: Add `SMTP_SERVER` (default `smtp.gmail.com`) and `SMTP_PORT` (default `587`).
-*(Optional)*: Add `SHEET_URL` if you wish to link directly to a specific spreadsheet URL.
-
+| Secret Name | Required By | Description | Example / Default |
+| :--- | :--- | :--- | :--- |
+| `SENDER_EMAIL` | Both | Gmail address sending digest emails | `yourname@gmail.com` |
+| `SENDER_PASSWORD` | Both | 16-character Gmail App Password | `abcd efgh ijkl mnop` |
+| `RECEIVER_EMAIL` | US Pipeline | Recipient for US digest | `user@example.com` |
+| `MUMBAI_RECEIVER_EMAIL` | Mumbai Pipeline | Recipient(s) for Mumbai digest (comma-separated supported) | `dad@example.com` |
+| `GCP_SERVICE_ACCOUNT` | US Pipeline | Raw JSON string of GCP Service Account key | `{"type": "service_account", ...}` |
+| `SMTP_SERVER` | Optional | Custom SMTP host | `smtp.gmail.com` |
+| `SMTP_PORT` | Optional | Custom SMTP port | `587` |
 
 ---
 
-## 💻 Local Installation & Testing
+## 💻 Local Setup & Execution
 
 ```bash
-# Clone the repository
+# 1. Clone & create virtual environment
 git clone https://github.com/dreamerskymaster/costco_fuel_notifier.git
 cd costco_fuel_notifier
-
-# Set up Python virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-# Place your GCP key file locally (ignored by .gitignore)
-cp /path/to/your/key.json service_account.json
+# 2. Run US Fuel Tracker locally
+SENDER_EMAIL="me@gmail.com" SENDER_PASSWORD="pass" RECEIVER_EMAIL="me@gmail.com" python gas_tracker.py
 
-# Run local test execution
-RECEIVER_EMAIL="your_email@gmail.com" python gas_tracker.py
+# 3. Run Mumbai Fuel Tracker locally
+SENDER_EMAIL="me@gmail.com" SENDER_PASSWORD="pass" MUMBAI_RECEIVER_EMAIL="dad@gmail.com" python mumbai_gas_tracker.py
 ```
 
 ---
 
-## ⚡ Rate Limits & Safety Quotas
+## 📁 Repository Structure
 
-| Component | Limit Threshold | Project Usage | Quota Status |
-| :--- | :--- | :--- | :--- |
-| **GasBuddy API** | ~20 req/min (Cloudflare) | 4 req/day | 🟢 100% Safe |
-| **FormSubmit** | 50 submissions/day | 1 email/day | 🟢 100% Safe |
-| **Google Sheets API** | 60 write req/min | 1 append/day | 🟢 100% Safe |
-| **GitHub Actions** | 2,000 billable min/month | ~22 min/month | 🟢 100% Safe |
-| **Waze Links** | Unlimited | Unlimited | 🟢 100% Safe |
+```
+.
+├── .github/workflows/
+│   ├── schedule.yml        # US fuel tracker workflow (Cron trigger)
+│   └── mumbai_schedule.yml # Mumbai fuel tracker workflow (Daily 7:00 AM IST)
+├── gas_tracker.py          # US fuel tracker, GasBuddy parser & Sheets logger
+├── mumbai_gas_tracker.py   # Mumbai fuel tracker, station router & vehicle care engine
+├── ARCHITECTURE.md         # Full system architecture, maintenance & troubleshooting memory
+├── CLAUDE.md               # Token-efficient AI agent context & quick reference guide
+└── requirements.txt        # Minimal Python dependencies
+```
 
-For detailed system design and maintenance guidelines, see [ARCHITECTURE.md](file:///Users/skymaster/Library/CloudStorage/OneDrive-NortheasternUniversity/Projects/Costco_Fuel_Notifier/ARCHITECTURE.md).
+---
+
+## 📄 Documentation
+
+- [ARCHITECTURE.md](file:///Users/skymaster/Library/CloudStorage/OneDrive-NortheasternUniversity/Projects/Costco_Fuel_Notifier/ARCHITECTURE.md): Technical deep-dive, system memory, error handling & maintenance guide.
+- [CLAUDE.md](file:///Users/skymaster/Library/CloudStorage/OneDrive-NortheasternUniversity/Projects/Costco_Fuel_Notifier/CLAUDE.md): Low-token summary for LLM context windows.
 
 ---
 
 ## 📄 License
 
-MIT License. Free to use and modify.
+MIT License. Free to use and adapt.
