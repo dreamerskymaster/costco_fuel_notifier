@@ -2,6 +2,7 @@ import os
 import asyncio
 import urllib.parse
 from datetime import datetime, timezone, timedelta
+import sys
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -344,54 +345,38 @@ def send_email_smtp(summary, stations):
 
 
 def send_email(stations):
-    """
-    Sends a digest of top fuel prices to RECEIVER_EMAIL via SMTP or FormSubmit fallback.
+    """Send the digest to RECEIVER_EMAIL over SMTP.
 
-    Args:
-        stations (list[dict]): List of station objects sorted by price.
+    Returns True when the message was accepted for delivery.
+
+    There is deliberately no fallback. FormSubmit used to sit here, and from
+    GitHub's datacenter IPs it returned HTML instead of JSON — so every send
+    raised, got swallowed, and the run still reported success. Days of digests
+    disappeared with a green tick. A missing App Password should be loud.
     """
     if not stations:
         print("No stations found.")
-        return
+        return False
 
     summary = ""
     for s in stations[:10]:
-        stale = " ⚠️ (Stale >12h)" if s["stale"] else ""
-        summary += f"• {s['name']} ({s['zip']}): Listed {s['formatted_price']} | 💳 Net {s['formatted_net_price']} ({s['best_card']})\n  Updated: {s['last_updated']}{stale}\n  🚗 Navigate: {s['waze_link']}\n\n"
+        stale = " \u26a0\ufe0f (Stale >12h)" if s["stale"] else ""
+        summary += (
+            f"\u2022 {s['name']} ({s['zip']}): Listed {s['formatted_price']} | "
+            f"\U0001f4b3 Net {s['formatted_net_price']} ({s['best_card']})\n"
+            f"  Updated: {s['last_updated']}{stale}\n"
+            f"  \U0001f697 Navigate: {s['waze_link']}\n\n"
+        )
 
-    # Try SMTP first if credentials are set
-    if SENDER_EMAIL and SENDER_PASSWORD:
-        if send_email_smtp(summary, stations):
-            return
+    if not (SENDER_EMAIL and SENDER_PASSWORD):
+        print(
+            "ERROR: SENDER_EMAIL / SENDER_PASSWORD are not set, so no email can be "
+            "sent. Add them as repository secrets — the password must be a Gmail "
+            "App Password, not the account password."
+        )
+        return False
 
-    # Fallback to FormSubmit AJAX API
-    recipient = RECEIVER_EMAIL
-    if not recipient:
-        print("Error: RECEIVER_EMAIL environment variable is not set.")
-        return
-
-    print(f"Attempting email dispatch via FormSubmit to {recipient}...")
-    url = f"https://formsubmit.co/ajax/{recipient}"
-    payload = {
-        "_subject": "Fuel Update : Norwalk (Optimized Card Discounts)",
-        "Top_10_Cheapest_Stations": summary,
-        "_template": "box"
-    }
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Referer": "https://formsubmit.co",
-        "Origin": "https://formsubmit.co"
-    }
-
-    try:
-        response = requests.post(url, data=payload, headers=headers, timeout=15)
-        res_data = response.json()
-        if str(res_data.get("success")).lower() == "true":
-            print("Digest email sent successfully via FormSubmit.")
-        else:
-            print(f"FormSubmit Notice ({response.status_code}): {res_data.get('message')}")
-    except Exception as e:
-        print(f"Failed to send email via FormSubmit: {e}")
+    return bool(send_email_smtp(summary, stations))
 
 
 async def main():
@@ -409,11 +394,16 @@ async def main():
 
     if price_changed or force_email or always_send:
         print("Sending daily fuel price digest email...")
-        send_email(stations)
+        if not send_email(stations):
+            # Exit non-zero so the workflow goes red. Previously this printed
+            # and returned 0, which is how a broken mailer stayed invisible.
+            print("Email dispatch FAILED.")
+            return 1
     else:
         print("Fuel price unchanged since last check. Email notification skipped.")
+    return 0
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    sys.exit(asyncio.run(main()) or 0)
 
 
