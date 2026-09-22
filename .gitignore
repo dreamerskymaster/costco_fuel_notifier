@@ -6,3 +6,10 @@ __pycache__/
 .DS_Store
 .env
 
+
+# USD/INR pipeline: the blanket *.json above exists to protect
+# service_account.json, but these two are real tracked data.
+!data/events.json
+!data/state.json
+data/cache/
+preview.html

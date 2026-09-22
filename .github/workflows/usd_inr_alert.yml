@@ -1,0 +1,69 @@
+name: USD-INR Threshold Alerts
+
+on:
+  schedule:
+    # Every three hours. The script stays silent unless a threshold is
+    # crossed, so this is a cheap poll rather than eight emails a day.
+    - cron: '37 */3 * * *'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  # Shared with the alert workflow: both commit to data/, so they must not race.
+  group: usd-inr-notifier
+  cancel-in-progress: false
+
+jobs:
+  run-usd-inr-alert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Yahoo throttles by IP and Actions runners share addresses, so a 429 is
+      # routine. Carrying the price cache between runs keeps it from costing
+      # us the day's email.
+      - name: Restore price cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: usd-inr-cache-${{ github.run_id }}
+          restore-keys: usd-inr-cache-
+
+      - name: Check Alert Conditions
+        env:
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+          FX_RECEIVER_EMAIL: ${{ secrets.FX_RECEIVER_EMAIL || secrets.RECEIVER_EMAIL }}
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SEND_AMOUNT_USD: ${{ vars.SEND_AMOUNT_USD }}
+          PAYDAY_DAY: ${{ vars.PAYDAY_DAY }}
+          FLEX_DAYS: ${{ vars.FLEX_DAYS }}
+          CURRENT_PROVIDER: ${{ vars.CURRENT_PROVIDER }}
+          RISK_AVERSION: ${{ vars.RISK_AVERSION }}
+          ALERT_PERCENTILE: ${{ vars.ALERT_PERCENTILE }}
+        run: python usd_inr_tracker.py --mode alert
+
+      - name: Commit rate history
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/history.csv data/state.json
+          git diff --staged --quiet && echo "nothing to commit" && exit 0
+          git commit -m "chore(data): USD/INR alert check $(date -u +%Y-%m-%d)"
+          git pull --rebase --autostash origin ${{ github.ref_name }}
+          git push
