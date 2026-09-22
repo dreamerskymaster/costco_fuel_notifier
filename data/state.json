@@ -1,0 +1,60 @@
+{
+  "last_alert_date": "2026-09-22",
+  "last_digest_date": "2026-09-22",
+  "markup_history": {
+    "chase (us)": [
+      {
+        "date": "2026-09-22",
+        "markup": 3.0992
+      }
+    ],
+    "instarem": [
+      {
+        "date": "2026-09-22",
+        "markup": 0.6696
+      }
+    ],
+    "ofx": [
+      {
+        "date": "2026-09-22",
+        "markup": 3.3023
+      }
+    ],
+    "remitly": [
+      {
+        "date": "2026-09-22",
+        "markup": 0.3326
+      }
+    ],
+    "state bank of india": [
+      {
+        "date": "2026-09-22",
+        "markup": 0.2908
+      }
+    ],
+    "wells fargo": [
+      {
+        "date": "2026-09-22",
+        "markup": 3.1399
+      }
+    ],
+    "western union": [
+      {
+        "date": "2026-09-22",
+        "markup": 0.3766
+      }
+    ],
+    "wise": [
+      {
+        "date": "2026-09-22",
+        "markup": 0.0
+      }
+    ],
+    "worldremit": [
+      {
+        "date": "2026-09-22",
+        "markup": 0.3227
+      }
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+date,spot,verdict,score,reservation_rate,edge_pct,best_provider,best_received_inr,current_provider_received_inr,days_left
+2026-09-22,95.8734,SEND_NOW,63,95.9441,-0.0737,SBI (bank),285847.19,284787.23,5
