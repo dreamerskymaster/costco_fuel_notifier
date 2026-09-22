@@ -1,0 +1,13 @@
+{
+  "_comment": "Policy dates that can move USD/INR inside a send window. Verify against the official calendars below before relying on a date; the RBI publishes its schedule a year ahead and the Fed about two years ahead, and both can shift.",
+  "_sources": {
+    "rbi": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+    "fomc": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  "events": [
+    {"date": "2026-10-07", "label": "RBI MPC decision", "detail": "Oct 5-7 meeting; repo held at 5.25% with a neutral stance at the August review", "impact": "high"},
+    {"date": "2026-10-28", "label": "FOMC decision", "detail": "Oct 27-28 meeting; no dot plot at this one", "impact": "high"},
+    {"date": "2026-12-09", "label": "FOMC decision", "detail": "Dec 8-9 meeting; includes the dot plot", "impact": "high"},
+    {"date": "2026-12-05", "label": "RBI MPC decision (approximate)", "detail": "December meeting date announced by RBI; confirm exact day", "impact": "medium"}
+  ]
+}
