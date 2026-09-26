@@ -13,6 +13,7 @@ from datetime import date
 import numpy as np
 
 from fx_backtest import run_backtest
+from fx_config import Config
 from fx_signals import (
     compute_stats,
     decide,
@@ -162,6 +163,48 @@ class Formatting(unittest.TestCase):
     def test_decimals(self) -> None:
         self.assertEqual(inr(286567.89, 2), "2,86,567.89")
         self.assertEqual(inr(95.8, 2), "95.80")
+
+
+class Recipients(unittest.TestCase):
+    """Recipient resolution. Addresses live in separate secrets because the
+    repo is public, so the merge logic is what actually delivers to both."""
+
+    def _config(self, **env):
+        import os
+        from unittest.mock import patch
+        keys = ("FX_RECEIVER_EMAIL", "RECEIVER_EMAIL", "FX_EXTRA_RECEIVERS")
+        cleared = {k: "" for k in keys}
+        with patch.dict(os.environ, {**cleared, **env}):
+            return Config()
+
+    def test_primary_only(self):
+        self.assertEqual(self._config(RECEIVER_EMAIL="a@x.com").receivers, ["a@x.com"])
+
+    def test_primary_plus_extra(self):
+        cfg = self._config(RECEIVER_EMAIL="a@x.com", FX_EXTRA_RECEIVERS="b@y.com")
+        self.assertEqual(cfg.receivers, ["a@x.com", "b@y.com"])
+
+    def test_extra_may_list_several(self):
+        cfg = self._config(RECEIVER_EMAIL="a@x.com", FX_EXTRA_RECEIVERS="b@y.com, c@z.com")
+        self.assertEqual(cfg.receivers, ["a@x.com", "b@y.com", "c@z.com"])
+
+    def test_duplicates_are_not_mailed_twice(self):
+        cfg = self._config(RECEIVER_EMAIL="a@x.com", FX_EXTRA_RECEIVERS="A@X.com")
+        self.assertEqual(cfg.receivers, ["a@x.com"])
+
+    def test_fx_receiver_overrides_generic_but_extra_still_applies(self):
+        cfg = self._config(FX_RECEIVER_EMAIL="fx@x.com", RECEIVER_EMAIL="gen@x.com",
+                           FX_EXTRA_RECEIVERS="b@y.com")
+        self.assertEqual(cfg.receivers, ["fx@x.com", "b@y.com"])
+
+    def test_empty_extra_is_harmless(self):
+        for blank in ("", "   ", ","):
+            cfg = self._config(RECEIVER_EMAIL="a@x.com", FX_EXTRA_RECEIVERS=blank)
+            self.assertEqual(cfg.receivers, ["a@x.com"])
+
+    def test_malformed_address_is_reported(self):
+        cfg = self._config(RECEIVER_EMAIL="a@x.com", FX_EXTRA_RECEIVERS="not-an-email")
+        self.assertTrue(any("malformed" in p for p in cfg.validate()))
 
 
 class Backtesting(unittest.TestCase):

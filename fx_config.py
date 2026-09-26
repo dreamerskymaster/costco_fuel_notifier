@@ -44,6 +44,26 @@ def _emails(*names: str) -> list[str]:
     return []
 
 
+def _recipients() -> list[str]:
+    """Primary recipient(s) plus any additional ones, de-duplicated.
+
+    Additional recipients live in their own variable rather than being appended
+    to the primary one. This repo is public, so an address must never appear in
+    a workflow file; keeping them in separate secrets means the workflow only
+    ever references secret names. Matching is case-insensitive so the same
+    address listed in both places is not mailed twice.
+    """
+    people = _emails("FX_RECEIVER_EMAIL", "RECEIVER_EMAIL") + _emails("FX_EXTRA_RECEIVERS")
+    seen: set[str] = set()
+    unique: list[str] = []
+    for address in people:
+        key = address.lower()
+        if key not in seen:
+            seen.add(key)
+            unique.append(address)
+    return unique
+
+
 @dataclass
 class Config:
     # --- transfer profile ---
@@ -63,7 +83,7 @@ class Config:
     # --- email ---
     sender_email: str = field(default_factory=lambda: _text("SENDER_EMAIL"))
     sender_password: str = field(default_factory=lambda: _text("SENDER_PASSWORD"))
-    receivers: list[str] = field(default_factory=lambda: _emails("FX_RECEIVER_EMAIL", "RECEIVER_EMAIL"))
+    receivers: list[str] = field(default_factory=_recipients)
     smtp_server: str = field(default_factory=lambda: _text("SMTP_SERVER", "smtp.gmail.com"))
     smtp_port: int = field(default_factory=lambda: _integer("SMTP_PORT", 587))
 
@@ -75,6 +95,9 @@ class Config:
             problems.append("SENDER_PASSWORD is not set")
         if not self.receivers:
             problems.append("FX_RECEIVER_EMAIL / RECEIVER_EMAIL is not set")
+        bad = [a for a in self.receivers if "@" not in a or a.startswith("@") or a.endswith("@")]
+        if bad:
+            problems.append(f"recipient address looks malformed: {', '.join(bad)}")
         if not 1 <= self.payday_day <= 28:
             problems.append(f"PAYDAY_DAY must be 1-28, got {self.payday_day}")
         if self.flex_days < 0:
