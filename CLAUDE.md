@@ -38,9 +38,10 @@
 | :--- | :--- | :--- | :--- |
 | `SENDER_EMAIL` | All three | Gmail address sending digests | `yourname@gmail.com` |
 | `SENDER_PASSWORD` | All three | 16-character Gmail App Password | `abcd efgh ijkl mnop` |
-| `RECEIVER_EMAIL` | US Tracker | Recipient for US fuel digest | `ajithsri2000@gmail.com` |
-| `MUMBAI_RECEIVER_EMAIL` | Mumbai | Recipient(s) for Mumbai digest (comma-separated supported) | `srikanthsund@gmail.com` |
-| `FX_RECEIVER_EMAIL` | USD→INR | Recipient(s) for remittance brief; falls back to `RECEIVER_EMAIL` | `ajithsri2000@gmail.com` |
+| `RECEIVER_EMAIL` | US Tracker | Recipient for US fuel digest | `you@example.com` |
+| `MUMBAI_RECEIVER_EMAIL` | Mumbai | Recipient(s) for Mumbai digest (comma-separated supported) | `family@example.com` |
+| `FX_RECEIVER_EMAIL` | USD→INR | Recipient(s) for remittance brief; falls back to `RECEIVER_EMAIL` | `you@example.com` |
+| `FX_EXTRA_RECEIVERS` | Optional | Extra recipient(s) appended & de-duplicated. Separate secret because **the repo is public** — never put an address in a workflow file | `friend@example.com` |
 | `GCP_SERVICE_ACCOUNT` | US Tracker | Raw JSON content of GCP Service Account | `{"type": "service_account"...}` |
 | `SMTP_SERVER` | Optional | SMTP host | `smtp.gmail.com` |
 | `SMTP_PORT` | Optional | SMTP port | `587` |

@@ -25,6 +25,7 @@ Configure the following secrets in **Settings > Secrets and variables > Actions*
 | `RECEIVER_EMAIL` | US Pipeline | Recipient for US digest | `user@example.com` |
 | `MUMBAI_RECEIVER_EMAIL` | Mumbai Pipeline | Recipient(s) for Mumbai digest (comma-separated supported) | `dad@example.com` |
 | `FX_RECEIVER_EMAIL` | USD→INR Pipeline | Recipient(s) for remittance brief. Falls back to `RECEIVER_EMAIL` if unset | `user@example.com` |
+| `FX_EXTRA_RECEIVERS` | Optional | Additional recipient(s), comma-separated, appended to the above and de-duplicated. Kept separate so no address ever appears in a workflow file — **this repo is public** | `friend@example.com` |
 | `GCP_SERVICE_ACCOUNT` | US Pipeline | Raw JSON string of GCP Service Account key | `{"type": "service_account", ...}` |
 | `SMTP_SERVER` | Optional | Custom SMTP host | `smtp.gmail.com` |
 | `SMTP_PORT` | Optional | Custom SMTP port | `587` |

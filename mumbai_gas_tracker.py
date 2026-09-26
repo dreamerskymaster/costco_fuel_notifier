@@ -18,7 +18,7 @@ TANK_CAPACITY_L = 45
 # Environment Variables
 SENDER_EMAIL = (os.environ.get("SENDER_EMAIL") or "").strip()
 SENDER_PASSWORD = (os.environ.get("SENDER_PASSWORD") or "").strip()
-RECEIVER_EMAIL = (os.environ.get("MUMBAI_RECEIVER_EMAIL") or os.environ.get("RECEIVER_EMAIL") or "srikanthsund@gmail.com").strip()
+RECEIVER_EMAIL = (os.environ.get("MUMBAI_RECEIVER_EMAIL") or os.environ.get("RECEIVER_EMAIL") or "").strip() or SENDER_EMAIL
 
 raw_smtp_server = (os.environ.get("SMTP_SERVER") or "").strip()
 SMTP_SERVER = raw_smtp_server if raw_smtp_server else "smtp.gmail.com"
