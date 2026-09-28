@@ -11,6 +11,7 @@ A production-grade, triple-pipeline automation suite built with Python and GitHu
 | **US Tracker** (`gas_tracker.py`) | ZIPs `06460`, `06854`, `06901`, `10801` (CT) | GasBuddy scraping, Google Sheets trend logging, Waze 1-tap navigation links | **Citi Costco Visa**: 4% at Costco & standalone gas<br>**Amex BCE**: 3% at standalone gas<br>*(Supermarket gas 1% base)* | 3-hour interval daily |
 | **Mumbai Tracker** (`mumbai_gas_tracker.py`) | Versova → Andheri West → JVLR → Powai → Airoli → Ghansoli | Sorted Petrol & Diesel, Purple Diesel highlights, Nitrogen tyre availability, Hyundai Venue 2019 care card | **Amazon Pay ICICI Card**: 1% fuel surcharge waiver on ₹400–₹4,000 spend (saves surcharge + 18% GST) | Daily @ 7:00 AM IST (`30 1 * * *`) |
 | **USD→INR Remittance** (`usd_inr_tracker.py`) | USD → India transfers, ~$3,000/month around the 15th | All-in provider cost ranking, trend+AR(1) stopping model, walk-forward backtest, markup-drift detection, threshold alerts | **Provider choice beats rate timing**: best-vs-worst spread ₹9–10k per transfer, vs a measured timing edge of +₹142/mo (not significant) | Daily @ ~08:11 ET + 3-hourly alert poll |
+| **INR→USD Credila Brief** (`inr_usd_tracker.py`) | Credila education loan → student's Chase account, ~$1,000/month | Live HSBC India & IOB TT-selling card rates, Credila wire OUR vs SHA vs Global Pay cost to land an exact dollar amount, Global Pay break-even rate, GST on conversion, Wise yardstick, receipt calibration | **Route and fee handling beat timing**: waiting for a cheap dollar measured −₹108/mo vs sending on day one over 55 windows | Daily check @ ~09:23 ET; emails only on window open / 2 days before close / weekly |
 
 ---
 
@@ -27,6 +28,7 @@ Configure the following secrets in **Settings > Secrets and variables > Actions*
 | `FX_RECEIVER_EMAIL` | USD→INR Pipeline | Recipient(s) for remittance brief. Falls back to `RECEIVER_EMAIL` if unset | `user@example.com` |
 | `FX_EXTRA_RECEIVERS` | Optional | Additional recipient(s), comma-separated, appended to the above and de-duplicated. Kept separate so no address ever appears in a workflow file — **this repo is public** | `friend@example.com` |
 | `GCP_SERVICE_ACCOUNT` | US Pipeline | Raw JSON string of GCP Service Account key | `{"type": "service_account", ...}` |
+| `INR_USD_RECEIVER_EMAIL` | INR→USD Pipeline | Recipient(s) for the Credila→Chase brief. **No fallback** to `RECEIVER_EMAIL` — the brief belongs to someone else | `student@example.com` |
 | `SMTP_SERVER` | Optional | Custom SMTP host | `smtp.gmail.com` |
 | `SMTP_PORT` | Optional | Custom SMTP port | `587` |
 
@@ -70,6 +72,22 @@ Set as repository **Variables** (not secrets), or as env vars locally. All optio
 | `ALERT_PERCENTILE` | `85` | Level that triggers send advice and alerts |
 | `ALERT_COOLDOWN_DAYS` | `3` | Minimum gap between threshold alerts |
 
+### Tunable variables (INR→USD Credila pipeline)
+
+| Variable | Default | Meaning |
+| :--- | :--- | :--- |
+| `INR_USD_AMOUNT` | `1000` | Dollars that must land in Chase |
+| `INR_USD_WINDOW_START` | `15` | Day of month the send window opens |
+| `INR_USD_FLEX_DAYS` | `14` | Window length in days |
+| `INR_USD_DIGEST_WEEKDAY` | `0` | Weekly brief day (0 = Monday) |
+| `WIRE_MARKUP_PCT` | `2.0` | Wire markup used only if HSBC's rate page is unreadable |
+| `WIRE_OUR_FEE_INR` | `1200` | HSBC charge (pre-GST) for OUR, where the sender pays every bank en route |
+| `WIRE_CORRESPONDENT_USD` | `20` | Dollars shaved by correspondents on SHA |
+| `CHASE_INCOMING_WIRE_USD` | `15` | Chase incoming international wire fee |
+| `GLOBALPAY_MARKUP_PCT` | `1.0` | Guess for Credila Global Pay (WSFx) — unpublished |
+| `GLOBALPAY_FEE_INR` / `GLOBALPAY_CORRESPONDENT_USD` | `0` / `0` | Extra Global Pay charges, if any |
+| `WIRE_RECEIPT` / `GLOBALPAY_RECEIPT` | unset | `YYYY-MM-DD,inr_debited,usd_received` from a real transfer; calibrates the markup |
+
 ---
 
 ## 📁 Repository Structure
@@ -80,7 +98,8 @@ Set as repository **Variables** (not secrets), or as env vars locally. All optio
 │   ├── schedule.yml            # US fuel tracker workflow (Cron trigger)
 │   ├── mumbai_schedule.yml     # Mumbai fuel tracker workflow (Daily 7:00 AM IST)
 │   ├── usd_inr_schedule.yml    # USD→INR daily brief (~08:11 ET)
-│   └── usd_inr_alert.yml       # USD→INR threshold alerts (3-hourly poll)
+│   ├── usd_inr_alert.yml       # USD→INR threshold alerts (3-hourly poll)
+│   └── inr_usd_schedule.yml    # INR→USD Credila brief (daily check, sparse emails)
 ├── gas_tracker.py          # US fuel tracker, GasBuddy parser & Sheets logger
 ├── mumbai_gas_tracker.py   # Mumbai fuel tracker, station router & vehicle care engine
 ├── usd_inr_tracker.py      # USD→INR orchestrator, HTML email, alert gating
@@ -88,8 +107,12 @@ Set as repository **Variables** (not secrets), or as env vars locally. All optio
 ├── fx_signals.py           # Trend+AR(1) model, reservation rate, send verdict
 ├── fx_providers.py         # All-in cost ranking, markup-drift warnings
 ├── fx_backtest.py          # Walk-forward validation of the send rules
-├── fx_config.py            # USD→INR env parsing (empty-string safe)
+├── inr_usd_tracker.py      # INR→USD Credila→Chase brief: routes, email, send gating
+├── fx_outbound.py          # Cost-to-land model, GST slabs, HSBC/IOB card rates, Wise yardstick
+├── fx_outbound_timing.py   # Walk-forward test of timing in the INR→USD direction
+├── fx_config.py            # Env parsing for both FX pipelines (empty-string safe)
 ├── test_fx_signals.py      # 21 offline tests for the model & window logic
+├── test_fx_outbound.py     # 16 offline tests for the INR→USD brief
 ├── data/events.json        # RBI / FOMC policy dates (manually refreshed)
 ├── ARCHITECTURE.md         # Full system architecture, maintenance & troubleshooting memory
 ├── CLAUDE.md               # Token-efficient AI agent context & quick reference guide
