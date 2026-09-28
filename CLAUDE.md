@@ -1,7 +1,7 @@
 # CLAUDE.md - Project Context & Token-Efficient Developer Guide
 
 ## Project Overview
-**Costco & Fuel Notifier** is an automated triple-pipeline monitoring suite built with Python and GitHub Actions. It monitors live regular gas/petrol/diesel prices along US and India commute routes, applies credit card reward optimization (Citi Costco Visa 4%, Amex BCE 3%, Amazon Pay ICICI 1% Surcharge Waiver), logs US trends to Google Sheets, tracks USD→INR remittance costs for monthly transfers to India, and dispatches responsive daily HTML email digests.
+**Costco & Fuel Notifier** is an automated multi-pipeline monitoring suite built with Python and GitHub Actions. It monitors live regular gas/petrol/diesel prices along US and India commute routes, applies credit card reward optimization (Citi Costco Visa 4%, Amex BCE 3%, Amazon Pay ICICI 1% Surcharge Waiver), logs US trends to Google Sheets, tracks USD→INR remittance costs for monthly transfers to India, and dispatches responsive daily HTML email digests.
 
 ## Pipelines & Data Flow
 
@@ -32,6 +32,14 @@
 - **Workflows**: `.github/workflows/usd_inr_schedule.yml` (`11 12 * * *`), `usd_inr_alert.yml` (`37 */3 * * *`).
 - **Landmines**: forecasts must anchor on today's close (invariant: horizon 0 == spot, reservation at `days_left=0` == spot); don't replace the elementwise weighted sums in `fx_signals.py` with `@` (macOS Accelerate BLAS raises spurious FP warnings); Yahoo 429s are normal and expected; `.gitignore`'s blanket `*.json` is negated for `data/events.json` and `data/state.json`.
 
+### 4. INR→USD Credila Brief (`inr_usd_tracker.py`)
+- **Purpose**: a student in the US moves ~$1,000/month from a **Credila** education loan to her **Chase** account, choosing between a **Credila wire** (funds sit in the HSBC India account opened at loan signing and leave by SWIFT at HSBC's TT-selling card rate) and **Credila Global Pay** (WSFx GlobalPay; markup unpublished).
+- **Core finding (do not undo)**: timing loses in this direction too — waiting for a cheap dollar within a 14-day window cost **₹108/mo** vs sending on day one over 55 windows (hindsight ceiling ₹312/mo), because the rupee drifts weaker. The brief says "send on day one" and leads with route choice: the Global Pay **break-even rate** vs a wire with charges set to **OUR**.
+- **Data**: HSBC India + IOB card-rate HTML pages (parsed by cell offset; a layout change returns None and falls back to `WIRE_MARKUP_PCT`), Frankfurter/Yahoo mid, Wise `v3/quotes` as a yardstick (not usable by a US-resident sender).
+- **Facts baked in** (checked Sept 2026): Chase $15 incoming international wire (College Checking too); HSBC OUR ₹1,200 + GST, app remittance otherwise free; GST on conversion per CGST Rule 32(2)(b); loan-funded education remittance = 0% TCS. Convera GlobalPay for Students pays institutions only — not a route to a personal Chase account.
+- **Modes**: `--mode digest` (emails only on window open, 2 days before close, weekly day) | `force` | `dry-run` (writes `inr_usd_preview.html`).
+- **Workflow**: `.github/workflows/inr_usd_schedule.yml` (`23 13 * * *`), shares the `usd-inr-notifier` concurrency group. State in `data/inr_usd_state.json` (negated in `.gitignore`), history in `data/inr_usd_history.csv`.
+
 ## Environment Variables & Secrets
 
 | Secret Name | Required By | Description | Default / Example |
@@ -42,6 +50,7 @@
 | `MUMBAI_RECEIVER_EMAIL` | Mumbai | Recipient(s) for Mumbai digest (comma-separated supported) | `family@example.com` |
 | `FX_RECEIVER_EMAIL` | USD→INR | Recipient(s) for remittance brief; falls back to `RECEIVER_EMAIL` | `you@example.com` |
 | `FX_EXTRA_RECEIVERS` | Optional | Extra recipient(s) appended & de-duplicated. Separate secret because **the repo is public** — never put an address in a workflow file | `friend@example.com` |
+| `INR_USD_RECEIVER_EMAIL` | INR→USD | Recipient(s) for the Credila→Chase brief. No fallback to `RECEIVER_EMAIL` by design | `student@example.com` |
 | `GCP_SERVICE_ACCOUNT` | US Tracker | Raw JSON content of GCP Service Account | `{"type": "service_account"...}` |
 | `SMTP_SERVER` | Optional | SMTP host | `smtp.gmail.com` |
 | `SMTP_PORT` | Optional | SMTP port | `587` |
@@ -61,4 +70,8 @@ SENDER_EMAIL="me@gmail.com" SENDER_PASSWORD="pass" MUMBAI_RECEIVER_EMAIL="dad@gm
 python usd_inr_tracker.py --mode dry-run        # render preview.html, send nothing
 SENDER_EMAIL="me@gmail.com" SENDER_PASSWORD="pass" FX_RECEIVER_EMAIL="me@gmail.com" python usd_inr_tracker.py --mode digest
 python -m unittest test_fx_signals              # 21 offline tests
+
+# Run INR→USD Credila brief locally
+python inr_usd_tracker.py --mode dry-run        # render inr_usd_preview.html
+python -m unittest test_fx_outbound             # 16 offline tests
 ```

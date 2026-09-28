@@ -113,3 +113,81 @@ def load_events() -> list[dict]:
         return json.loads(EVENTS_JSON.read_text()).get("events", [])
     except (json.JSONDecodeError, OSError):
         return []
+
+
+# --------------------------------------------------------------------------
+# INR -> USD (Credila education loan to a US Chase account)
+# --------------------------------------------------------------------------
+
+OUTBOUND_HISTORY_CSV = DATA_DIR / "inr_usd_history.csv"
+OUTBOUND_STATE_JSON = DATA_DIR / "inr_usd_state.json"
+
+
+def _receipt(name: str) -> tuple[str, float, float] | None:
+    """Parse "YYYY-MM-DD,inr_debited,usd_received" from a real transfer receipt."""
+    parts = [p.strip().replace("_", "") for p in _text(name).split(",")]
+    if len(parts) != 3:
+        return None
+    try:
+        return parts[0], float(parts[1]), float(parts[2])
+    except ValueError:
+        return None
+
+
+@dataclass
+class OutboundConfig:
+    """Settings for the INR->USD brief. Separate recipients from the USD->INR one.
+
+    There is deliberately no fallback to RECEIVER_EMAIL: this brief belongs to
+    someone else, and silently mailing the repo owner instead would hide a
+    missing secret rather than surface it.
+    """
+
+    usd_amount: float = field(default_factory=lambda: _number("INR_USD_AMOUNT", 1000.0))
+    window_start: int = field(default_factory=lambda: _integer("INR_USD_WINDOW_START", 15))
+    flex_days: int = field(default_factory=lambda: _integer("INR_USD_FLEX_DAYS", 14))
+    digest_weekday: int = field(default_factory=lambda: _integer("INR_USD_DIGEST_WEEKDAY", 0))  # Monday
+
+    # Credila wire: money sits in the HSBC India account opened at loan signing
+    # and leaves by SWIFT at HSBC's live TT-selling card rate. The markup below
+    # is only the fallback for when that page cannot be read.
+    wire_markup_pct: float = field(default_factory=lambda: _number("WIRE_MARKUP_PCT", 2.0))
+    # HSBC: app remittances carry no fee; ticking OUR (sender pays every bank
+    # in the chain) costs ₹1,200 + GST. With SHA, correspondents shave dollars.
+    wire_our_fee_inr: float = field(default_factory=lambda: _number("WIRE_OUR_FEE_INR", 1200.0))
+    wire_correspondent_usd: float = field(default_factory=lambda: _number("WIRE_CORRESPONDENT_USD", 20.0))
+    # Chase: $15 per incoming international wire, College Checking included.
+    chase_incoming_wire_usd: float = field(default_factory=lambda: _number("CHASE_INCOMING_WIRE_USD", 15.0))
+    wire_receipt: tuple | None = field(default_factory=lambda: _receipt("WIRE_RECEIPT"))
+
+    # Global Pay (WSFx GlobalPay, Credila's forex partner): "market-linked"
+    # rate with no published markup, so this is a guess until a receipt or an
+    # in-app quote replaces it. Assumed to arrive as a SWIFT wire, so Chase's
+    # incoming fee applies.
+    globalpay_markup_pct: float = field(default_factory=lambda: _number("GLOBALPAY_MARKUP_PCT", 1.0))
+    globalpay_fee_inr: float = field(default_factory=lambda: _number("GLOBALPAY_FEE_INR", 0.0))
+    globalpay_correspondent_usd: float = field(default_factory=lambda: _number("GLOBALPAY_CORRESPONDENT_USD", 0.0))
+    globalpay_receipt: tuple | None = field(default_factory=lambda: _receipt("GLOBALPAY_RECEIPT"))
+
+    sender_email: str = field(default_factory=lambda: _text("SENDER_EMAIL"))
+    sender_password: str = field(default_factory=lambda: _text("SENDER_PASSWORD"))
+    receivers: list[str] = field(default_factory=lambda: _emails("INR_USD_RECEIVER_EMAIL"))
+    smtp_server: str = field(default_factory=lambda: _text("SMTP_SERVER", "smtp.gmail.com"))
+    smtp_port: int = field(default_factory=lambda: _integer("SMTP_PORT", 587))
+
+    def validate(self) -> list[str]:
+        problems: list[str] = []
+        if not self.sender_email:
+            problems.append("SENDER_EMAIL is not set")
+        if not self.sender_password:
+            problems.append("SENDER_PASSWORD is not set")
+        if not self.receivers:
+            problems.append("INR_USD_RECEIVER_EMAIL is not set")
+        bad = [a for a in self.receivers if "@" not in a or a.startswith("@") or a.endswith("@")]
+        if bad:
+            problems.append(f"recipient address looks malformed: {', '.join(bad)}")
+        if not 1 <= self.window_start <= 28:
+            problems.append(f"INR_USD_WINDOW_START must be 1-28, got {self.window_start}")
+        if self.flex_days < 0:
+            problems.append("INR_USD_FLEX_DAYS cannot be negative")
+        return problems
