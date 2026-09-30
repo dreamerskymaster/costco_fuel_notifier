@@ -31,6 +31,7 @@ from statistics import median
 
 import numpy as np
 
+import email_thread  # shared threading + rate-change gating
 import fx_data
 import fx_providers as provider_module
 from fx_backtest import BacktestResult, run_backtest
@@ -522,10 +523,23 @@ def build_html(
 # --------------------------------------------------------------------------
 
 def send_email(config: Config, subject: str, html: str) -> None:
+    """Send the digest via SMTP, threading same-day messages into one conversation.
+
+    The first email of each calendar day becomes the thread anchor (its
+    Message-ID is stored in ``data/thread_state.json``).  Subsequent calls on
+    the same day attach ``In-Reply-To`` and ``References`` headers so that
+    Gmail and other IMAP clients group them into a single thread.
+    """
+    thread_headers = email_thread.get_thread_headers("usd_inr")
+    mid = email_thread.mark_sent("usd_inr")
+
     message = MIMEMultipart("alternative")
     message["Subject"] = subject
     message["From"] = config.sender_email
     message["To"] = ", ".join(config.receivers)
+    message["Message-ID"] = mid
+    for header_name, header_value in thread_headers.items():
+        message[header_name] = header_value
     message.attach(MIMEText(html, "html"))
 
     context = ssl.create_default_context()
@@ -533,6 +547,8 @@ def send_email(config: Config, subject: str, html: str) -> None:
         server.starttls(context=context)
         server.login(config.sender_email, config.sender_password)
         server.sendmail(config.sender_email, config.receivers, message.as_string())
+    thread_note = "(new thread)" if not thread_headers else "(threaded reply)"
+    print(f"Email sent to {', '.join(config.receivers)} {thread_note}")
 
 
 # --------------------------------------------------------------------------
@@ -622,6 +638,19 @@ def main(argv: list[str] | None = None) -> int:
         save_state(state)
         return 0
 
+    # --- rate-change gate (alert mode bypasses when genuine alerts exist) ---
+    is_genuine_alert = args.mode == "alert" and bool(alerts)
+    spot_value = stats.spot
+    if not is_genuine_alert and not email_thread.has_rate_changed(
+        "usd_inr", spot_value, threshold_pct=0.1, key="last_rate"
+    ):
+        print(
+            f"Rate gate: spot ₹{spot_value:.3f} has not moved >= 0.1% since last email "
+            f"— skipping. {summary}"
+        )
+        save_state(state)
+        return 0
+
     html = build_html(spot, stats, model, decision, report, backtest, context, events, config, alerts)
 
     if args.mode == "dry-run":
@@ -661,6 +690,8 @@ def main(argv: list[str] | None = None) -> int:
     if alerts:
         state["last_digest_date"] = today.isoformat()
     save_state(state)
+    # Persist spot rate for next run's change gate.
+    email_thread.record_rate("usd_inr", stats.spot, key="last_rate")
     print(f"sent to {', '.join(config.receivers)} — {summary}")
     return 0
 

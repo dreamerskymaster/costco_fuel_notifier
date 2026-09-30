@@ -20,11 +20,16 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import smtplib
+import ssl
 import sys
 from dataclasses import replace
 from datetime import date, timedelta
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from pathlib import Path
 
+import email_thread  # shared threading + rate-change gating
 import fx_data
 from fx_config import DATA_DIR, OUTBOUND_HISTORY_CSV, OUTBOUND_STATE_JSON, OutboundConfig
 from fx_outbound import (
@@ -38,7 +43,7 @@ from fx_outbound import (
     implied_markup_pct,
 )
 from fx_outbound_timing import OutboundBacktest, cheapness_percentile, run_outbound_backtest
-from usd_inr_tracker import BAD, GOOD, INK, MUTED, WARN, _card, compute_window, inr, send_email, signed_pct
+from usd_inr_tracker import BAD, GOOD, INK, MUTED, WARN, _card, compute_window, inr, signed_pct
 
 ACCENT = "#1d4ed8"  # Chase-adjacent blue, so the two briefs are told apart at a glance
 
@@ -128,9 +133,40 @@ def _mid_on(day: str) -> float | None:
     return candidates[-1] if candidates else None
 
 
-# --------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# SMTP sender — separate pipeline key so inr_usd threads independently
+# ---------------------------------------------------------------------------
+
+def _send_email_inr_usd(config: OutboundConfig, subject: str, html: str) -> None:
+    """Send the INR→USD brief via SMTP, threading same-day messages together.
+
+    Uses the ``'inr_usd'`` pipeline key in ``data/thread_state.json`` so that
+    these emails thread separately from the USD→INR pipeline.
+    """
+    thread_headers = email_thread.get_thread_headers("inr_usd")
+    mid = email_thread.mark_sent("inr_usd")
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = subject
+    message["From"] = config.sender_email
+    message["To"] = ", ".join(config.receivers)
+    message["Message-ID"] = mid
+    for header_name, header_value in thread_headers.items():
+        message[header_name] = header_value
+    message.attach(MIMEText(html, "html"))
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP(config.smtp_server, config.smtp_port, timeout=30) as server:
+        server.starttls(context=context)
+        server.login(config.sender_email, config.sender_password)
+        server.sendmail(config.sender_email, config.receivers, message.as_string())
+    thread_note = "(new thread)" if not thread_headers else "(threaded reply)"
+    print(f"INR→USD email sent to {len(config.receivers)} recipient(s) {thread_note}")
+
+
+# ---------------------------------------------------------------------------
 # persistence
-# --------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 def load_state() -> dict:
     try:
@@ -406,9 +442,20 @@ def main(argv: list[str] | None = None) -> int:
         print("wrote inr_usd_preview.html")
         return 0
 
+    # --- rate-change gate (0.1% mid movement required; force/manual bypasses) ---
+    if args.mode != "force" and not email_thread.has_rate_changed(
+        "inr_usd", mid, threshold_pct=0.1, key="last_rate"
+    ):
+        print(
+            f"Rate gate: mid ₹{mid:.3f} has not moved >= 0.1% since last email — skipping."
+        )
+        state["last_sent"] = today.isoformat()
+        save_state(state)
+        return 0
+
     tag = {"window-open": "SEND NOW", "closing": "LAST CALL", "weekly": "WEEKLY", "manual": "BRIEF"}[reason]
     subject = f"INR→USD ₹{mid:.2f} · {tag} · Global Pay ≤ ₹{breakeven_rate:.2f} else wire OUR ₹{inr(best_wire.total_inr)}"
-    send_email(config, subject, html)
+    _send_email_inr_usd(config, subject, html)
 
     append_history(
         {
@@ -428,6 +475,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     state["last_sent"] = today.isoformat()
     save_state(state)
+    # Persist mid rate for next run's change gate.
+    email_thread.record_rate("inr_usd", mid, key="last_rate")
     print(f"sent ({reason}) to {len(config.receivers)} recipient(s) — {summary}")
     return 0
 

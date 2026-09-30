@@ -15,6 +15,8 @@ import requests
 import gspread
 import re
 
+import email_thread  # shared threading + rate-change gating
+
 # --- CONFIGURATION ---
 # Commute corridor: Norwalk, CT (Home) -> Stamford -> New Rochelle -> GWB/Route 46 -> Tonnelle Ave (US-1&9) -> Jersey City (Westside Ave) -> Bayonne
 # Covers Costco locations + top Northern NJ high-volume discounters (Fuel 4, Delta, Wawa, QuickChek, US Gas, Lukoil, Speedway)
@@ -549,7 +551,11 @@ def build_email_content(stations, mode: str):
 
 def send_email_smtp(subject, text_content, html_content):
     """
-    Sends email via standard SMTP over TLS.
+    Sends email via standard SMTP over TLS with daily thread chaining.
+
+    Same-day emails are grouped into a single Gmail/IMAP thread by setting
+    ``In-Reply-To`` and ``References`` headers pointing to the first email's
+    Message-ID, which is persisted in ``data/thread_state.json``.
     """
     if not SENDER_EMAIL or not SENDER_PASSWORD:
         print("SMTP Error: SENDER_EMAIL or SENDER_PASSWORD not configured.")
@@ -560,10 +566,17 @@ def send_email_smtp(subject, text_content, html_content):
         print("SMTP Error: No recipient email specified.")
         return False
 
+    # Determine thread position for today and generate a new Message-ID.
+    thread_headers = email_thread.get_thread_headers("gas")
+    mid = email_thread.mark_sent("gas")
+
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"] = SENDER_EMAIL
     msg["To"] = recipient
+    msg["Message-ID"] = mid
+    for header_name, header_value in thread_headers.items():
+        msg[header_name] = header_value
     msg.attach(MIMEText(text_content, "plain"))
     msg.attach(MIMEText(html_content, "html"))
 
@@ -574,39 +587,65 @@ def send_email_smtp(subject, text_content, html_content):
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
         server.sendmail(SENDER_EMAIL, recipient, msg.as_string())
         server.quit()
-        print(f"Digest email sent successfully via SMTP to {recipient}.")
+        thread_note = "(new thread)" if not thread_headers else "(threaded reply)"
+        print(f"Digest email sent successfully via SMTP to {recipient} {thread_note}.")
         return True
     except Exception as e:
         print(f"Failed to send email via SMTP: {e}")
         return False
 
 
+# Minimum price movement (per gallon) to trigger a regular 3-hour check email.
+_PRICE_CHANGE_THRESHOLD_USD = 0.02
+
+
 async def main():
+    """Fetch gas prices, apply price-change gate, and dispatch the email digest.
+
+    Gate logic:
+    - Friday departure / Sunday return alerts: always send (time-critical).
+    - FORCE_EMAIL env var set to 'true': always send (manual override).
+    - Regular 3-hour checks: only send if the best net price has moved by
+      >= $0.02/gal since the last sent email (stored in thread_state.json).
+    """
     print("Fetching gas prices across Norwalk -> Jersey City corridor...")
     stations = await fetch_gas_prices()
     if not stations:
         print("No stations found.")
         return 1
 
-    price_changed = log_to_sheets(stations)
+    log_to_sheets(stations)
 
     mode = get_commute_mode()
     print(f"Detected commute mode: {mode}")
 
-    subject, text_summary, html_content = build_email_content(stations, mode)
-
-    # Force email on Friday departure or Sunday return alerts
+    # --- price-change gate ---
     is_weekend_alert = mode in ["FRIDAY_DEPARTURE", "SUNDAY_RETURN"]
-    always_send = os.environ.get("ALWAYS_SEND_EMAIL", "true").lower() == "true"
     force_email = os.environ.get("FORCE_EMAIL", "false").lower() == "true"
 
-    if price_changed or force_email or always_send or is_weekend_alert:
-        print("Sending fuel price digest email...")
-        if not send_email_smtp(subject, text_summary, html_content):
-            print("Email dispatch FAILED.")
-            return 1
-    else:
-        print("Fuel price unchanged since last check. Email notification skipped.")
+    best_price = stations[0]["net_price"] if stations else 0.0
+    price_moved = email_thread.has_rate_changed(
+        "gas", best_price,
+        threshold_pct=(_PRICE_CHANGE_THRESHOLD_USD / best_price * 100) if best_price else 0.1,
+        key="last_price",
+    )
+
+    if not (is_weekend_alert or force_email or price_moved):
+        print(
+            f"Price gate: best net ${best_price:.3f}/gal has not moved "
+            f">= ${_PRICE_CHANGE_THRESHOLD_USD:.2f} since last email — skipping."
+        )
+        return 0
+
+    subject, text_summary, html_content = build_email_content(stations, mode)
+
+    print("Sending fuel price digest email...")
+    if not send_email_smtp(subject, text_summary, html_content):
+        print("Email dispatch FAILED.")
+        return 1
+
+    # Persist the price so the next run can compare against it.
+    email_thread.record_rate("gas", best_price, key="last_price")
     return 0
 
 
