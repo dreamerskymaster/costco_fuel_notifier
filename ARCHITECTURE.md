@@ -39,12 +39,14 @@ The **Costco & Fuel Price Notifier** is an automated dual-pipeline system design
 
 ## 1. US Pipeline Architecture (`gas_tracker.py`)
 
-- **Target Route**: ZIP codes `06460`, `06854`, `06901`, `10801` (Norwalk/Stamford, CT corridor).
-- **Scraper Engine**:
+- **Target Route**: Norwalk, CT (`06854`) → Stamford, CT (`06901`) → New Rochelle, NY (`10801`) → Teterboro, NJ (`07608`) → Jersey City, NJ (`07306` / 850 Westside Ave) → Bayonne, NJ (`07002` / Costco). *Milford, CT (`06460`) removed.*
+- **Scraper Engine & Arbitrage**:
   - Fetches GasBuddy CSRF token (`window.gbcsrf`) from `https://www.gasbuddy.com/home` using browser User-Agent headers.
   - Executes GraphQL queries (`LocationBySearchTerm`) against `https://www.gasbuddy.com/graphql`.
   - Filters stale prices (> 12 hours) with warning flags (`⚠️ Stale >12h`).
-  - Generates Waze 1-tap navigation deep links: `https://waze.com/ul?q=<Station_Name>+<ZIP>&navigate=yes`.
+  - Generates 1-tap Google Maps search links and Waze navigation links for every station.
+  - Automatically activates **Friday Pre-Departure (Norwalk → Jersey City)** and **Sunday Pre-Return (Jersey City → Norwalk)** arbitrage briefings, advising when to hold off on filling in CT to capture NJ's ~$0.40–$0.60/gal cheaper prices.
+
 - **Google Sheets Trend Logger**:
   - Authenticates via GCP Service Account key (`GCP_SERVICE_ACCOUNT` secret or `service_account.json`).
   - Appends daily cheapest station row `[YYYY-MM-DD, Name, ZIP, Price]` to spreadsheet `Fuel Trends`.

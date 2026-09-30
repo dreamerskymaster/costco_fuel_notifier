@@ -6,14 +6,16 @@
 ## Pipelines & Data Flow
 
 ### 1. US Fuel Notifier (`gas_tracker.py`)
-- **Coverage**: ZIP codes `06460`, `06854`, `06901`, `10801` (Norwalk, CT commute).
+- **Coverage**: Norwalk, CT (`06854`) → Stamford, CT (`06901`) → New Rochelle, NY (`10801`) → Teterboro, NJ (`07608`) → Jersey City, NJ (`07306` / 850 Westside Ave) → Bayonne, NJ (`07002` / Costco). *Milford, CT (`06460`) removed.*
 - **Scraper**: GasBuddy GraphQL (`LocationBySearchTerm`).
 - **Sheets Logging**: Appends daily cheapest station `[YYYY-MM-DD, Name, ZIP, Price]` to Google Sheet `Fuel Trends` (`service_account.json`).
+- **Arbitrage Strategy**: Automatically detects Friday pre-departure (Norwalk → Jersey City) and Sunday pre-return (Jersey City → Norwalk), calculating NJ vs CT gas price differentials (~$0.40–$0.60/gal cheaper in NJ) and recommending optimal fill-up timing.
 - **Card Optimization**:
   - **Costco Gas**: Citi Costco Anywhere Visa (4% cash back, Visa only).
   - **Standalone Gas**: Citi Costco Visa (4%) / Amex Blue Cash Everyday (3%).
   - **Supermarket Gas (Stop & Shop)**: Excluded by MCC rules (1% base).
-- **Workflow**: `.github/workflows/schedule.yml` (Cron: `0 */3 * * *`).
+- **Workflow**: `.github/workflows/schedule.yml` (Cron: `0 */3 * * *`, plus Friday 4:00 PM EDT `0 20 * * 5` and Sunday 3:00 PM EDT `0 19 * * 0`).
+
 
 ### 2. Mumbai Fuel Notifier (`mumbai_gas_tracker.py`)
 - **Coverage**: Versova → Andheri West → JVLR → Powai → Airoli → Ghansoli (Navi Mumbai).

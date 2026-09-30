@@ -2,7 +2,12 @@ name: Daily Gas Price Tracker
 
 on:
   schedule:
+    # Routine corridor price monitoring every 3 hours
     - cron: '0 */3 * * *'
+    # Friday 4:00 PM EDT (20:00 UTC) — Pre-departure alert from Norwalk to 850 Westside Ave, Jersey City
+    - cron: '0 20 * * 5'
+    # Sunday 3:00 PM EDT (19:00 UTC) — Pre-return alert from Jersey City back to Norwalk
+    - cron: '0 19 * * 0'
 
   workflow_dispatch:
 
