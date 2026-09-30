@@ -27,18 +27,78 @@ raw_smtp_port = (os.environ.get("SMTP_PORT") or "").strip()
 SMTP_PORT = int(raw_smtp_port) if raw_smtp_port.isdigit() else 587
 
 
-def get_amazon_icici_card_benefit(price):
-    """
-    Calculates Amazon Pay ICICI Bank Credit Card fuel benefit:
-    - 1% Fuel Surcharge Waiver on transactions between ₹400 and ₹4,000.
-    - 0% Cashback points (fuel purchases excluded from earning Amazon Pay reward points).
-    """
-    return {
+# Dad's cards. None of them earn rewards/cashback on fuel, so the only lever is the
+# fuel surcharge waiver (~1% + 18% GST on the surcharge) — which applies only when a
+# single swipe falls inside the card's range.
+DAD_CARDS = [
+    {
+        "card_name": "HDFC Regalia",
+        "short": "Regalia",
+        "waiver_min": 400,
+        "waiver_max": 5000,
+        "cap_note": "max ₹500 waiver per statement cycle",
+    },
+    {
         "card_name": "Amazon Pay ICICI Card",
-        "benefit_summary": "1% Surcharge Waived",
-        "min_max_spend": "Valid on ₹400 – ₹4,000 spend",
-        "net_price": price,
-        "formatted_net": f"₹{price:.2f}/L"
+        "short": "ICICI Amazon",
+        "waiver_min": 400,
+        "waiver_max": 4000,
+        "cap_note": "",
+    },
+    {
+        # The HSBC RuPay *Cashback* card has no fuel waiver. If Dad's card is the RuPay
+        # *Platinum*, set waiver_min=400, waiver_max=4000 (capped at ₹250/month).
+        "card_name": "HSBC RuPay",
+        "short": "HSBC RuPay",
+        "waiver_min": None,
+        "waiver_max": None,
+        "cap_note": "no fuel waiver on RuPay Cashback variant",
+    },
+    {
+        "card_name": "Mastercard Debit Card",
+        "short": "Debit",
+        "waiver_min": None,
+        "waiver_max": None,
+        "cap_note": "no fuel waiver on debit cards",
+    },
+]
+
+
+def recommend_card(amount):
+    """
+    Picks the card whose surcharge-waiver range covers a single swipe of `amount`.
+    Prefers ICICI Amazon for fills up to ₹4,000 so Regalia's ₹500/cycle cap is kept
+    for full tanks; Regalia covers ₹4,000–₹5,000 in one swipe.
+    """
+    preference = ["ICICI Amazon", "Regalia"]
+    eligible = [
+        c for c in DAD_CARDS
+        if c["waiver_min"] is not None and c["waiver_min"] <= amount <= c["waiver_max"]
+    ]
+    eligible.sort(key=lambda c: preference.index(c["short"]) if c["short"] in preference else 99)
+    if eligible:
+        return {"card": eligible[0], "waived": True, "surcharge_saved": round(amount * 0.01, 2)}
+    # Over ₹5,000 (or under ₹400): no single swipe is waived — split across Regalia + ICICI.
+    return {"card": None, "waived": False, "surcharge_saved": 0.0}
+
+
+def get_card_benefit(price):
+    """Card recommendation for a full 45L tank at this station's price."""
+    full_tank = round(price * TANK_CAPACITY_L, 2)
+    rec = recommend_card(full_tank)
+    if rec["waived"]:
+        card = rec["card"]
+        return {
+            "card_name": card["card_name"],
+            "card_short": card["short"],
+            "benefit_summary": f"1% waived (~₹{rec['surcharge_saved']:.0f})",
+            "full_tank": full_tank,
+        }
+    return {
+        "card_name": "Split: Regalia + ICICI Amazon",
+        "card_short": "Split swipe",
+        "benefit_summary": "Keep each swipe ≤ ₹4,000/₹5,000",
+        "full_tank": full_tank,
     }
 
 
@@ -209,7 +269,7 @@ def fetch_mumbai_fuel_prices():
 
     for s in all_stations:
         s["formatted_price"] = f"₹{s['listed_price']:.2f}/L"
-        benefit = get_amazon_icici_card_benefit(s["listed_price"])
+        benefit = get_card_benefit(s["listed_price"])
         s.update(benefit)
         query = urllib.parse.quote_plus(f"{s['name']} {s['area']} Mumbai")
         s["maps_link"] = f"https://www.google.com/maps/search/?api=1&query={query}"
@@ -254,7 +314,7 @@ def build_table_rows(stations, is_diesel=False):
                 {nitrogen_badge}
             </td>
             <td style="padding: 10px 8px; font-size: 12px; color: #d97706; font-weight: 600; white-space: nowrap;">
-                💳 ICICI Amazon<br><span style="font-size: 10px; color: #166534; background: #dcfce7; padding: 1px 4px; border-radius: 3px;">1% Surcharge Waived</span>
+                💳 {s['card_short']}<br><span style="font-size: 10px; color: #166534; background: #dcfce7; padding: 1px 4px; border-radius: 3px;">{s['benefit_summary']}</span>
             </td>
             <td style="padding: 10px 8px; text-align: right; white-space: nowrap;">
                 <a href="{s['maps_link']}" style="background-color: #0284c7; color: #ffffff; padding: 6px 12px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; white-space: nowrap; font-size: 12px;">📍 Directions</a>
@@ -299,13 +359,14 @@ def send_mumbai_digest_email(petrol_stations, diesel_stations):
     text_summary += "=== PETROL STATIONS (Lowest to Highest) ===\n"
     for s in petrol_stations:
         nitro = "Nitrogen Available" if s['has_nitrogen'] else "Air Only"
-        text_summary += f"• {s['name']} ({s['area']}): {s['fuel_type']} - {s['formatted_price']} [{nitro}]\n  📍 Directions: {s['maps_link']}\n\n"
+        text_summary += f"• {s['name']} ({s['area']}): {s['fuel_type']} - {s['formatted_price']} [{nitro}] | Pay with: {s['card_short']}\n  📍 Directions: {s['maps_link']}\n\n"
         
     text_summary += "\n=== DIESEL STATIONS (Lowest to Highest) ===\n"
     for s in diesel_stations:
         nitro = "Nitrogen Available" if s['has_nitrogen'] else "Air Only"
-        text_summary += f"• {s['name']} ({s['area']}): {s['fuel_type']} - {s['formatted_price']} [{nitro}]\n  📍 Directions: {s['maps_link']}\n\n"
+        text_summary += f"• {s['name']} ({s['area']}): {s['fuel_type']} - {s['formatted_price']} [{nitro}] | Pay with: {s['card_short']}\n  📍 Directions: {s['maps_link']}\n\n"
 
+    text_summary += "\nCARD TIP: Full tank -> HDFC Regalia (1% waiver up to ₹5,000). Top-ups <= ₹4,000 -> Amazon Pay ICICI. Avoid HSBC RuPay and debit card for fuel.\n"
     msg.attach(MIMEText(text_summary, "plain"))
 
     petrol_rows_html = build_table_rows(petrol_stations, is_diesel=False)
@@ -332,7 +393,9 @@ def send_mumbai_digest_email(petrol_stations, diesel_stations):
             <div style="font-weight: 700; font-size: 13px; color: #14532d; margin-bottom: 4px;">🚘 Vehicle Profile: {VEHICLE_NAME}</div>
             • 🛞 <strong>Recommended Cold Tyre Pressure</strong>: <strong>{REC_TYRE_PSI}</strong>. Inflate with <strong>Nitrogen 🎈</strong> for steady pressure stability on highway runs.<br>
             • ⛽ <strong>Full Tank (45L) Cost</strong>: <strong>₹{full_tank_petrol:.2f}</strong> (Petrol) / <strong>₹{full_tank_diesel:.2f}</strong> (Diesel).<br>
-            • 💳 <strong>Amazon Pay ICICI Card Tip</strong>: 1% Surcharge waived on ₹400 – ₹4,000 spend. If filling a full 45L tank (over ₹4,000), split the payment or cap single swipe at ₹4,000 for 100% surcharge waiver!
+            • 💳 <strong>Which card to swipe</strong>: <strong>Full tank (~₹{full_tank_petrol:,.0f}) → HDFC Regalia</strong> — its 1% surcharge waiver covers up to ₹5,000 in one swipe (max ₹500 waiver per statement cycle).<br>
+            • 💳 <strong>Top-ups up to ₹4,000 → Amazon Pay ICICI</strong> — same 1% waiver, and it saves Regalia's monthly cap for full tanks.<br>
+            • 🚫 <strong>Avoid for fuel</strong>: HSBC RuPay (no fuel waiver on Cashback card) and Mastercard debit card. Note: No card earns reward points on fuel.
           </div>
 
           <!-- SECTION 1: PETROL -->

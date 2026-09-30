@@ -70,7 +70,10 @@ The **Costco & Fuel Price Notifier** is an automated dual-pipeline system design
   - Recommended cold tyre pressure: **33 PSI** (front & rear).
   - Full tank cost calculation based on 45L fuel tank capacity.
 - **Credit Card Surcharge Waiver Engine**:
-  - **Amazon Pay ICICI Credit Card**: 1% Fuel Surcharge Waiver on transactions between ₹400 and ₹4,000.
+  - **Dad's Cards (`DAD_CARDS`, `recommend_card()`)**:
+    - **HDFC Regalia**: 1% waiver on ₹400 – ₹5,000 (max ₹500/cycle cap) recommended for full tanks (~₹4,600+).
+    - **Amazon Pay ICICI**: 1% waiver on ₹400 – ₹4,000 (uncapped) for partial fills / top-ups ≤ ₹4,000.
+    - **HSBC RuPay & Mastercard Debit**: Excluded (no fuel waiver; 0% reward points on fuel).
   - Saves 1% surcharge fee + 18% GST on surcharge fee.
   - Explains 0% reward point accumulation on fuel MCC transactions per RBI / bank rules.
 

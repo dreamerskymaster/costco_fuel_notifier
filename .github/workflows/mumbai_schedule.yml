@@ -24,6 +24,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Skip on Road Trip Days
+        # On the 6 one-time trip departure dates the road_trip_schedule.yml workflow
+        # already fires at 5:30 AM IST with a tailored trip email. We skip the regular
+        # Mumbai digest on those mornings to avoid a duplicate email.
+        run: |
+          TODAY_IST=$(TZ="Asia/Kolkata" date +%Y-%m-%d)
+          ROAD_TRIP_DATES="2026-09-30 2026-10-04 2026-10-09 2026-10-10 2026-10-15 2026-10-17"
+          for d in $ROAD_TRIP_DATES; do
+            if [ "$TODAY_IST" = "$d" ]; then
+              echo "Road trip day ($TODAY_IST) -- skipping regular Mumbai digest."
+              exit 0
+            fi
+          done
+          echo "Regular digest day ($TODAY_IST) -- proceeding."
+
       - name: Run Mumbai Fuel Tracker
         env:
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}

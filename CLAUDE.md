@@ -19,9 +19,20 @@
 - **Coverage**: Versova → Andheri West → JVLR → Powai → Airoli → Ghansoli (Navi Mumbai).
 - **Sorting**: Petrol Section (lowest to highest) followed by Diesel Section (lowest to highest).
 - **Visuals**: Diesel prices highlighted in **Purple (`#6b21a8`)**; Nitrogen tyre inflation availability (`🎈 Nitrogen` vs `💨 Air Only`).
-- **Vehicle Profile**: Hyundai Venue (2019) cold tyre recommendation (33 PSI) and full tank (45L) cost estimates.
-- **Card Optimization**: Amazon Pay ICICI Card (1% fuel surcharge waiver on ₹400 – ₹4,000 spend).
-- **Workflow**: `.github/workflows/mumbai_schedule.yml` (Cron: `30 1 * * *` = 7:00 AM IST).
+- **Vehicle Profile**: Hyundai Venue (2019) cold tyre recommendation (33 PSI normal / 36 PSI highway) and full tank (45L) cost estimates.
+- **Card Optimization**: Dad's card rules via `recommend_card(amount)`:
+  - **HDFC Regalia**: 1% fuel surcharge waiver on ₹400 – ₹5,000 (max ₹500/cycle); recommended for full tanks (~₹4,600+).
+  - **Amazon Pay ICICI**: 1% fuel surcharge waiver on ₹400 – ₹4,000 (uncapped); recommended for top-ups ≤ ₹4,000.
+  - **HSBC RuPay & Mastercard Debit**: Excluded (no fuel waiver; 0% reward points on fuel across all cards).
+- **Workflow**: `.github/workflows/mumbai_schedule.yml` (Cron: `30 1 * * *` = 7:00 AM IST; auto-skips on road trip dates).
+
+### 3. One-Time Road Trip Fuel & Route Digest (`road_trip_tracker.py`)
+- **Coverage**: Mumbai ↔ Goa (choice of NH48 via Kolhapur vs NH66 Coastal) & Mumbai ↔ Pune (Mumbai-Pune Expressway).
+- **Dates (IST)**: Sep 30, Oct 4, Oct 9, Oct 10, Oct 15, Oct 17.
+- **Navigation**: Visual route comparison cards with 1-tap Google Maps Driving Directions and Waze links.
+- **Card & Vehicle**: Dad's credit card swipe recommendations & Venue 36 PSI highway tyre advisory.
+- **Workflow**: `.github/workflows/road_trip_schedule.yml` (Cron: `0 0 * * *` = 5:30 AM IST).
+
 
 ### 3. USD→INR Remittance Notifier (`usd_inr_tracker.py`)
 - **Purpose**: ~$3,000/month USD→India transfers, sent around the 15th with ~14 days of flexibility.
