@@ -7,14 +7,17 @@
 
 ### 1. US Fuel Notifier (`gas_tracker.py`)
 - **Coverage**: Norwalk, CT (`06854`) → Stamford, CT (`06901`) → New Rochelle, NY (`10801`) → Teterboro, NJ (`07608`) → Jersey City, NJ (`07306` / 850 Westside Ave) → Bayonne, NJ (`07002` / Costco). *Milford, CT (`06460`) removed.*
-- **Scraper**: GasBuddy GraphQL (`LocationBySearchTerm`).
-- **Sheets Logging**: Appends daily cheapest station `[YYYY-MM-DD, Name, ZIP, Price]` to Google Sheet `Fuel Trends` (`service_account.json`).
-- **Arbitrage Strategy**: Automatically detects Friday pre-departure (Norwalk → Jersey City) and Sunday pre-return (Jersey City → Norwalk), calculating NJ vs CT gas price differentials (~$0.40–$0.60/gal cheaper in NJ) and recommending optimal fill-up timing.
+- **Vehicle Profile**: **Volkswagen Passat (2013 SE)** — 18.5 gal (70 L) tank, 31 mpg hwy, 570+ mile range, recommended cold tyre pressure 34 PSI (normal) / 38 PSI (loaded highway).
+- **Route Optimization (Non-Toll / E-ZPass Minimization)**:
+  - **Friday (Norwalk → 850 Westside Ave, Jersey City)**: **100% Toll-Free ($0.00)** via Merritt Pkwy (CT-15 S) → Hutchinson River Pkwy (NY-15 S) → Cross Bronx/I-95 → GWB (Free westbound) → US-1&9 South/Tonnelle Ave directly to Westside Ave (bypassing I-95 New Rochelle toll barrier & NJ Turnpike).
+  - **Sunday (Jersey City → Norwalk)**: **Toll-Minimized** via US-1&9 North (Free) → GWB Eastbound ($13.38 off-peak NY E-ZPass) → Hutchinson River Pkwy North → Merritt Pkwy North (Free). Avoids NJ Turnpike and I-95 tolls.
+- **Arbitrage Strategy**: Leveraging Passat's 18.5-gal capacity and 570-mile range (~120 mi round trip), user can complete multiple trips on a single fill-up, completely avoiding high CT fuel taxes. Fills 100% at Costco Bayonne or Teterboro (saving ~$10+ per fill).
 - **Card Optimization**:
   - **Costco Gas**: Citi Costco Anywhere Visa (4% cash back, Visa only).
   - **Standalone Gas**: Citi Costco Visa (4%) / Amex Blue Cash Everyday (3%).
   - **Supermarket Gas (Stop & Shop)**: Excluded by MCC rules (1% base).
 - **Workflow**: `.github/workflows/schedule.yml` (Cron: `0 */3 * * *`, plus Friday 4:00 PM EDT `0 20 * * 5` and Sunday 3:00 PM EDT `0 19 * * 0`).
+
 
 
 ### 2. Mumbai Fuel Notifier (`mumbai_gas_tracker.py`)

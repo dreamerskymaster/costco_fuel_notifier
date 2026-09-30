@@ -32,10 +32,34 @@ ZIP_META = {
 JERSEY_CITY_DEST = "850 Westside Ave, Jersey City, NJ"
 NORWALK_ORIGIN = "Norwalk, CT"
 
+# --- VEHICLE PROFILE ---
+VEHICLE_NAME = "Volkswagen Passat (2013 SE)"
+TANK_CAPACITY_GAL = 18.5  # 18.5 US Gal (70 L)
+REC_TYRE_PSI = "34 PSI (Normal) / 38 PSI (Loaded Highway)"
+HWY_MPG = 31.0
+COMMUTE_ONE_WAY_MI = 60.0
+
+# Non-toll Google Maps & Waze Deep Links
+ROUTE_NON_TOLL_FRIDAY = (
+    "https://www.google.com/maps/dir/?api=1"
+    f"&origin={urllib.parse.quote_plus(NORWALK_ORIGIN)}"
+    f"&destination={urllib.parse.quote_plus(JERSEY_CITY_DEST)}"
+    "&travelmode=driving&avoid=tolls"
+)
+ROUTE_NON_TOLL_SUNDAY = (
+    "https://www.google.com/maps/dir/?api=1"
+    f"&origin={urllib.parse.quote_plus(JERSEY_CITY_DEST)}"
+    f"&destination={urllib.parse.quote_plus(NORWALK_ORIGIN)}"
+    "&travelmode=driving&avoid=tolls"
+)
+ROUTE_WAZE_DEST = f"https://waze.com/ul?q={urllib.parse.quote_plus(JERSEY_CITY_DEST)}&navigate=yes"
+ROUTE_WAZE_HOME = f"https://waze.com/ul?q={urllib.parse.quote_plus(NORWALK_ORIGIN)}&navigate=yes"
+
 # Pulling credentials from Environment Variables (GitHub Secrets)
 SENDER_EMAIL = (os.environ.get("SENDER_EMAIL") or "").strip()
 SENDER_PASSWORD = (os.environ.get("SENDER_PASSWORD") or "").strip()
 RECEIVER_EMAIL = (os.environ.get("RECEIVER_EMAIL") or "").strip() or SENDER_EMAIL
+
 
 raw_smtp_server = (os.environ.get("SMTP_SERVER") or "").strip()
 SMTP_SERVER = raw_smtp_server if raw_smtp_server else "smtp.gmail.com"
@@ -288,54 +312,72 @@ def build_email_content(stations, mode: str):
     tank_savings = 0.0
     if lowest_ct and lowest_nj:
         price_diff = round(lowest_ct["net_price"] - lowest_nj["net_price"], 2)
-        tank_savings = round(price_diff * 14.0, 2)  # Standard 14 gal fill
+        tank_savings = round(price_diff * TANK_CAPACITY_GAL, 2)  # Passat 18.5 gal tank
 
-    # Commute Mode specifics
-    route_gmaps = f"https://www.google.com/maps/dir/?api=1&origin={urllib.parse.quote_plus(NORWALK_ORIGIN)}&destination={urllib.parse.quote_plus(JERSEY_CITY_DEST)}&travelmode=driving"
-    route_waze = f"https://waze.com/ul?q={urllib.parse.quote_plus(JERSEY_CITY_DEST)}&navigate=yes"
+    est_range_mi = int(TANK_CAPACITY_GAL * HWY_MPG)
+    round_trip_mi = int(COMMUTE_ONE_WAY_MI * 2)
 
+    # Route options based on mode
     if mode == "FRIDAY_DEPARTURE":
-        subject = f"⛽ Friday Commute: Norwalk → Jersey City (Save ~${tank_savings:.0f} in NJ!)"
-        banner_title = "🚗 Friday Pre-Departure Alert: Norwalk → 850 Westside Ave, Jersey City"
+        subject = f"⛽ Friday Commute: Norwalk → Jersey City (100% Toll-Free Route + Save ~${tank_savings:.0f} in NJ!)"
+        banner_title = f"🚗 Friday Pre-Departure: Norwalk → 850 Westside Ave ({VEHICLE_NAME})"
         banner_bg = "#ecfdf5"
         banner_border = "#a7f3d0"
         banner_text_color = "#065f46"
         banner_body = f"""
-        • 💡 <strong>State Arbitrage Strategy</strong>: Gas in New Jersey is <strong>${price_diff:.2f}/gal cheaper</strong> than Norwalk/CT!<br>
-        • ⛽ <strong>Recommendation</strong>: If you have enough gas for the ~60-mile drive (~3–4 gallons), <strong>WAIT to fill up in NJ</strong>! A 14-gallon full fill in NJ saves you <strong>~${tank_savings:.2f}</strong>.<br>
-        • 🏆 <strong>Best NJ Stops</strong>: <strong>Costco Bayonne (07002)</strong> is just 4 miles south of 850 Westside Ave (or <strong>Costco Teterboro 07608</strong> right off Route 46/I-80).<br>
-        • ⚠️ Running on empty in Norwalk? Splash only 2–3 gallons locally to reach NJ, then top off!
+        • 🛣️ <strong>100% Toll-Free Route ($0.00 Tolls)</strong>: Keep NY E-ZPass in your glovebox!<br>
+          &nbsp;&nbsp;1. Take <strong>Merritt Pkwy (CT-15 S)</strong> → <strong>Hutchinson River Pkwy (NY-15 S)</strong> (Zero Tolls, completely bypasses the I-95 New Rochelle toll barrier).<br>
+          &nbsp;&nbsp;2. Cross Bronx Expy to <strong>George Washington Bridge (GWB)</strong> — <em>Westbound into New Jersey is 100% FREE!</em><br>
+          &nbsp;&nbsp;3. Exit GWB onto <strong>US-1&9 South (Tonnelle Ave)</strong> directly into Jersey City (Zero Tolls, completely bypasses the NJ Turnpike toll).<br>
+        • ⛽ <strong>State Fuel Arbitrage</strong>: Gas in NJ is <strong>${price_diff:.2f}/gal cheaper</strong> than Norwalk/CT!<br>
+        • 🔋 <strong>Passat Advantage</strong>: Your <strong>18.5-gal tank</strong> gives <strong>~{est_range_mi} miles of range</strong>. A round trip is only ~{round_trip_mi} miles, meaning you can do multiple weekend trips on one tank. <strong>Fill up 100% in NJ to save ~${tank_savings:.2f} per fill!</strong><br>
+        • 🏆 <strong>Top NJ Fill-up</strong>: <strong>Costco Bayonne (07002)</strong> (4.5 mi south of Westside Ave) or <strong>Costco Teterboro (07608)</strong> off Route 46/GWB.<br>
+        • 🛞 <strong>Tyre Check</strong>: {REC_TYRE_PSI}.
         """
+        route_primary_btn = f'<a href="{ROUTE_NON_TOLL_FRIDAY}" style="background:#0284c7;color:#ffffff;padding:8px 14px;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;margin-right:6px;">🛣️ Open 100% Toll-Free Route (Google Maps)</a>'
+        waze_btn = f'<a href="{ROUTE_WAZE_DEST}" style="background:#059669;color:#ffffff;padding:8px 14px;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;">🧭 Waze to 850 Westside Ave</a>'
     elif mode == "SUNDAY_RETURN":
-        subject = f"⛽ Sunday Return Alert: Fill Up in NJ Before Heading Back to Norwalk!"
-        banner_title = "🚗 Sunday Pre-Return Alert: Jersey City → Norwalk, CT"
+        subject = f"⛽ Sunday Return Alert: Fill Up in NJ & Toll-Minimized Route to Norwalk!"
+        banner_title = f"🚗 Sunday Pre-Return: Jersey City → Norwalk, CT ({VEHICLE_NAME})"
         banner_bg = "#eff6ff"
         banner_border = "#bfdbfe"
         banner_text_color = "#1e40af"
         banner_body = f"""
         • 🚨 <strong>Action Item</strong>: <strong>DO NOT cross back into NY/CT on an empty tank!</strong><br>
-        • 💰 <strong>Lock In NJ Rates</strong>: Refueling at <strong>Costco Bayonne (07002)</strong> or in Jersey City before departure saves you <strong>${price_diff:.2f}/gal</strong> (~<strong>${tank_savings:.2f}</strong> on a full tank) versus filling up in Norwalk or Stamford.<br>
-        • 📍 <strong>Closest Station</strong>: Costco Bayonne (21 E 71st St) is just ~4.5 miles south of 850 Westside Ave down Route 440.
+        • 💰 <strong>Lock In NJ Rates</strong>: Top off your Passat's 18.5-gal tank at <strong>Costco Bayonne (07002)</strong> before leaving. You save <strong>${price_diff:.2f}/gal</strong> (~<strong>${tank_savings:.2f}</strong> on a full fill) versus Connecticut prices.<br>
+        • 🛣️ <strong>Toll-Minimized Return Route</strong>:<br>
+          &nbsp;&nbsp;1. Take <strong>US-1&9 North</strong> through Jersey City to GWB (Free, bypasses NJ Turnpike).<br>
+          &nbsp;&nbsp;2. Cross GWB Eastbound ($13.38 off-peak NY E-ZPass — <em>unavoidable Hudson River toll</em>).<br>
+          &nbsp;&nbsp;3. Cross Bronx to <strong>Hutchinson River Pkwy North → Merritt Pkwy (CT-15 N)</strong> (Zero Tolls, bypasses I-95 toll barrier) into Norwalk.<br>
+        • 🛞 <strong>Tyre Check</strong>: {REC_TYRE_PSI}.
         """
+        route_primary_btn = f'<a href="{ROUTE_NON_TOLL_SUNDAY}" style="background:#0284c7;color:#ffffff;padding:8px 14px;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;margin-right:6px;">🛣️ Open Toll-Minimized Route (Google Maps)</a>'
+        waze_btn = f'<a href="{ROUTE_WAZE_HOME}" style="background:#059669;color:#ffffff;padding:8px 14px;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;">🧭 Waze to Norwalk Home</a>'
     else:
-        subject = f"⛽ Fuel Digest: Norwalk ↔ Jersey City Corridor (Costco & Card Optimizer)"
-        banner_title = "📊 Corridor Fuel Arbitrage: Connecticut vs New Jersey"
+        subject = f"⛽ Fuel Digest: Norwalk ↔ Jersey City Corridor ({VEHICLE_NAME})"
+        banner_title = f"📊 Corridor Fuel Arbitrage: CT vs NJ • {VEHICLE_NAME}"
         banner_bg = "#f0f9ff"
         banner_border = "#bae6fd"
         banner_text_color = "#0369a1"
         banner_body = f"""
-        • 📍 <strong>Commute Route</strong>: Norwalk, CT ↔ 850 Westside Ave, Jersey City, NJ.<br>
-        • 💰 <strong>Price Benchmark</strong>: Lowest CT Net: <strong>${lowest_ct['formatted_net_price'] if lowest_ct else 'N/A'}</strong> ({lowest_ct['name'] if lowest_ct else ''}) vs Lowest NJ Net: <strong>${lowest_nj['formatted_net_price'] if lowest_nj else 'N/A'}</strong> ({lowest_nj['name'] if lowest_nj else ''}).<br>
-        • 💡 <strong>Savings</strong>: Filling up in NJ saves you <strong>${price_diff:.2f}/gal</strong> (~<strong>${tank_savings:.2f}</strong> per 14-gal fill).
+        • 📍 <strong>Commute Route</strong>: Norwalk, CT ↔ 850 Westside Ave, Jersey City, NJ (~{COMMUTE_ONE_WAY_MI} miles each way).<br>
+        • 🚘 <strong>Vehicle Profile</strong>: {VEHICLE_NAME} • {TANK_CAPACITY_GAL} Gal Tank • {REC_TYRE_PSI}.<br>
+        • 💰 <strong>Price Benchmark</strong>: Lowest CT Net: <strong>${lowest_ct['formatted_net_price'] if lowest_ct else 'N/A'}</strong> vs Lowest NJ Net: <strong>${lowest_nj['formatted_net_price'] if lowest_nj else 'N/A'}</strong>.<br>
+        • 💡 <strong>Savings</strong>: Filling up in NJ saves you <strong>${price_diff:.2f}/gal</strong> (~<strong>${tank_savings:.2f}</strong> on an 18.5-gal Passat fill).<br>
+        • 🛣️ <strong>Non-Toll Travel Tip</strong>: Use Merritt Pkwy (CT-15) + GWB (free westbound) + US-1&9 for a 100% toll-free Friday drive!
         """
+        route_primary_btn = f'<a href="{ROUTE_NON_TOLL_FRIDAY}" style="background:#0284c7;color:#ffffff;padding:8px 14px;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;margin-right:6px;">🛣️ Toll-Free Route (Maps)</a>'
+        waze_btn = f'<a href="{ROUTE_WAZE_DEST}" style="background:#059669;color:#ffffff;padding:8px 14px;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;">🧭 Waze Navigation</a>'
 
     # Plain text summary
     text_summary = f"{banner_title}\n\n"
     if lowest_ct and lowest_nj:
         text_summary += f"Lowest CT Price: {lowest_ct['formatted_net_price']} ({lowest_ct['name']})\n"
         text_summary += f"Lowest NJ Price: {lowest_nj['formatted_net_price']} ({lowest_nj['name']})\n"
-        text_summary += f"NJ Arbitrage Savings: ${price_diff:.2f}/gal (~${tank_savings:.2f} on a 14-gal tank)\n\n"
+        text_summary += f"NJ Arbitrage Savings: ${price_diff:.2f}/gal (~${tank_savings:.2f} on Passat's {TANK_CAPACITY_GAL}-gal tank)\n\n"
 
+    text_summary += f"VEHICLE: {VEHICLE_NAME} | Tyre: {REC_TYRE_PSI}\n"
+    text_summary += f"NON-TOLL ROUTE: {ROUTE_NON_TOLL_FRIDAY}\n\n"
     text_summary += "TOP FUEL STATIONS (Sorted by Net Discounted Price):\n"
     for s in stations[:12]:
         text_summary += (
@@ -412,12 +454,8 @@ def build_email_content(stations, mode: str):
         </div>
         {banner_body}
         <div style="margin-top:10px;">
-          <a href="{route_gmaps}" style="background:#0284c7;color:#ffffff;padding:6px 12px;text-decoration:none;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;margin-right:6px;">
-            🗺️ Norwalk ↔ Jersey City Route
-          </a>
-          <a href="{route_waze}" style="background:#059669;color:#ffffff;padding:6px 12px;text-decoration:none;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;">
-            🧭 Waze to 850 Westside Ave
-          </a>
+          {route_primary_btn}
+          {waze_btn}
         </div>
       </div>
 

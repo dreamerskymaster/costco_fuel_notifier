@@ -50,6 +50,13 @@ The **Costco & Fuel Price Notifier** is an automated dual-pipeline system design
 - **Google Sheets Trend Logger**:
   - Authenticates via GCP Service Account key (`GCP_SERVICE_ACCOUNT` secret or `service_account.json`).
   - Appends daily cheapest station row `[YYYY-MM-DD, Name, ZIP, Price]` to spreadsheet `Fuel Trends`.
+- **Vehicle Profile & Range**:
+  - **Volkswagen Passat (2013 SE)**: 18.5 gal tank, 31 mpg highway (~573 miles range).
+  - Recommended cold tyre pressure: **34 PSI** (front & rear normal) / **38 PSI** (highway loaded).
+  - Round trip is ~120 miles, allowing 4+ trips per tank without needing CT fuel.
+- **Non-Toll Route Optimization**:
+  - Friday (Norwalk → Jersey City): 100% Toll-Free ($0.00) via Merritt Pkwy (CT-15) + GWB (Westbound Free) + US-1&9 South.
+  - Sunday (Jersey City → Norwalk): Toll-Minimized via US-1&9 North + GWB Eastbound ($13.38 off-peak NY E-ZPass) + Hutchinson/Merritt Pkwy North.
 - **Credit Card Reward Optimization Rules**:
   - **Costco Gas**: Citi Costco Anywhere Visa (4% cash back; Visa only accepted).
   - **Standalone Gas (CITGO, Shell, Mobil, Speedway, etc.)**: Citi Costco Visa (4%) or Amex Blue Cash Everyday (3%).
