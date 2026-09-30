@@ -16,16 +16,38 @@ import gspread
 import re
 
 # --- CONFIGURATION ---
-# Commute corridor: Norwalk, CT (Home) -> Stamford, CT -> New Rochelle, NY -> Jersey City & Bayonne, NJ
-# Removed Milford, CT (06460) as requested.
-ZIP_CODES = ["06854", "06901", "10801", "07608", "07306", "07002"]
+# Commute corridor: Norwalk, CT (Home) -> Stamford -> New Rochelle -> GWB/Route 46 -> Tonnelle Ave (US-1&9) -> Jersey City (Westside Ave) -> Bayonne
+# Covers Costco locations + top Northern NJ high-volume discounters (Fuel 4, Delta, Wawa, QuickChek, US Gas, Lukoil, Speedway)
+ZIP_CODES = [
+    # CT Home / Origin
+    "06854",  # Norwalk (Home)
+    "06901",  # Stamford (I-95)
+    # NY Corridor
+    "10801",  # New Rochelle (Costco NY)
+    # NJ GWB & Route 46 Descent (Non-Toll GWB Exit)
+    "07657",  # Ridgefield (US-1&9 / Rt 46 - US Gas, Delta, QuickChek)
+    "07608",  # Teterboro (Costco NJ)
+    "07601",  # Hackensack (Rt 17 Corridor - Fuel 4, QuickChek)
+    # NJ US-1&9 / Tonnelle Ave Non-Toll Route into Jersey City
+    "07047",  # North Bergen (Tonnelle Ave / Wawa, Delta, BP)
+    # NJ Jersey City & Neighboring Westside Commute Zones
+    "07032",  # Kearny (Rt 7 / Passaic Ave - 2 mi West of Westside Ave)
+    "07306",  # Jersey City (Westside Ave / JFK Blvd / Lukoil)
+    "07305",  # Jersey City (Route 440 Corridor / Speedway)
+    "07002",  # Bayonne (Costco NJ - ~4.5 mi South of Westside Ave)
+]
 
 ZIP_META = {
     "06854": {"city": "Norwalk", "state": "CT", "label": "Norwalk (Home)"},
     "06901": {"city": "Stamford", "state": "CT", "label": "Stamford (I-95)"},
     "10801": {"city": "New Rochelle", "state": "NY", "label": "New Rochelle (Costco)"},
-    "07608": {"city": "Teterboro", "state": "NJ", "label": "Teterboro (Costco / GWB Route)"},
+    "07657": {"city": "Ridgefield", "state": "NJ", "label": "Ridgefield (Rt 46 / GWB Exit)"},
+    "07608": {"city": "Teterboro", "state": "NJ", "label": "Teterboro (Costco)"},
+    "07601": {"city": "Hackensack", "state": "NJ", "label": "Hackensack (Rt 17 Corridor)"},
+    "07047": {"city": "North Bergen", "state": "NJ", "label": "North Bergen (Tonnelle Ave)"},
+    "07032": {"city": "Kearny", "state": "NJ", "label": "Kearny (Rt 7 / ~2 mi West)"},
     "07306": {"city": "Jersey City", "state": "NJ", "label": "Jersey City (Westside Ave)"},
+    "07305": {"city": "Jersey City", "state": "NJ", "label": "Jersey City (Route 440)"},
     "07002": {"city": "Bayonne", "state": "NJ", "label": "Bayonne (Costco / ~4 mi South)"},
 }
 
@@ -376,19 +398,32 @@ def build_email_content(stations, mode: str):
         text_summary += f"Lowest NJ Price: {lowest_nj['formatted_net_price']} ({lowest_nj['name']})\n"
         text_summary += f"NJ Arbitrage Savings: ${price_diff:.2f}/gal (~${tank_savings:.2f} on Passat's {TANK_CAPACITY_GAL}-gal tank)\n\n"
 
+    # Identify Costco vs Standalone Discounters in NJ
+    costco_nj = [s for s in nj_stations if "costco" in s["name"].lower()]
+    non_costco_nj = [s for s in nj_stations if "costco" not in s["name"].lower()]
+    lowest_costco = min(costco_nj, key=lambda x: x["net_price"]) if costco_nj else None
+    lowest_discounter = min(non_costco_nj, key=lambda x: x["net_price"]) if non_costco_nj else None
+
+    if lowest_costco and lowest_discounter:
+        text_summary += (
+            "SPOTLIGHT: COSTCO VS NJ COMMUTE DISCOUNTERS:\n"
+            f"• Costco NJ: {lowest_costco['name']} ({lowest_costco['area_label']}) - Listed {lowest_costco['formatted_price']} | Net {lowest_costco['formatted_net_price']} (Citi 4% Visa)\n"
+            f"• NJ Discounter: {lowest_discounter['name']} ({lowest_discounter['area_label']}) - Listed {lowest_discounter['formatted_price']} | Net {lowest_discounter['formatted_net_price']} (Citi 4% / Amex 3%)\n\n"
+        )
+
     text_summary += f"VEHICLE: {VEHICLE_NAME} | Tyre: {REC_TYRE_PSI}\n"
     text_summary += f"NON-TOLL ROUTE: {ROUTE_NON_TOLL_FRIDAY}\n\n"
-    text_summary += "TOP FUEL STATIONS (Sorted by Net Discounted Price):\n"
-    for s in stations[:12]:
+    text_summary += "TOP 20 FUEL STATIONS (Sorted by Net Discounted Price):\n"
+    for s in stations[:20]:
         text_summary += (
             f"• {s['name']} - {s['area_label']} [{s['state']}]: Listed {s['formatted_price']} | "
             f"Net {s['formatted_net_price']} ({s['best_card']})\n"
             f"  Maps: {s['maps_link']} | Waze: {s['waze_link']}\n\n"
         )
 
-    # HTML table rows
+    # HTML table rows (Top 20 stations)
     html_rows = ""
-    for idx, s in enumerate(stations[:14]):
+    for idx, s in enumerate(stations[:20]):
         bg_color = "#f8fafc" if idx % 2 == 1 else "#ffffff"
         
         state_badge = (
@@ -401,12 +436,14 @@ def build_email_content(stations, mode: str):
             )
         )
         is_costco = "costco" in s["name"].lower()
-        costco_star = " 🌟" if is_costco else ""
+        is_popular_discounter = any(b in s["name"].lower() for b in ["wawa", "quickchek", "delta", "fuel 4", "us gas", "speedway", "lukoil", "kearny gas"])
+        
+        type_icon = " 🌟" if is_costco else (" 🏪" if is_popular_discounter else "")
 
         html_rows += f"""
         <tr style="background-color:{bg_color};border-bottom:1px solid #e2e8f0;">
           <td style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
-            {s['name']}{costco_star}<br>
+            {s['name']}{type_icon}<br>
             <span style="font-size:11px;color:#64748b;font-weight:normal;">{state_badge} {s['area_label']}</span>
           </td>
           <td style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
@@ -425,6 +462,20 @@ def build_email_content(stations, mode: str):
         </tr>
         """
 
+    # Spotlight HTML Card
+    spotlight_html = ""
+    if lowest_costco and lowest_discounter:
+        spotlight_html = f"""
+        <div style="padding:14px 18px;background-color:#fffbeb;border-bottom:1px solid #fde68a;font-size:12px;line-height:1.6;color:#78350f;">
+          <div style="font-weight:800;font-size:13px;margin-bottom:6px;color:#92400e;">
+            🏆 Costco vs NJ Commute Discounters (Decide for Yourself!)
+          </div>
+          • 🌟 <strong>Costco NJ Champion</strong>: <strong>{lowest_costco['name']}</strong> ({lowest_costco['area_label']}) — Listed <strong>{lowest_costco['formatted_price']}</strong> → Net <strong>{lowest_costco['formatted_net_price']}</strong> with <strong>Citi Costco Visa (4%)</strong>. <em>Requires Visa &amp; membership.</em><br>
+          • 🏪 <strong>Top NJ Discounter (No Membership)</strong>: <strong>{lowest_discounter['name']}</strong> ({lowest_discounter['area_label']}) — Listed <strong>{lowest_discounter['formatted_price']}</strong> → Net <strong>{lowest_discounter['formatted_net_price']}</strong> with <strong>Citi 4% / Amex 3%</strong>. <em>24/7 access, no lines.</em><br>
+          • ⛽ <strong>Tonnelle Ave / Rt 46 Corridor Picks</strong>: High-volume stations like <strong>Wawa</strong> (7408 Tonnelle Ave), <strong>Delta</strong> (5100 Tonnelle Ave), and <strong>QuickChek</strong> (Rt 46 Ridgefield &amp; Bayonne) sit directly along your toll-free route!
+        </div>
+        """
+
     html_content = f"""<!DOCTYPE html>
 <html>
   <head>
@@ -432,7 +483,7 @@ def build_email_content(stations, mode: str):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#334155;margin:0;padding:12px;background-color:#f8fafc;">
-    <div style="max-width:700px;margin:0 auto;background:#ffffff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+    <div style="max-width:720px;margin:0 auto;background:#ffffff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
 
       <!-- Header -->
       <div style="background:linear-gradient(135deg, #0284c7, #1e3a8a);padding:20px;color:#ffffff;">
@@ -443,7 +494,7 @@ def build_email_content(stations, mode: str):
           ⛽ Fuel Digest &amp; Weekend Arbitrage
         </h2>
         <p style="margin:0;font-size:12px;opacity:0.9;">
-          Norwalk (06854) → Stamford (06901) → New Rochelle (10801) → Teterboro (07608) → Jersey City (07306) → Bayonne (07002)
+          CT (Norwalk/Stamford) → NY (New Rochelle) → NJ (GWB/Rt 46 → Tonnelle Ave → Jersey City → Bayonne)
         </p>
       </div>
 
@@ -459,12 +510,15 @@ def build_email_content(stations, mode: str):
         </div>
       </div>
 
+      <!-- Costco vs NJ Discounters Spotlight -->
+      {spotlight_html}
+
       <!-- Card Savings Banner -->
       <div style="padding:10px 18px;background-color:#f1f5f9;border-bottom:1px solid #e2e8f0;font-size:11px;color:#475569;">
         💳 <strong>Card Optimization Applied</strong>: Net prices include <strong>4% Citi Costco Anywhere Visa</strong> (at Costco &amp; standalone pumps) or <strong>3% Amex Blue Cash Everyday</strong>. Supermarket gas earns 1%.
       </div>
 
-      <!-- Table Container -->
+      <!-- Table Container (Top 20 Ranked Pumps) -->
       <div style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;">
         <table style="width:100%;border-collapse:collapse;text-align:left;min-width:540px;">
           <thead>
@@ -484,7 +538,7 @@ def build_email_content(stations, mode: str):
 
       <!-- Footer -->
       <div style="padding:12px 18px;background-color:#f8fafc;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;text-align:center;">
-        Costco &amp; Fuel Notifier • Commute Edition for {RECEIVER_EMAIL}
+        Costco &amp; Fuel Notifier • Commute Edition for {RECEIVER_EMAIL} • 🌟 Costco &nbsp; 🏪 24/7 Top Discounter
       </div>
     </div>
   </body>
