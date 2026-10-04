@@ -56,6 +56,13 @@
 - **Modes**: `--mode digest` (emails only on window open, 2 days before close, weekly day) | `force` | `dry-run` (writes `inr_usd_preview.html`).
 - **Workflow**: `.github/workflows/inr_usd_schedule.yml` (`23 13 * * *`), shares the `usd-inr-notifier` concurrency group. State in `data/inr_usd_state.json` (negated in `.gitignore`), history in `data/inr_usd_history.csv`.
 
+### 5. ML outlooks (shared by all emails)
+- **`ml_core.py`**: numpy-only L2 logistic/ridge + expanding-window walk-forward. Every probability in an email is printed with its own out-of-sample record; a model without an edge (`WalkForward.has_edge`) is labelled Low confidence and, for FX, replaced by the base rate.
+- **US gas (`us_fuel_forecast.py`)**: P(PADD 1B weekly retail rises next week) + expected ¢ move, from retail Δ1–2w, NY Harbor wholesale Δ1/2/4w and margin vs 52w mean (EIA weekly, free, back to 1993). Walk-forward 2008–2026: **77% right vs 56% base rate** (977 weeks). Logs per-station prices to `data/us_station_history.csv` (rolling year) so "is today low?" switches to your own stations after 7 logged days.
+- **USD/INR (`fx_outlook.py`)**: direction at 2 weeks / 1 month. **Finding (do not oversell)**: no horizon 1w–3m beat the base rate (65% vs 66% at 2w), so the email shows the base rate and leads with the 80% range, whose empirical coverage tested at ~80–82%. Added as a card to both FX briefs.
+- **India fuel (`india_fuel.py`)**: `priceapi.indiatoday.in` is dead (emails showed ₹104.21 petrol vs ₹111.21 real). Prices now from goodreturns.in (today + 10 days + monthly first/last; Mumbai/Pune/Thane) then bankbazaar.com (today only; Goa). Plausibility bands and diesel>petrol rejection guard against scrape glitches (bankbazaar once showed Goa diesel ₹113.51). Outlook is **rule-based, not ML** (prices are administered; one revision in 6 months): days stable, revision base rate, Brent-in-rupees vs the month of the last revision. History in `data/india_fuel_history.csv`. Navi Mumbai stations use Thane's price.
+- `schedule.yml` and `mumbai_schedule.yml` now commit their history CSVs (`contents: write`, pull-rebase retry).
+
 ## Environment Variables & Secrets
 
 | Secret Name | Required By | Description | Default / Example |
@@ -90,4 +97,8 @@ python -m unittest test_fx_signals              # 21 offline tests
 # Run INR→USD Credila brief locally
 python inr_usd_tracker.py --mode dry-run        # render inr_usd_preview.html
 python -m unittest test_fx_outbound             # 16 offline tests
+
+# ML outlooks
+python us_fuel_forecast.py                      # print this week's fill-up outlook + reliability table
+python -m unittest test_ml_outlooks             # 19 offline tests
 ```

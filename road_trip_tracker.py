@@ -32,6 +32,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import requests
 
+import india_fuel
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
@@ -446,22 +448,19 @@ TRIP_SCHEDULE = [
 
 def _fetch_city_petrol_price(city_key: str) -> float:
     """
-    Fetches today's live petrol price from India Today API.
+    Fetches today's live petrol price (india_fuel: goodreturns, then bankbazaar).
     Falls back to regional benchmark if unavailable.
     """
-    defaults = {
-        "mumbai": 104.21,
-        "pune": 104.28,
-        "goa": 101.83,
+    defaults = {            # last known retail rates (Oct 2026), used only if every source fails
+        "mumbai": 111.21,
+        "pune": 112.02,
+        "goa": 104.06,
     }
-    try:
-        resp = requests.get(f"https://priceapi.indiatoday.in/fuel/{city_key}", timeout=8)
-        if resp.status_code == 200:
-            data = resp.json()
-            return float(data.get("petrol", {}).get("price", defaults.get(city_key, 104.21)))
-    except Exception:
-        pass
-    return defaults.get(city_key, 104.21)
+    live = india_fuel.fetch(city_key, "petrol")
+    if live:
+        return live.price
+    print(f"warning: no live petrol price for {city_key}; using last known benchmark")
+    return defaults.get(city_key, 111.21)
 
 
 def _city_to_api_key(city: str) -> str:

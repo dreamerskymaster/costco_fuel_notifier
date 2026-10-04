@@ -11,15 +11,18 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   run-tracker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -41,5 +44,15 @@ jobs:
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
         run: python gas_tracker.py
+
+      - name: Commit price history
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/us_station_history.csv 2>/dev/null || true
+          git diff --staged --quiet && echo "nothing to commit" && exit 0
+          git commit -m "chore(data): US fuel price history $(date -u +%Y-%m-%d)"
+          for i in 1 2 3; do git pull --rebase --autostash origin ${{ github.ref_name }} && git push && exit 0; sleep 5; done
+          exit 1
 
 

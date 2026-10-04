@@ -31,6 +31,7 @@ from pathlib import Path
 
 import email_thread  # shared threading + rate-change gating
 import fx_data
+import fx_outlook
 from fx_config import DATA_DIR, OUTBOUND_HISTORY_CSV, OUTBOUND_STATE_JSON, OutboundConfig
 from fx_outbound import (
     CardRate,
@@ -265,6 +266,7 @@ def build_html(
     window: tuple[date, date, int, int],
     calibration: list[str],
     reason: str,
+    fx_view: "fx_outlook.FxOutlook | None" = None,
 ) -> str:
     start, deadline, days_left, _ = window
     by_name = {c.route.name: c for c in costs}
@@ -338,6 +340,8 @@ def build_html(
     cards = [
         _card("The decision", decision, colour),
         _card("Route comparison", _route_table(costs, wise, config.usd_amount, mid), ACCENT),
+        *([_card("Will the dollar get cheaper? (ML outlook)",
+                 fx_outlook.outlook_html(fx_view, config.usd_amount, "inr_to_usd", MUTED), ACCENT)] if fx_view else []),
         _card("Before you confirm", f"<ul style='margin:0;padding-left:18px;'>{checklist}</ul>", WARN),
         _card("Does timing help? (its own track record)", track, MUTED),
         _card("Assumptions", f"<span style='font-size:12px;color:{MUTED};'>{assumptions}</span>", MUTED),
@@ -429,8 +433,14 @@ def main(argv: list[str] | None = None) -> int:
         + ([f"IOB TT ₹{iob.tt_sell:.2f}"] if iob else [])
         + ([f"Wise yardstick ₹{inr(wise['total_inr'])}"] if wise else [])
     )
+    try:
+        fx_view = fx_outlook.forecast(closes)
+    except Exception as exc:  # the outlook is an extra; never let it cost the brief
+        print(f"warning: FX outlook skipped ({exc})", file=sys.stderr)
+        fx_view = None
     html = build_html(
-        config, spot, mid, costs, wise, iob, breakeven_rate, backtest, cheapness, window, calibration, reason
+        config, spot, mid, costs, wise, iob, breakeven_rate, backtest, cheapness, window, calibration, reason,
+        fx_view,
     )
 
     if args.mode == "dry-run":
