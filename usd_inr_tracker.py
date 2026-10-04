@@ -33,6 +33,7 @@ import numpy as np
 
 import email_thread  # shared threading + rate-change gating
 import fx_data
+import fx_outlook
 import fx_providers as provider_module
 from fx_backtest import BacktestResult, run_backtest
 from fx_config import DATA_DIR, HISTORY_CSV, STATE_JSON, Config, load_events
@@ -290,6 +291,7 @@ def build_html(
     events: list[dict],
     config: Config,
     alerts: list[str],
+    fx_view: "fx_outlook.FxOutlook | None" = None,
 ) -> str:
     verdict_colour = {"SEND_NOW": GOOD, "HOLD": WARN, "FORCED_SEND": BAD}[decision.verdict]
     verdict_text = {
@@ -390,6 +392,11 @@ def build_html(
             verdict_colour,
         )
     )
+
+    # --- 2b. direction outlook, with its own record ---
+    if fx_view:
+        cards.append(_card("🔮 WILL USD/INR RISE OR FALL? (ML outlook)",
+                           fx_outlook.outlook_html(fx_view, config.send_amount, "usd_to_inr", MUTED), ACCENT))
 
     # --- 3. provider detail ---
     cards.append(_card("③ ALL PROVIDERS", _provider_table(report, config), ACCENT))
@@ -651,7 +658,12 @@ def main(argv: list[str] | None = None) -> int:
         save_state(state)
         return 0
 
-    html = build_html(spot, stats, model, decision, report, backtest, context, events, config, alerts)
+    try:
+        fx_view = fx_outlook.forecast(closes)
+    except Exception as exc:  # the outlook is an extra; never let it cost the brief
+        print(f"warning: FX outlook skipped ({exc})", file=sys.stderr)
+        fx_view = None
+    html = build_html(spot, stats, model, decision, report, backtest, context, events, config, alerts, fx_view)
 
     if args.mode == "dry-run":
         Path("preview.html").write_text(html)

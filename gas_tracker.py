@@ -15,6 +15,7 @@ import requests
 import gspread
 import re
 
+import us_fuel_forecast
 import email_thread  # shared threading + rate-change gating
 
 # --- CONFIGURATION ---
@@ -322,7 +323,7 @@ def log_to_sheets(stations):
         return True
 
 
-def build_email_content(stations, mode: str):
+def build_email_content(stations, mode: str, outlook=None):
     """
     Builds customized plain text and responsive HTML content with NJ vs CT arbitrage tips.
     """
@@ -395,6 +396,8 @@ def build_email_content(stations, mode: str):
 
     # Plain text summary
     text_summary = f"{banner_title}\n\n"
+    if outlook:
+        text_summary += "ML FILL-UP OUTLOOK:\n" + "".join(f"• {line}\n" for line in us_fuel_forecast.outlook_lines(outlook)) + "\n"
     if lowest_ct and lowest_nj:
         text_summary += f"Lowest CT Price: {lowest_ct['formatted_net_price']} ({lowest_ct['name']})\n"
         text_summary += f"Lowest NJ Price: {lowest_nj['formatted_net_price']} ({lowest_nj['name']})\n"
@@ -499,6 +502,9 @@ def build_email_content(stations, mode: str):
           CT (Norwalk/Stamford) → NY (New Rochelle) → NJ (GWB/Rt 46 → Tonnelle Ave → Jersey City → Bayonne)
         </p>
       </div>
+
+      <!-- ML Fill-Up Outlook -->
+      {us_fuel_forecast.outlook_html(outlook) if outlook else ""}
 
       <!-- Strategy Callout Banner -->
       <div style="padding:14px 18px;background-color:{banner_bg};border-bottom:1px solid {banner_border};color:{banner_text_color};font-size:12px;line-height:1.6;">
@@ -615,6 +621,7 @@ async def main():
         return 1
 
     log_to_sheets(stations)
+    us_fuel_forecast.record_stations(stations)
 
     mode = get_commute_mode()
     print(f"Detected commute mode: {mode}")
@@ -637,7 +644,15 @@ async def main():
         )
         return 0
 
-    subject, text_summary, html_content = build_email_content(stations, mode)
+    try:
+        outlook = us_fuel_forecast.forecast(
+            best_price=stations[0]["price"], tank_gal=TANK_CAPACITY_GAL,
+            station_history=us_fuel_forecast.load_station_history(), best_station=stations[0]["name"],
+        )
+    except Exception as e:  # the outlook is an extra; never let it cost the digest
+        print(f"ML outlook skipped: {e}")
+        outlook = None
+    subject, text_summary, html_content = build_email_content(stations, mode, outlook)
 
     print("Sending fuel price digest email...")
     if not send_email_smtp(subject, text_summary, html_content):
