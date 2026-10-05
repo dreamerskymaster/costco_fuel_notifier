@@ -16,6 +16,7 @@ import gspread
 import re
 
 import gas_cadence
+import price_predictor
 import us_fuel_forecast
 import email_thread  # shared threading + rate-change gating
 
@@ -324,7 +325,7 @@ def log_to_sheets(stations):
         return True
 
 
-def build_email_content(stations, mode: str, outlook=None):
+def build_email_content(stations, mode: str, outlook=None, prediction_lines=None):
     """
     Builds customized plain text and responsive HTML content with NJ vs CT arbitrage tips.
     """
@@ -397,6 +398,8 @@ def build_email_content(stations, mode: str, outlook=None):
 
     # Plain text summary
     text_summary = f"{banner_title}\n\n"
+    if prediction_lines:
+        text_summary += "TOMORROW'S PRICE (self-graded daily):\n" + "".join(f"• {line}\n" for line in prediction_lines) + "\n"
     if outlook:
         text_summary += "ML FILL-UP OUTLOOK:\n" + "".join(f"• {line}\n" for line in us_fuel_forecast.outlook_lines(outlook)) + "\n"
     if lowest_ct and lowest_nj:
@@ -506,6 +509,7 @@ def build_email_content(stations, mode: str, outlook=None):
 
       <!-- ML Fill-Up Outlook -->
       {us_fuel_forecast.outlook_html(outlook) if outlook else ""}
+      {_prediction_html(prediction_lines) if prediction_lines else ""}
 
       <!-- Strategy Callout Banner -->
       <div style="padding:14px 18px;background-color:{banner_bg};border-bottom:1px solid {banner_border};color:{banner_text_color};font-size:12px;line-height:1.6;">
@@ -618,6 +622,29 @@ def _open_spreadsheet(gc):
     return gc.open(SHEET_NAME)
 
 
+def _prediction_html(lines) -> str:
+    body = "".join(f"<div style='margin-top:3px;'>• {line}</div>" for line in lines)
+    return f"""
+      <div style="padding:12px 18px;background-color:#f8fafc;border-bottom:1px solid #e2e8f0;font-size:12px;line-height:1.6;color:#334155;">
+        <div style="font-weight:800;font-size:13px;color:#0f172a;">🎯 Tomorrow's Norwalk price (graded every day)</div>
+        {body}
+      </div>"""
+
+
+def log_prediction(row: dict) -> None:
+    """Append a graded prediction to the 'Predictions' tab (created on first use)."""
+    try:
+        book = _open_spreadsheet(gspread.service_account(filename=SERVICE_ACCOUNT_FILE))
+        try:
+            tab = book.worksheet("Predictions")
+        except gspread.exceptions.WorksheetNotFound:
+            tab = book.add_worksheet(title="Predictions", rows=1000, cols=len(price_predictor.FIELDS))
+            tab.append_row(price_predictor.FIELDS)
+        tab.append_row([row[k] for k in price_predictor.FIELDS], value_input_option="USER_ENTERED")
+    except Exception as e:
+        print(f"Could not write to 'Predictions' tab: {e.__cause__ or e}")
+
+
 def log_price_run(stations, mode: str, emailed: str) -> bool:
     """Append one row per run to the 'Price Log' tab (created on first use), emailed or not."""
     def cheapest(pred):
@@ -660,8 +687,8 @@ def log_price_run(stations, mode: str, emailed: str) -> bool:
 async def main():
     """Fetch prices every run, log them, and email only when gas_cadence says so.
 
-    Emails: one Friday departure and one Sunday return alert per weekend; otherwise
-    only a new 60-day NJ low or every 10 days (FORCE_EMAIL=true overrides).
+    Emails: one Friday departure and one Sunday return alert per weekend; on weekdays
+    only a new 90-day Norwalk low (FORCE_EMAIL=true overrides).
     """
     print("Fetching gas prices across Norwalk -> Jersey City corridor...")
     stations = await fetch_gas_prices()
@@ -673,39 +700,45 @@ async def main():
     print(f"Detected commute mode: {mode}")
 
     today = datetime.now(ET).date()
-    nj = [s for s in stations if s["state"] == "NJ"]
-    nj_price = min(s["price"] for s in nj) if nj else None
-    nj_zips = {s["zip"] for s in nj}
+    home = [s for s in stations if s["zip"] == gas_cadence.HOME_ZIP]
+    home_price = min(s["price"] for s in home) if home else None
     history = us_fuel_forecast.load_station_history()      # read before today's prices are added
     state = gas_cadence.load_state()
-    decision = gas_cadence.decide(mode, nj_price, history, nj_zips, state, today,
+    decision = gas_cadence.decide(mode, home_price, history, state, today,
                                   force=os.environ.get("FORCE_EMAIL", "false").lower() == "true")
     print(f"Email decision: {'SEND' if decision.send else 'skip'} ({decision.note})")
 
     us_fuel_forecast.record_stations(stations, today)
     log_to_sheets(stations)
 
+    try:
+        outlook = us_fuel_forecast.forecast(
+            best_price=stations[0]["price"], tank_gal=TANK_CAPACITY_GAL,
+            station_history=us_fuel_forecast.load_station_history(), best_station=stations[0]["name"],
+        )
+    except Exception as e:  # the outlook is an extra; never let it cost the digest
+        print(f"ML outlook skipped: {e}")
+        outlook = None
+
+    # Grade yesterday's Norwalk prediction, relearn, predict tomorrow (once a day).
+    graded, made, learned = price_predictor.run_daily(
+        today, home_price, outlook.expected_cents if outlook else None)
+    if graded:
+        print(f"Prediction graded: {graded['note']}")
+        log_prediction(graded)
+    prediction_lines = price_predictor.summary_lines(graded, made, learned)
+
     sent = False
     if decision.send:
-        try:
-            outlook = us_fuel_forecast.forecast(
-                best_price=stations[0]["price"], tank_gal=TANK_CAPACITY_GAL,
-                station_history=us_fuel_forecast.load_station_history(), best_station=stations[0]["name"],
-            )
-        except Exception as e:  # the outlook is an extra; never let it cost the digest
-            print(f"ML outlook skipped: {e}")
-            outlook = None
-        subject, text_summary, html_content = build_email_content(stations, mode, outlook)
+        subject, text_summary, html_content = build_email_content(stations, mode, outlook, prediction_lines)
         if decision.reason == "low":
-            subject = f"📉 New NJ low: ${nj_price:.3f}/gal — " + subject.lstrip("⛽ ")
+            subject = f"📉 Norwalk low: ${home_price:.3f}/gal — " + subject.lstrip("⛽ ")
             text_summary = f"WHY THIS EMAIL: {decision.note}.\n\n" + text_summary
-        elif decision.reason == "interval":
-            text_summary = f"WHY THIS EMAIL: routine {gas_cadence.INTERVAL_DAYS}-day digest.\n\n" + text_summary
 
         print("Sending fuel price digest email...")
         sent = send_email_smtp(subject, text_summary, html_content)
         if sent:
-            gas_cadence.save_state(gas_cadence.mark_sent(state, decision, mode, nj_price, today))
+            gas_cadence.save_state(gas_cadence.mark_sent(state, decision, mode, home_price, today))
         else:
             print("Email dispatch FAILED.")
 

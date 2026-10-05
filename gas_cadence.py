@@ -1,15 +1,13 @@
-"""When the US fuel digest is allowed to email.
-
-Prices are checked (and logged) every 3 hours, but an email goes out only when:
+"""When the US fuel digest is allowed to email. Two rules, nothing else:
 
     weekend   one Friday departure alert and one Sunday return alert, each at most
               once per day. NJ travel only happens on weekends.
-    low       the cheapest NJ net price (where the fill-ups happen) is a new low:
-              below every logged day of the last LOW_LOOKBACK_DAYS, and below the
-              price of the last low-price email.
-    interval  INTERVAL_DAYS have passed since the last weekday digest (routine or low);
-              weekend alerts don't reset this clock.
+    low       Monday-Friday: the cheapest Norwalk (06854) listed price is the lowest
+              in the last LOW_LOOKBACK_DAYS (90; at least 7 days of history needed),
+              and lower than the price of the last low alert.
     force     FORCE_EMAIL=true (manual run).
+
+Prices are still checked and logged every 3 hours whether or not anything is sent.
 
 State lives in data/gas_state.json, which the workflow commits. The old gate kept
 its memory in data/thread_state.json, which is git-ignored, so every run started
@@ -24,8 +22,8 @@ from datetime import date, timedelta
 from pathlib import Path
 
 STATE_JSON = Path(__file__).parent / "data" / "gas_state.json"
-INTERVAL_DAYS = 10
-LOW_LOOKBACK_DAYS = 60
+HOME_ZIP = "06854"            # Norwalk
+LOW_LOOKBACK_DAYS = 90
 LOW_MIN_HISTORY_DAYS = 7      # don't call anything a "low" until a week of history exists
 LOW_MARGIN_USD = 0.005        # sub-cent wobbles are not a new low
 WEEKEND_MODES = ("FRIDAY_DEPARTURE", "SUNDAY_RETURN")
@@ -43,12 +41,17 @@ def save_state(state: dict) -> None:
     STATE_JSON.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n")
 
 
-def previous_low(history: list[dict], zips: set[str], today: date) -> tuple[float | None, int]:
-    """Lowest daily NJ listed price before today within the lookback, and how many days that covers."""
+def daily_low(history: list[dict], zip_code: str, day: str) -> float | None:
+    vals = [float(r["price"]) for r in history if r["zip"] == zip_code and r["date"] == day]
+    return min(vals) if vals else None
+
+
+def previous_low(history: list[dict], zip_code: str, today: date) -> tuple[float | None, int]:
+    """Lowest daily listed price in `zip_code` before today within the lookback, and how many days that covers."""
     start = (today - timedelta(days=LOW_LOOKBACK_DAYS)).isoformat()
     by_day: dict[str, float] = {}
     for r in history:
-        if r["zip"] in zips and start <= r["date"] < today.isoformat():
+        if r["zip"] == zip_code and start <= r["date"] < today.isoformat():
             by_day[r["date"]] = min(by_day.get(r["date"], 1e9), float(r["price"]))
     if not by_day:
         return None, 0
@@ -58,12 +61,12 @@ def previous_low(history: list[dict], zips: set[str], today: date) -> tuple[floa
 @dataclass
 class Decision:
     send: bool
-    reason: str               # "weekend" | "low" | "interval" | "force" | "" when not sending
+    reason: str               # "weekend" | "low" | "force" | "" when not sending
     note: str                 # one line for the log and the email
 
 
-def decide(mode: str, nj_price: float | None, history: list[dict], nj_zips: set[str],
-           state: dict, today: date, force: bool = False) -> Decision:
+def decide(mode: str, home_price: float | None, history: list[dict], state: dict, today: date,
+           force: bool = False) -> Decision:
     if force:
         return Decision(True, "force", "manual run")
 
@@ -72,28 +75,26 @@ def decide(mode: str, nj_price: float | None, history: list[dict], nj_zips: set[
             return Decision(False, "", f"{mode} alert already sent today")
         return Decision(True, "weekend", mode)
 
-    if nj_price is not None:
-        low, days = previous_low(history, nj_zips, today)
+    if today.weekday() >= 5:
+        return Decision(False, "", "weekend outside the Friday/Sunday alert windows")
+
+    if home_price is not None:
+        low, days = previous_low(history, HOME_ZIP, today)
         last_alert = state.get("last_low_alert_price")
-        if (low is not None and days >= LOW_MIN_HISTORY_DAYS and nj_price < low - LOW_MARGIN_USD
-                and (last_alert is None or nj_price < last_alert - LOW_MARGIN_USD)):
-            return Decision(True, "low", f"NJ ${nj_price:.3f}/gal is the lowest in {days} logged days "
+        if (low is not None and days >= LOW_MIN_HISTORY_DAYS and home_price < low - LOW_MARGIN_USD
+                and (last_alert is None or home_price < last_alert - LOW_MARGIN_USD)):
+            return Decision(True, "low", f"Norwalk ${home_price:.3f}/gal is the lowest in {days} logged days "
                                          f"(previous low ${low:.3f})")
-
-    last = state.get("last_digest_date")
-    if last is None or (today - date.fromisoformat(last)).days >= INTERVAL_DAYS:
-        return Decision(True, "interval", f"{INTERVAL_DAYS}-day digest" if last else "first digest")
-    days_left = INTERVAL_DAYS - (today - date.fromisoformat(last)).days
-    return Decision(False, "", f"no new NJ low; next routine digest in {days_left} day(s)")
+        if low is not None and days < LOW_MIN_HISTORY_DAYS:
+            return Decision(False, "", f"building history ({days}/{LOW_MIN_HISTORY_DAYS} days) before low alerts")
+    return Decision(False, "", "no new Norwalk low")
 
 
-def mark_sent(state: dict, decision: Decision, mode: str, nj_price: float | None, today: date) -> dict:
-    """Weekend alerts run on their own track; only weekday digests restart the 10-day clock."""
+def mark_sent(state: dict, decision: Decision, mode: str, home_price: float | None, today: date) -> dict:
+    state["last_sent_date"] = today.isoformat()
     state["last_reason"] = decision.reason
     if decision.reason == "weekend":
         state.setdefault("weekend_sent", {})[mode] = today.isoformat()
-    else:
-        state["last_digest_date"] = today.isoformat()
-    if decision.reason == "low" and nj_price is not None:
-        state["last_low_alert_price"] = round(nj_price, 3)
+    if decision.reason == "low" and home_price is not None:
+        state["last_low_alert_price"] = round(home_price, 3)
     return state
