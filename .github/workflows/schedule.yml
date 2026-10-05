@@ -2,7 +2,7 @@ name: Daily Gas Price Tracker
 
 on:
   schedule:
-    # Routine corridor price monitoring every 3 hours
+    # Price check + Sheet log every 3 hours; gas_cadence decides whether to email
     - cron: '0 */3 * * *'
     # Friday 4:00 PM EDT (20:00 UTC) — Pre-departure alert from Norwalk to 850 Westside Ave, Jersey City
     - cron: '0 20 * * 5'
@@ -10,9 +10,18 @@ on:
     - cron: '0 19 * * 0'
 
   workflow_dispatch:
+    inputs:
+      force_email:
+        description: "Send the digest even if no weekend alert, new low or 10-day interval is due"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
+
+concurrency:
+  group: gas-tracker
+  cancel-in-progress: false
 
 jobs:
   run-tracker:
@@ -41,6 +50,7 @@ jobs:
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
           SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+          FORCE_EMAIL: ${{ inputs.force_email && 'true' || 'false' }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
         run: python gas_tracker.py
@@ -49,7 +59,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/us_station_history.csv 2>/dev/null || true
+          git add data/us_station_history.csv data/gas_state.json 2>/dev/null || true
           git diff --staged --quiet && echo "nothing to commit" && exit 0
           git commit -m "chore(data): US fuel price history $(date -u +%Y-%m-%d)"
           for i in 1 2 3; do git pull --rebase --autostash origin ${{ github.ref_name }} && git push && exit 0; sleep 5; done

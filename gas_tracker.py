@@ -15,6 +15,7 @@ import requests
 import gspread
 import re
 
+import gas_cadence
 import us_fuel_forecast
 import email_thread  # shared threading + rate-change gating
 
@@ -601,18 +602,66 @@ def send_email_smtp(subject, text_content, html_content):
         return False
 
 
-# Minimum price movement (per gallon) to trigger a regular 3-hour check email.
-_PRICE_CHANGE_THRESHOLD_USD = 0.02
+PRICE_LOG_TAB = "Price Log"
+PRICE_LOG_HEADER = [
+    "Checked (ET)", "Day", "Mode", "Cheapest overall", "ZIP", "Listed $/gal", "Net $/gal",
+    "Cheapest NJ", "NJ listed", "NJ net", "Cheapest CT", "CT listed", "CT net",
+    "Costco Bayonne", "Costco Teterboro", "NJ saving vs CT /gal", "Emailed",
+]
+
+
+def _open_spreadsheet(gc):
+    if SHEET_URL:
+        return gc.open_by_url(SHEET_URL)
+    if SHEET_ID:
+        return gc.open_by_key(SHEET_ID)
+    return gc.open(SHEET_NAME)
+
+
+def log_price_run(stations, mode: str, emailed: str) -> bool:
+    """Append one row per run to the 'Price Log' tab (created on first use), emailed or not."""
+    def cheapest(pred):
+        found = [s for s in stations if pred(s)]
+        return min(found, key=lambda s: s["net_price"]) if found else None
+
+    def listed(s):
+        return round(s["price"], 3) if s else ""
+
+    best = stations[0]
+    nj = cheapest(lambda s: s["state"] == "NJ")
+    ct = cheapest(lambda s: s["state"] == "CT")
+    bayonne = cheapest(lambda s: s["zip"] == "07002" and "costco" in s["name"].lower())
+    teterboro = cheapest(lambda s: s["zip"] == "07608" and "costco" in s["name"].lower())
+    now = datetime.now(ET)
+    row = [
+        now.strftime("%Y-%m-%d %H:%M"), now.strftime("%a"), mode,
+        best["name"], best["zip"], listed(best), best["net_price"],
+        nj["name"] if nj else "", listed(nj), nj["net_price"] if nj else "",
+        ct["name"] if ct else "", listed(ct), ct["net_price"] if ct else "",
+        listed(bayonne), listed(teterboro),
+        round(ct["net_price"] - nj["net_price"], 3) if nj and ct else "",
+        emailed or "no",
+    ]
+    try:
+        book = _open_spreadsheet(gspread.service_account(filename=SERVICE_ACCOUNT_FILE))
+        try:
+            tab = book.worksheet(PRICE_LOG_TAB)
+        except gspread.exceptions.WorksheetNotFound:
+            tab = book.add_worksheet(title=PRICE_LOG_TAB, rows=1000, cols=len(PRICE_LOG_HEADER))
+            tab.append_row(PRICE_LOG_HEADER)
+        tab.append_row(row, value_input_option="USER_ENTERED")
+        print(f"Logged run to '{PRICE_LOG_TAB}' tab.")
+        return True
+    except Exception as e:
+        print(f"Could not write to '{PRICE_LOG_TAB}' tab: {e.__cause__ or e}")
+        return False
 
 
 async def main():
-    """Fetch gas prices, apply price-change gate, and dispatch the email digest.
+    """Fetch prices every run, log them, and email only when gas_cadence says so.
 
-    Gate logic:
-    - Friday departure / Sunday return alerts: always send (time-critical).
-    - FORCE_EMAIL env var set to 'true': always send (manual override).
-    - Regular 3-hour checks: only send if the best net price has moved by
-      >= $0.02/gal since the last sent email (stored in thread_state.json).
+    Emails: one Friday departure and one Sunday return alert per weekend; otherwise
+    only a new 60-day NJ low or every 10 days (FORCE_EMAIL=true overrides).
     """
     print("Fetching gas prices across Norwalk -> Jersey City corridor...")
     stations = await fetch_gas_prices()
@@ -620,48 +669,48 @@ async def main():
         print("No stations found.")
         return 1
 
-    log_to_sheets(stations)
-    us_fuel_forecast.record_stations(stations)
-
     mode = get_commute_mode()
     print(f"Detected commute mode: {mode}")
 
-    # --- price-change gate ---
-    is_weekend_alert = mode in ["FRIDAY_DEPARTURE", "SUNDAY_RETURN"]
-    force_email = os.environ.get("FORCE_EMAIL", "false").lower() == "true"
+    today = datetime.now(ET).date()
+    nj = [s for s in stations if s["state"] == "NJ"]
+    nj_price = min(s["price"] for s in nj) if nj else None
+    nj_zips = {s["zip"] for s in nj}
+    history = us_fuel_forecast.load_station_history()      # read before today's prices are added
+    state = gas_cadence.load_state()
+    decision = gas_cadence.decide(mode, nj_price, history, nj_zips, state, today,
+                                  force=os.environ.get("FORCE_EMAIL", "false").lower() == "true")
+    print(f"Email decision: {'SEND' if decision.send else 'skip'} ({decision.note})")
 
-    best_price = stations[0]["net_price"] if stations else 0.0
-    price_moved = email_thread.has_rate_changed(
-        "gas", best_price,
-        threshold_pct=(_PRICE_CHANGE_THRESHOLD_USD / best_price * 100) if best_price else 0.1,
-        key="last_price",
-    )
+    us_fuel_forecast.record_stations(stations, today)
+    log_to_sheets(stations)
 
-    if not (is_weekend_alert or force_email or price_moved):
-        print(
-            f"Price gate: best net ${best_price:.3f}/gal has not moved "
-            f">= ${_PRICE_CHANGE_THRESHOLD_USD:.2f} since last email — skipping."
-        )
-        return 0
+    sent = False
+    if decision.send:
+        try:
+            outlook = us_fuel_forecast.forecast(
+                best_price=stations[0]["price"], tank_gal=TANK_CAPACITY_GAL,
+                station_history=us_fuel_forecast.load_station_history(), best_station=stations[0]["name"],
+            )
+        except Exception as e:  # the outlook is an extra; never let it cost the digest
+            print(f"ML outlook skipped: {e}")
+            outlook = None
+        subject, text_summary, html_content = build_email_content(stations, mode, outlook)
+        if decision.reason == "low":
+            subject = f"📉 New NJ low: ${nj_price:.3f}/gal — " + subject.lstrip("⛽ ")
+            text_summary = f"WHY THIS EMAIL: {decision.note}.\n\n" + text_summary
+        elif decision.reason == "interval":
+            text_summary = f"WHY THIS EMAIL: routine {gas_cadence.INTERVAL_DAYS}-day digest.\n\n" + text_summary
 
-    try:
-        outlook = us_fuel_forecast.forecast(
-            best_price=stations[0]["price"], tank_gal=TANK_CAPACITY_GAL,
-            station_history=us_fuel_forecast.load_station_history(), best_station=stations[0]["name"],
-        )
-    except Exception as e:  # the outlook is an extra; never let it cost the digest
-        print(f"ML outlook skipped: {e}")
-        outlook = None
-    subject, text_summary, html_content = build_email_content(stations, mode, outlook)
+        print("Sending fuel price digest email...")
+        sent = send_email_smtp(subject, text_summary, html_content)
+        if sent:
+            gas_cadence.save_state(gas_cadence.mark_sent(state, decision, mode, nj_price, today))
+        else:
+            print("Email dispatch FAILED.")
 
-    print("Sending fuel price digest email...")
-    if not send_email_smtp(subject, text_summary, html_content):
-        print("Email dispatch FAILED.")
-        return 1
-
-    # Persist the price so the next run can compare against it.
-    email_thread.record_rate("gas", best_price, key="last_price")
-    return 0
+    log_price_run(stations, mode, decision.reason if sent else "")
+    return 0 if sent or not decision.send else 1
 
 
 if __name__ == "__main__":

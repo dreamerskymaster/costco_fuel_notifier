@@ -16,7 +16,8 @@
   - **Costco Gas**: Citi Costco Anywhere Visa (4% cash back, Visa only).
   - **Standalone Gas**: Citi Costco Visa (4%) / Amex Blue Cash Everyday (3%).
   - **Supermarket Gas (Stop & Shop)**: Excluded by MCC rules (1% base).
-- **Workflow**: `.github/workflows/schedule.yml` (Cron: `0 */3 * * *`, plus Friday 4:00 PM EDT `0 20 * * 5` and Sunday 3:00 PM EDT `0 19 * * 0`).
+- **Workflow**: `.github/workflows/schedule.yml` (Cron: `0 */3 * * *`, plus Friday 4:00 PM EDT `0 20 * * 5` and Sunday 3:00 PM EDT `0 19 * * 0`). Manual runs email only with the `force_email` input.
+- **Email cadence (`gas_cadence.py`, state in committed `data/gas_state.json`)**: prices are checked and appended to the Google Sheet's **Price Log** tab every run; emails go out only for (a) one Friday departure + one Sunday return alert per weekend (NJ travel is weekend-only), (b) a new 60-day low in the cheapest NJ listed price (needs 7 logged days), or (c) 10 days since the last weekday digest. **Landmine**: the old gate stored its memory in git-ignored `data/thread_state.json`, so every CI run started blank and emailed (the Monday emails, Oct 2026). Any gate state must live in a committed file.
 
 
 

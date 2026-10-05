@@ -12,6 +12,7 @@ __pycache__/
 !data/events.json
 !data/state.json
 !data/inr_usd_state.json
+!data/gas_state.json
 data/cache/
 preview.html
 inr_usd_preview.html
