@@ -1,4 +1,7 @@
 {
-  "last_reason": "",
-  "last_sent_date": "2026-10-05"
+  "last_reason": "weekend",
+  "last_sent_date": "2026-10-09",
+  "weekend_sent": {
+    "FRIDAY_DEPARTURE": "2026-10-09"
+  }
 }
