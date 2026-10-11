@@ -216,3 +216,109 @@ def break_even_markup(route: Route, target_total: float, usd_target: float, mid:
         else:
             low = trial.markup_pct
     return (low + high) / 2
+
+
+# --------------------------------------------------------------------------
+# forex-card and Global Pay quotes (public JSON, no key)
+# --------------------------------------------------------------------------
+
+# WSFx GlobalPay is Credila's forex partner. Its public calculator prices the
+# Global Pay remittance and the Global Pay forex card from the same feed the
+# website uses; it answers without the site's auth headers.
+WSFX_CALCULATOR = "https://apimerged.wsfx.in/b2cCalculator"
+WSFX_PRODUCTS = {
+    "remittance": ("REMITTANCE", "HOTTISSUER"),
+    "card": ("FOREXCARD", "WSFXGLOBALSCC"),
+    "student_card": ("FOREXCARD", "WSFXSTUDENTSCC"),
+}
+
+# Thomas Cook's static rate page is stale (frozen at 2024); the live number
+# comes from this JSON service, which wants the session cookies a plain visit
+# to the rate page sets, echoed back as headers.
+THOMAS_COOK_PAGE = "https://www.thomascook.in/foreign-exchange/forex-rate-card"
+THOMAS_COOK_RATES = "https://services.thomascook.in/tcRevampForexRS/generic/rateCards/2"
+
+
+@dataclass
+class ProviderRate:
+    name: str
+    rate: float            # INR per USD charged
+    charges_inr: float     # flat charges the provider quotes on top
+    updated: str
+
+
+def fetch_wsfx(kind: str, usd: float, timeout: int = 20) -> ProviderRate | None:
+    """WSFx selling rate and charges for `kind` in WSFX_PRODUCTS, or None."""
+    product, issuer = WSFX_PRODUCTS[kind]
+    try:
+        response = requests.get(
+            WSFX_CALCULATOR,
+            params={
+                "product": product, "sellType": "SELL", "travelingCurrency": "USD",
+                "requiredCurrency": "USD", "requiredAmount": f"{usd:.0f}", "issuerCode": issuer,
+            },
+            headers={"User-Agent": USER_AGENT},
+            timeout=timeout,
+        )
+        response.raise_for_status()
+        payload = response.json()
+    except (requests.RequestException, ValueError) as exc:
+        print(f"warning: WSFx {kind} quote unavailable ({exc})", file=sys.stderr)
+        return None
+    data = payload.get("data", payload) if isinstance(payload, dict) else {}
+    if isinstance(data, list):
+        data = data[0] if data else {}
+    rate = _first_number(data, ("sellrate", "sellRate", "rate"))
+    if rate is None or not 50 < rate < 200:
+        print(f"warning: WSFx {kind} response not recognised", file=sys.stderr)
+        return None
+    charges = _first_number(data, ("charges", "totalCharges", "serviceCharge")) or 0.0
+    return ProviderRate(name=f"WSFx {kind}", rate=rate, charges_inr=charges, updated="live")
+
+
+def fetch_thomas_cook_card(timeout: int = 25) -> ProviderRate | None:
+    """Thomas Cook Borderless card selling (load) rate for USD, or None."""
+    session = requests.Session()
+    session.headers["User-Agent"] = "Mozilla/5.0"
+    try:
+        session.get(THOMAS_COOK_PAGE, timeout=timeout).raise_for_status()
+        headers = {
+            "requestId": session.cookies.get("requestId", ""),
+            "sessionId": session.cookies.get("c2Vzc2lvbklk", ""),
+        }
+        response = session.get(THOMAS_COOK_RATES, headers=headers, timeout=timeout)
+        response.raise_for_status()
+        payload = response.json()
+    except (requests.RequestException, ValueError) as exc:
+        print(f"warning: Thomas Cook card rate unavailable ({exc})", file=sys.stderr)
+        return None
+    for row in _walk_dicts(payload):
+        product = str(row.get("productName", "")).lower()
+        currency = str(row.get("currencyCode", row.get("currency", "USD"))).upper()
+        if "card" in product and currency == "USD" and str(row.get("moduleType", "")).lower() == "buy":
+            rate = _first_number(row, ("roe",))
+            if rate and 50 < rate < 200:
+                return ProviderRate("Thomas Cook card", rate, 0.0, str(row.get("updateDate", "unknown")))
+    print("warning: Thomas Cook rate card layout not recognised", file=sys.stderr)
+    return None
+
+
+def _first_number(row: dict, keys: tuple[str, ...]) -> float | None:
+    for key in keys:
+        try:
+            if row.get(key) is not None:
+                return float(row[key])
+        except (TypeError, ValueError):
+            continue
+    return None
+
+
+def _walk_dicts(node):
+    """Every dict nested anywhere in a JSON payload."""
+    if isinstance(node, dict):
+        yield node
+        for value in node.values():
+            yield from _walk_dicts(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from _walk_dicts(value)

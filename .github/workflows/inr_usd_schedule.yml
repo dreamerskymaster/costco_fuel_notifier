@@ -67,6 +67,11 @@ jobs:
           GLOBALPAY_FEE_INR: ${{ vars.GLOBALPAY_FEE_INR }}
           GLOBALPAY_CORRESPONDENT_USD: ${{ vars.GLOBALPAY_CORRESPONDENT_USD }}
           GLOBALPAY_RECEIPT: ${{ vars.GLOBALPAY_RECEIPT }}
+          CARD_ATM_FEE_USD: ${{ vars.CARD_ATM_FEE_USD }}
+          ATM_SURCHARGE_USD: ${{ vars.ATM_SURCHARGE_USD }}
+          CARD_ATM_WITHDRAWALS: ${{ vars.CARD_ATM_WITHDRAWALS }}
+          WSFX_CARD_MARKUP_PCT: ${{ vars.WSFX_CARD_MARKUP_PCT }}
+          THOMAS_COOK_CARD_MARKUP_PCT: ${{ vars.THOMAS_COOK_CARD_MARKUP_PCT }}
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
             python inr_usd_tracker.py --mode force

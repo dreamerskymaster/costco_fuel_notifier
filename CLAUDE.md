@@ -55,6 +55,9 @@
 - **Core finding (do not undo)**: timing loses in this direction too — waiting for a cheap dollar within a 14-day window cost **₹108/mo** vs sending on day one over 55 windows (hindsight ceiling ₹312/mo), because the rupee drifts weaker. The brief says "send on day one" and leads with route choice: the Global Pay **break-even rate** vs a wire with charges set to **OUR**.
 - **Data**: HSBC India + IOB card-rate HTML pages (parsed by cell offset; a layout change returns None and falls back to `WIRE_MARKUP_PCT`), Frankfurter/Yahoo mid, Wise `v3/quotes` as a yardstick (not usable by a US-resident sender).
 - **Facts baked in** (checked Sept 2026): Chase $15 incoming international wire (College Checking too); HSBC OUR ₹1,200 + GST, app remittance otherwise free; GST on conversion per CGST Rule 32(2)(b); loan-funded education remittance = 0% TCS. Convera GlobalPay for Students pays institutions only — not a route to a personal Chase account.
+- **Forex cards (added Oct 2026)**: she also holds a **WSFx Global Pay card** and a **Thomas Cook Borderless card**. Neither can transfer to a bank, so the card routes model load → US ATM cash (card $2 + ~$3.22 ATM-owner surcharge each, `CARD_ATM_WITHDRAWALS`=2) → free Chase cash deposit. On 2026-10-11 Thomas Cook (₹97.04, +0.3%) was cheapest overall at ₹98,230 for $1,000; the Global Pay *remittance* on its live quote (₹98.29 + ₹1,499) was the dearest non-SHA route, so the old 1% guess was far too generous.
+- **Live quote sources (no key)**: WSFx `apimerged.wsfx.in/b2cCalculator` (REMITTANCE/HOTTISSUER, FOREXCARD/WSFXGLOBALSCC) — answers without the site's auth token, so **never commit that token** (public repo). Thomas Cook `services.thomascook.in/tcRevampForexRS/generic/rateCards/2` needs the `requestId` and `c2Vzc2lvbklk` cookies from a GET of the rate-card page, echoed as `requestId`/`sessionId` headers; its static HTML rate (2024) is stale. All fall back to the `*_MARKUP_PCT` variables.
+- **Gate landmine**: the 0.1% rate-change gate may skip only the weekly brief. It once applied to every scheduled email, so a flat rate could silence the window-open (15th) and last-call (27th) reminders.
 - **Modes**: `--mode digest` (emails only on window open, 2 days before close, weekly day) | `force` | `dry-run` (writes `inr_usd_preview.html`).
 - **Workflow**: `.github/workflows/inr_usd_schedule.yml` (`23 13 * * *`), shares the `usd-inr-notifier` concurrency group. State in `data/inr_usd_state.json` (negated in `.gitignore`), history in `data/inr_usd_history.csv`.
 
@@ -98,7 +101,7 @@ python -m unittest test_fx_signals              # 21 offline tests
 
 # Run INR→USD Credila brief locally
 python inr_usd_tracker.py --mode dry-run        # render inr_usd_preview.html
-python -m unittest test_fx_outbound             # 16 offline tests
+python -m unittest test_fx_outbound             # 18 offline tests
 
 # ML outlooks
 python us_fuel_forecast.py                      # print this week's fill-up outlook + reliability table
