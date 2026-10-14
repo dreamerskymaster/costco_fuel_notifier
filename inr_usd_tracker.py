@@ -150,7 +150,10 @@ def _send_email_inr_usd(config: OutboundConfig, subject: str, html: str) -> None
     message = MIMEMultipart("alternative")
     message["Subject"] = subject
     message["From"] = config.sender_email
-    message["To"] = ", ".join(config.receivers)
+    # Every recipient is BCC: the visible To is the sender's own address, and
+    # the real recipients go only in the SMTP envelope below. No Bcc header is
+    # written, because smtplib would transmit it verbatim and expose the list.
+    message["To"] = config.sender_email
     message["Message-ID"] = mid
     for header_name, header_value in thread_headers.items():
         message[header_name] = header_value

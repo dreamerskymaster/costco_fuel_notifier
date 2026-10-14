@@ -75,6 +75,7 @@
 | `MUMBAI_RECEIVER_EMAIL` | Mumbai | Recipient(s) for Mumbai digest (comma-separated supported) | `family@example.com` |
 | `FX_RECEIVER_EMAIL` | USD→INR | Recipient(s) for remittance brief; falls back to `RECEIVER_EMAIL` | `you@example.com` |
 | `FX_EXTRA_RECEIVERS` | Optional | Extra recipient(s) appended & de-duplicated. Separate secret because **the repo is public** — never put an address in a workflow file | `friend@example.com` |
+| `FX_ADDITIONAL_RECEIVERS` | Optional | More USD→INR recipient(s), comma-separated. A third secret so new people can be added without overwriting the others (secret values can't be read back). **All FX recipients are BCC**: the visible To is the sender | `colleague@example.edu` |
 | `INR_USD_RECEIVER_EMAIL` | INR→USD | Recipient(s) for the Credila→Chase brief. No fallback to `RECEIVER_EMAIL` by design | `student@example.com` |
 | `GCP_SERVICE_ACCOUNT` | US Tracker | Raw JSON content of GCP Service Account | `{"type": "service_account"...}` |
 | `SMTP_SERVER` | Optional | SMTP host | `smtp.gmail.com` |

@@ -53,7 +53,11 @@ def _recipients() -> list[str]:
     ever references secret names. Matching is case-insensitive so the same
     address listed in both places is not mailed twice.
     """
-    people = _emails("FX_RECEIVER_EMAIL", "RECEIVER_EMAIL") + _emails("FX_EXTRA_RECEIVERS")
+    people = (
+        _emails("FX_RECEIVER_EMAIL", "RECEIVER_EMAIL")
+        + _emails("FX_EXTRA_RECEIVERS")
+        + _emails("FX_ADDITIONAL_RECEIVERS")
+    )
     seen: set[str] = set()
     unique: list[str] = []
     for address in people:
