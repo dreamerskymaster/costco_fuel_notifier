@@ -27,6 +27,7 @@ Configure the following secrets in **Settings > Secrets and variables > Actions*
 | `MUMBAI_RECEIVER_EMAIL` | Mumbai Pipeline | Recipient(s) for Mumbai digest (comma-separated supported) | `dad@example.com` |
 | `FX_RECEIVER_EMAIL` | USD→INR Pipeline | Recipient(s) for remittance brief. Falls back to `RECEIVER_EMAIL` if unset | `user@example.com` |
 | `FX_EXTRA_RECEIVERS` | Optional | Additional recipient(s), comma-separated, appended to the above and de-duplicated. Kept separate so no address ever appears in a workflow file — **this repo is public** | `friend@example.com` |
+| `FX_ADDITIONAL_RECEIVERS` | Optional | More USD→INR recipient(s), comma-separated. A third secret so new people can be added without overwriting the others (secret values can't be read back). **All FX recipients are BCC**: the visible To is the sender | `colleague@example.edu` |
 | `GCP_SERVICE_ACCOUNT` | US Pipeline | Raw JSON string of GCP Service Account key | `{"type": "service_account", ...}` |
 | `INR_USD_RECEIVER_EMAIL` | INR→USD Pipeline | Recipient(s) for the Credila→Chase brief. **No fallback** to `RECEIVER_EMAIL` — the brief belongs to someone else | `student@example.com` |
 | `SMTP_SERVER` | Optional | Custom SMTP host | `smtp.gmail.com` |
