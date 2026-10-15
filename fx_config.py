@@ -169,6 +169,18 @@ class OutboundConfig:
     globalpay_correspondent_usd: float = field(default_factory=lambda: _number("GLOBALPAY_CORRESPONDENT_USD", 0.0))
     globalpay_receipt: tuple | None = field(default_factory=lambda: _receipt("GLOBALPAY_RECEIPT"))
 
+    # Forex cards she already holds (WSFx Global Pay card, Thomas Cook card).
+    # Neither can transfer to a bank, so reaching Chase means ATM cash and a
+    # free Chase cash deposit: each withdrawal costs the card fee plus the US
+    # ATM owner's surcharge (Bankrate 2025 average $3.22). Spending on the
+    # card directly avoids both.
+    card_atm_fee_usd: float = field(default_factory=lambda: _number("CARD_ATM_FEE_USD", 2.0))
+    atm_surcharge_usd: float = field(default_factory=lambda: _number("ATM_SURCHARGE_USD", 3.22))
+    card_atm_withdrawals: int = field(default_factory=lambda: _integer("CARD_ATM_WITHDRAWALS", 2))
+    # Fallback markups if a live card quote cannot be fetched.
+    wsfx_card_markup_pct: float = field(default_factory=lambda: _number("WSFX_CARD_MARKUP_PCT", 2.2))
+    thomas_cook_card_markup_pct: float = field(default_factory=lambda: _number("THOMAS_COOK_CARD_MARKUP_PCT", 0.4))
+
     sender_email: str = field(default_factory=lambda: _text("SENDER_EMAIL"))
     sender_password: str = field(default_factory=lambda: _text("SENDER_PASSWORD"))
     receivers: list[str] = field(default_factory=lambda: _emails("INR_USD_RECEIVER_EMAIL"))

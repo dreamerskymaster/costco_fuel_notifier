@@ -35,11 +35,14 @@ import fx_outlook
 from fx_config import DATA_DIR, OUTBOUND_HISTORY_CSV, OUTBOUND_STATE_JSON, OutboundConfig
 from fx_outbound import (
     CardRate,
+    ProviderRate,
     Route,
     RouteCost,
     break_even_markup,
     cost_to_land,
     fetch_card_rate,
+    fetch_thomas_cook_card,
+    fetch_wsfx,
     fetch_wise_benchmark,
     implied_markup_pct,
 )
@@ -50,7 +53,7 @@ ACCENT = "#1d4ed8"  # Chase-adjacent blue, so the two briefs are told apart at a
 
 HISTORY_FIELDS = [
     "date", "mid", "hsbc_tt_sell", "iob_tt_sell", "wire_total_inr", "globalpay_total_inr",
-    "globalpay_breakeven_rate", "wise_total_inr",
+    "globalpay_breakeven_rate", "wise_total_inr", "wsfx_card_total_inr", "thomas_cook_total_inr",
     "best_route", "cheapness_pct", "days_left", "reason",
 ]
 
@@ -59,8 +62,18 @@ HISTORY_FIELDS = [
 # routes
 # --------------------------------------------------------------------------
 
-def build_routes(config: OutboundConfig, mid: float, hsbc: CardRate | None) -> tuple[list[Route], list[str]]:
-    """The routes she can actually use. The wire's markup comes from HSBC's live card rate."""
+def build_routes(
+    config: OutboundConfig,
+    mid: float,
+    hsbc: CardRate | None,
+    quotes: dict[str, ProviderRate | None] | None = None,
+) -> tuple[list[Route], list[str]]:
+    """The routes she can actually use, priced from live quotes wherever one exists.
+
+    Order is fixed and relied on by callers: wire OUR, wire SHA, Global Pay
+    remittance, then the two forex cards cashed out at an ATM into Chase.
+    """
+    quotes = quotes or {}
     notes: list[str] = []
     if hsbc:
         wire_markup = 100.0 * (hsbc.tt_sell / mid - 1.0)
@@ -87,12 +100,51 @@ def build_routes(config: OutboundConfig, mid: float, hsbc: CardRate | None) -> t
         usd_deductions=config.wire_correspondent_usd + chase,
         notes=[],
     )
+    gp_quote = quotes.get("remittance")
     globalpay = Route(
         name="Credila Global Pay",
-        markup_pct=config.globalpay_markup_pct,
-        fee_inr=config.globalpay_fee_inr,
+        markup_pct=100.0 * (gp_quote.rate / mid - 1.0) if gp_quote else config.globalpay_markup_pct,
+        fee_inr=gp_quote.charges_inr if gp_quote else config.globalpay_fee_inr,
         usd_deductions=config.globalpay_correspondent_usd + chase,
         notes=[],
+    )
+    if gp_quote:
+        notes.append(
+            f"Global Pay remittance: WSFx live quote ₹{gp_quote.rate:.2f} + ₹{inr(gp_quote.charges_inr)} charges."
+        )
+    else:
+        notes.append(f"WSFx quote unavailable; Global Pay modelled at mid + {config.globalpay_markup_pct:.2f}%.")
+
+    # Cards: loaded in India at the card selling rate (GST on conversion
+    # applies, no load fee), then cashed out at US ATMs and deposited into
+    # Chase. ATM fees come off the card balance, so they are grossed up.
+    atm_cost = config.card_atm_withdrawals * (config.card_atm_fee_usd + config.atm_surcharge_usd)
+    cards: list[Route] = []
+    for key, name, fallback in (
+        ("card", "Global Pay card → ATM", config.wsfx_card_markup_pct),
+        ("thomas_cook", "Thomas Cook card → ATM", config.thomas_cook_card_markup_pct),
+    ):
+        quote = quotes.get(key)
+        markup = 100.0 * (quote.rate / mid - 1.0) if quote else fallback
+        notes.append(
+            f"{name.split(' →')[0]} load rate: ₹{quote.rate:.2f} ({quote.updated})." if quote
+            else f"{name.split(' →')[0]} live rate unavailable; modelled at mid + {fallback:.2f}%."
+        )
+        cards.append(
+            Route(
+                name=name,
+                markup_pct=markup,
+                fee_inr=quote.charges_inr if quote else 0.0,
+                usd_deductions=atm_cost,
+                notes=[],
+            )
+        )
+    cards[1].notes.append(
+        f"Cards can't send to a bank. Reaching Chase means {config.card_atm_withdrawals} ATM withdrawals "
+        f"(~${config.card_atm_fee_usd + config.atm_surcharge_usd:.2f} each: card fee plus the ATM owner's "
+        "surcharge), then a free cash deposit at a Chase branch or ATM. Withdraw larger amounts to cut the "
+        "fees; the daily ATM limit on both cards is $1,500. Paying rent or groceries with the card directly "
+        "skips the ATM fees completely."
     )
 
     for route, receipt, label in (
@@ -111,10 +163,10 @@ def build_routes(config: OutboundConfig, mid: float, hsbc: CardRate | None) -> t
             f"{label} ({day}: ₹{inr(inr_debited)} → ${usd_received:,.2f}, mid {mid_then:.3f}) "
             f"implies a {implied:.2f}% markup."
         )
-        if route is globalpay:
-            # Global Pay has no public rate, so a real receipt beats the guess.
+        if route is globalpay and not gp_quote:
+            # Without a live WSFx quote, a real receipt beats the guess.
             globalpay.markup_pct = implied
-    return [wire_our, wire_sha, globalpay], notes
+    return [wire_our, wire_sha, globalpay, *cards], notes
 
 
 _HISTORY_CACHE: fx_data.Series | None = None
@@ -183,11 +235,21 @@ def save_state(state: dict) -> None:
 
 def append_history(row: dict) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    is_new = not OUTBOUND_HISTORY_CSV.exists()
+    rows: list[dict] = []
+    if OUTBOUND_HISTORY_CSV.exists():
+        with OUTBOUND_HISTORY_CSV.open(newline="") as handle:
+            reader = csv.DictReader(handle)
+            if reader.fieldnames != HISTORY_FIELDS:
+                # Columns were added since the file was written: rewrite it
+                # under the current header so old rows stay aligned.
+                rows = list(reader)
+    if rows or not OUTBOUND_HISTORY_CSV.exists():
+        with OUTBOUND_HISTORY_CSV.open("w", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=HISTORY_FIELDS, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows({key: old.get(key, "") for key in HISTORY_FIELDS} for old in rows)
     with OUTBOUND_HISTORY_CSV.open("a", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=HISTORY_FIELDS)
-        if is_new:
-            writer.writeheader()
         writer.writerow({key: row.get(key, "") for key in HISTORY_FIELDS})
 
 
@@ -248,7 +310,7 @@ def _route_table(costs: list[RouteCost], wise: dict | None, usd: float, mid: flo
         )
     return (
         f"<div style='font-size:12px;color:{MUTED};margin-bottom:4px;'>"
-        f"Rupees drawn from the loan to land exactly <b>${usd:,.0f}</b> in Chase (Global Pay row is an estimate)</div>"
+        f"Rupees drawn from the loan to land exactly <b>${usd:,.0f}</b> in Chase (card routes assume ATM cash → Chase deposit)</div>"
         f"<table width='100%' cellpadding='0' cellspacing='0' style='font-size:14px;'>{''.join(rows)}</table>"
     )
 
@@ -287,14 +349,25 @@ def build_html(
         when = f"<b>Next window opens {start:%a %b %d}.</b> Send on day one; waiting has not paid off historically."
         colour = ACCENT
 
+    ranked = sorted(costs, key=lambda c: c.total_inr)
+    best, runner = ranked[0], ranked[1]
+    worst = ranked[-1]
+    how = {
+        "Thomas Cook card → ATM": "Load the Thomas Cook card in USD from India, then withdraw at a US ATM and "
+                                  "deposit the cash at Chase — or just pay with the card and skip the ATM.",
+        "Global Pay card → ATM": "Load the Global Pay card in USD, then withdraw at a US ATM and deposit at Chase "
+                                 "— or pay with the card directly.",
+        "Credila Global Pay": "Send through Credila Global Pay straight to the Chase account, in USD.",
+    }.get(best.route.name, "Wire from HSBC to Chase in USD with charges set to OUR.")
     decision = f"""
       <div style="font:700 19px/1.35 -apple-system,sans-serif;color:{colour};">
-        Open Global Pay first. If its rate is ₹{breakeven_rate:.2f} per dollar or better{f' with its ₹{inr(config.globalpay_fee_inr)} fee' if config.globalpay_fee_inr else ' and it adds no separate fee'}, use it.
-        Otherwise wire from HSBC with charges set to OUR.</div>
-      <div style="margin-top:8px;">Wire (OUR) costs <b>₹{inr(best_wire.total_inr)}</b> to land
-      ${config.usd_amount:,.0f}: HSBC's card rate is {best_wire.route.markup_pct:.2f}% over mid-market, plus fees.
-      Global Pay at an assumed +{globalpay.route.markup_pct:.2f}% would cost ₹{inr(globalpay.total_inr)}.
-      Choosing OUR over SHA on the wire saves about ₹{inr(worst_wire.total_inr - best_wire.total_inr)}.</div>
+        Cheapest today: {best.route.name} — ₹{inr(best.total_inr)} to land ${config.usd_amount:,.0f}.</div>
+      <div style="margin-top:6px;">{how}</div>
+      <div style="margin-top:8px;">That is ₹{inr(runner.total_inr - best.total_inr)} less than the next best
+      ({runner.route.name}) and ₹{inr(worst.total_inr - best.total_inr)} less than the costliest
+      ({worst.route.name}), about ₹{inr(12 * (worst.total_inr - best.total_inr))} a year.
+      If she wires, choosing OUR over SHA saves ₹{inr(worst_wire.total_inr - best_wire.total_inr)}; Global Pay
+      only beats the wire at ₹{breakeven_rate:.2f} or better.</div>
       <div style="margin-top:8px;color:{MUTED};font-size:13px;">{when}</div>"""
 
     checklist = "".join(f"<li style='margin-bottom:4px;'>{note}</li>" for c in costs for note in c.route.notes)
@@ -327,12 +400,14 @@ def build_html(
     ) if backtest.n else "Not enough history to score a timing rule."
 
     assumptions = (
-        f"Global Pay (WSFx) publishes no markup, so +{config.globalpay_markup_pct:.2f}% is a guess. "
+        "Global Pay and both card rates come from WSFx's and Thomas Cook's own public calculators; "
+        "confirm the figure on the payment screen before paying. Card loads assume no load fee "
+        "(both issuers list none) but include GST on conversion. "
         f"Correspondent deductions on SHA are ~${config.wire_correspondent_usd:.0f}; Chase takes "
         f"${config.chase_incoming_wire_usd:.0f} per incoming wire. GST on conversion follows CGST Rule 32(2)(b). "
         "After a transfer, save the receipt as the <code>GLOBALPAY_RECEIPT</code> or <code>WIRE_RECEIPT</code> "
-        "repo variable (<code>YYYY-MM-DD,inr_debited,usd_received</code>). A Global Pay receipt replaces the guess; "
-        "a wire receipt shows what HSBC actually charged."
+        "repo variable (<code>YYYY-MM-DD,inr_debited,usd_received</code>) to check the live quotes against what "
+        "was actually charged."
     )
     if calibration:
         assumptions = "<br>".join(calibration) + "<br>" + assumptions
@@ -413,7 +488,12 @@ def main(argv: list[str] | None = None) -> int:
 
     hsbc = fetch_card_rate("HSBC India")
     iob = fetch_card_rate("IOB")
-    routes, calibration = build_routes(config, mid, hsbc)
+    quotes = {
+        "remittance": fetch_wsfx("remittance", config.usd_amount),
+        "card": fetch_wsfx("card", config.usd_amount),
+        "thomas_cook": fetch_thomas_cook_card(),
+    }
+    routes, calibration = build_routes(config, mid, hsbc, quotes)
     costs = [cost_to_land(route, config.usd_amount, mid) for route in routes]
     best_wire = min(costs[:2], key=lambda c: c.total_inr)
     breakeven = break_even_markup(routes[2], best_wire.total_inr, config.usd_amount, mid)
@@ -452,8 +532,10 @@ def main(argv: list[str] | None = None) -> int:
         print("wrote inr_usd_preview.html")
         return 0
 
-    # --- rate-change gate (0.1% mid movement required; force/manual bypasses) ---
-    if args.mode != "force" and not email_thread.has_rate_changed(
+    # --- rate-change gate: only the weekly brief can be skipped for a flat rate.
+    # Window-open and last-call emails are calendar reminders to send money;
+    # suppressing them because the rate barely moved would defeat their purpose.
+    if reason == "weekly" and not email_thread.has_rate_changed(
         "inr_usd", mid, threshold_pct=0.1, key="last_rate"
     ):
         print(
@@ -464,7 +546,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     tag = {"window-open": "SEND NOW", "closing": "LAST CALL", "weekly": "WEEKLY", "manual": "BRIEF"}[reason]
-    subject = f"INR→USD ₹{mid:.2f} · {tag} · Global Pay ≤ ₹{breakeven_rate:.2f} else wire OUR ₹{inr(best_wire.total_inr)}"
+    subject = f"INR→USD ₹{mid:.2f} · {tag} · cheapest: {best.route.name} ₹{inr(best.total_inr)} for ${config.usd_amount:,.0f}"
     _send_email_inr_usd(config, subject, html)
 
     append_history(
@@ -473,6 +555,8 @@ def main(argv: list[str] | None = None) -> int:
             "mid": round(mid, 4),
             "wire_total_inr": round(best_wire.total_inr, 2),
             "globalpay_total_inr": round(costs[2].total_inr, 2),
+            "wsfx_card_total_inr": round(costs[3].total_inr, 2),
+            "thomas_cook_total_inr": round(costs[4].total_inr, 2),
             "globalpay_breakeven_rate": round(breakeven_rate, 4),
             "hsbc_tt_sell": hsbc.tt_sell if hsbc else "",
             "iob_tt_sell": iob.tt_sell if iob else "",
