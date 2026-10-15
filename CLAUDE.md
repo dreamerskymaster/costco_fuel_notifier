@@ -1,7 +1,19 @@
 # CLAUDE.md - Project Context & Token-Efficient Developer Guide
 
 ## Project Overview
-**Costco & Fuel Notifier** is an automated multi-pipeline monitoring suite built with Python and GitHub Actions. It monitors live regular gas/petrol/diesel prices along US and India commute routes, applies credit card reward optimization (Citi Costco Visa 4%, Amex BCE 3%, Amazon Pay ICICI 1% Surcharge Waiver), logs US trends to Google Sheets, tracks USD→INR remittance costs for monthly transfers to India, and dispatches responsive daily HTML email digests.
+**Costco & Fuel Notifier** is an automated multi-pipeline monitoring suite built with Python and GitHub Actions. It monitors live regular gas/petrol/diesel prices along US and India commute routes, picks the best credit card per fill (US: Citi Costco Visa 4% / Amex BCE 3%; Mumbai: Dad's HDFC Regalia / Amazon Pay ICICI surcharge waivers), logs US trends to Google Sheets, tracks USD→INR and INR→USD transfer costs, and dispatches responsive daily HTML email digests.
+
+**Runs entirely on GitHub Actions.** There is no maintained local checkout; work in a fresh clone or worktree. Vehicles, routes, card rules and schedules live in `AGENTS.md` (`MEMORY.md` points there).
+
+## Status (2026-10-14)
+- All 6 workflows green; last 100 runs had 0 failures. 66 offline tests pass (`python -m unittest test_fx_signals test_fx_outbound test_ml_outlooks test_gas_cadence`).
+- Merged: PR #1–#5 (USD→INR, Credila brief, ML outlooks + India price fix, gas cadence + self-graded prediction). Dad's card picker is on `main`.
+- Open: PR #6 (INR→USD forex-card routes + live Global Pay quote), PR #7 (FX briefs BCC all recipients + `FX_ADDITIONAL_RECEIVERS`).
+
+## Next
+- After the last road trip (2026-10-17), disable or delete `.github/workflows/road_trip_schedule.yml`.
+- Confirm Dad's HSBC card variant: RuPay **Cashback** = no fuel waiver (current assumption); RuPay **Platinum** = 1% on ₹400–₹4,000, ₹250/month cap → edit its `DAD_CARDS` entry. If his Regalia is now Regalia Gold, recheck the waiver range.
+- Review and merge PR #6 and PR #7.
 
 ## Pipelines & Data Flow
 
@@ -35,13 +47,13 @@
 
 ### 3. One-Time Road Trip Fuel & Route Digest (`road_trip_tracker.py`)
 - **Coverage**: Mumbai ↔ Goa (choice of NH48 via Kolhapur vs NH66 Coastal) & Mumbai ↔ Pune (Mumbai-Pune Expressway).
-- **Dates (IST)**: Sep 30, Oct 4, Oct 9, Oct 10, Oct 15, Oct 17.
+- **Dates (IST)**: Sep 30, Oct 4, Oct 9, Oct 10, Oct 15, Oct 17 (2026). Retire the workflow after Oct 17.
 - **Navigation**: Visual route comparison cards with 1-tap Google Maps Driving Directions and Waze links.
 - **Card & Vehicle**: Dad's credit card swipe recommendations & Venue 36 PSI highway tyre advisory.
 - **Workflow**: `.github/workflows/road_trip_schedule.yml` (Cron: `0 0 * * *` = 5:30 AM IST).
 
 
-### 3. USD→INR Remittance Notifier (`usd_inr_tracker.py`)
+### 4. USD→INR Remittance Notifier (`usd_inr_tracker.py`)
 - **Purpose**: ~$3,000/month USD→India transfers, sent around the 15th with ~14 days of flexibility.
 - **Core finding (do not undo)**: timing the rate is near worthless at this size; provider choice is worth ~8× more and is certain. Walk-forward over 45 monthly windows (5y ECB data): percentile ≥85 rule **+₹142/mo**, optimal-stopping model **−₹49/mo**, perfect hindsight **+₹1,163/mo**, best-vs-worst provider spread **₹9–10k per transfer**. The email therefore leads with the provider decision and prints the timing rule's track record beside its verdict.
 - **Model**: `log S = a + b·t + x`, `x` an AR(1) residual; optimal stopping by backward induction under CRRA risk aversion. Computed and displayed as context, but does **not** drive the verdict — its drift term always argues for waiting in a depreciating currency.
@@ -50,7 +62,7 @@
 - **Workflows**: `.github/workflows/usd_inr_schedule.yml` (`11 12 * * *`), `usd_inr_alert.yml` (`37 */3 * * *`).
 - **Landmines**: forecasts must anchor on today's close (invariant: horizon 0 == spot, reservation at `days_left=0` == spot); don't replace the elementwise weighted sums in `fx_signals.py` with `@` (macOS Accelerate BLAS raises spurious FP warnings); Yahoo 429s are normal and expected; `.gitignore`'s blanket `*.json` is negated for `data/events.json` and `data/state.json`.
 
-### 4. INR→USD Credila Brief (`inr_usd_tracker.py`)
+### 5. INR→USD Credila Brief (`inr_usd_tracker.py`)
 - **Purpose**: a student in the US moves ~$1,000/month from a **Credila** education loan to her **Chase** account, choosing between a **Credila wire** (funds sit in the HSBC India account opened at loan signing and leave by SWIFT at HSBC's TT-selling card rate) and **Credila Global Pay** (WSFx GlobalPay; markup unpublished).
 - **Core finding (do not undo)**: timing loses in this direction too — waiting for a cheap dollar within a 14-day window cost **₹108/mo** vs sending on day one over 55 windows (hindsight ceiling ₹312/mo), because the rupee drifts weaker. The brief says "send on day one" and leads with route choice: the Global Pay **break-even rate** vs a wire with charges set to **OUR**.
 - **Data**: HSBC India + IOB card-rate HTML pages (parsed by cell offset; a layout change returns None and falls back to `WIRE_MARKUP_PCT`), Frankfurter/Yahoo mid, Wise `v3/quotes` as a yardstick (not usable by a US-resident sender).
@@ -61,7 +73,7 @@
 - **Modes**: `--mode digest` (emails only on window open, 2 days before close, weekly day) | `force` | `dry-run` (writes `inr_usd_preview.html`).
 - **Workflow**: `.github/workflows/inr_usd_schedule.yml` (`23 13 * * *`), shares the `usd-inr-notifier` concurrency group. State in `data/inr_usd_state.json` (negated in `.gitignore`), history in `data/inr_usd_history.csv`.
 
-### 5. ML outlooks (shared by all emails)
+### 6. ML outlooks (shared by all emails)
 - **`ml_core.py`**: numpy-only L2 logistic/ridge + expanding-window walk-forward. Every probability in an email is printed with its own out-of-sample record; a model without an edge (`WalkForward.has_edge`) is labelled Low confidence and, for FX, replaced by the base rate.
 - **US gas (`us_fuel_forecast.py`)**: P(PADD 1B weekly retail rises next week) + expected ¢ move, from retail Δ1–2w, NY Harbor wholesale Δ1/2/4w and margin vs 52w mean (EIA weekly, free, back to 1993). Walk-forward 2008–2026: **77% right vs 56% base rate** (977 weeks). Logs per-station prices to `data/us_station_history.csv` (rolling year) so "is today low?" switches to your own stations after 7 logged days.
 - **USD/INR (`fx_outlook.py`)**: direction at 2 weeks / 1 month. **Finding (do not oversell)**: no horizon 1w–3m beat the base rate (65% vs 66% at 2w), so the email shows the base rate and leads with the 80% range, whose empirical coverage tested at ~80–82%. Added as a card to both FX briefs.
@@ -72,8 +84,8 @@
 
 | Secret Name | Required By | Description | Default / Example |
 | :--- | :--- | :--- | :--- |
-| `SENDER_EMAIL` | All three | Gmail address sending digests | `yourname@gmail.com` |
-| `SENDER_PASSWORD` | All three | 16-character Gmail App Password | `abcd efgh ijkl mnop` |
+| `SENDER_EMAIL` | All pipelines | Gmail address sending digests | `yourname@gmail.com` |
+| `SENDER_PASSWORD` | All pipelines | 16-character Gmail App Password | `abcd efgh ijkl mnop` |
 | `RECEIVER_EMAIL` | US Tracker | Recipient for US fuel digest | `you@example.com` |
 | `MUMBAI_RECEIVER_EMAIL` | Mumbai | Recipient(s) for Mumbai digest (comma-separated supported) | `family@example.com` |
 | `FX_RECEIVER_EMAIL` | USD→INR | Recipient(s) for remittance brief; falls back to `RECEIVER_EMAIL` | `you@example.com` |
@@ -107,4 +119,5 @@ python -m unittest test_fx_outbound             # 18 offline tests
 # ML outlooks
 python us_fuel_forecast.py                      # print this week's fill-up outlook + reliability table
 python -m unittest test_ml_outlooks             # 19 offline tests
+python -m unittest test_gas_cadence             # 10 offline tests
 ```
