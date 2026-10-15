@@ -6,14 +6,13 @@
 **Runs entirely on GitHub Actions.** There is no maintained local checkout; work in a fresh clone or worktree. Vehicles, routes, card rules and schedules live in `AGENTS.md` (`MEMORY.md` points there).
 
 ## Status (2026-10-14)
-- All 6 workflows green; last 100 runs had 0 failures. 66 offline tests pass (`python -m unittest test_fx_signals test_fx_outbound test_ml_outlooks test_gas_cadence`).
+- All 6 workflows green; last 100 runs had 0 failures. 69 offline tests pass (`python -m unittest test_fx_signals test_fx_outbound test_fx_bcc test_ml_outlooks test_gas_cadence`).
 - Merged: PR #1–#5 (USD→INR, Credila brief, ML outlooks + India price fix, gas cadence + self-graded prediction). Dad's card picker is on `main`.
-- Open: PR #6 (INR→USD forex-card routes + live Global Pay quote), PR #7 (FX briefs BCC all recipients + `FX_ADDITIONAL_RECEIVERS`).
+- Combined PR (supersedes #6, #7, #8): INR→USD forex-card routes + live Global Pay quote; FX briefs BCC all recipients + `FX_ADDITIONAL_RECEIVERS`; finalized docs. 69 offline tests (add `test_fx_bcc`).
 
 ## Next
 - After the last road trip (2026-10-17), disable or delete `.github/workflows/road_trip_schedule.yml`.
 - Confirm Dad's HSBC card variant: RuPay **Cashback** = no fuel waiver (current assumption); RuPay **Platinum** = 1% on ₹400–₹4,000, ₹250/month cap → edit its `DAD_CARDS` entry. If his Regalia is now Regalia Gold, recheck the waiver range.
-- Review and merge PR #6 and PR #7.
 
 ## Pipelines & Data Flow
 
