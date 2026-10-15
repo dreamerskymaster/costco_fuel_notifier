@@ -1,5 +1,6 @@
-date,mid,hsbc_tt_sell,iob_tt_sell,wire_total_inr,globalpay_total_inr,globalpay_breakeven_rate,wise_total_inr,best_route,cheapness_pct,days_left,reason
-2026-09-28,95.9279,97.75,96.21,100810.84,98517.47,99.1431,97415.51,Credila Global Pay,14.4,1,manual
-2026-10-05,96.4006,98.09,96.56,101156.56,99003.0,99.4834,97904.61,Credila Global Pay,4.4,10,weekly
-2026-10-11,96.8297,98.55,96.89,101624.28,99443.64,99.9438,97854.82,Credila Global Pay,0.0,10,manual
-2026-10-12,96.9643,97.67,95.97,100729.49,99581.91,99.0631,97404.35,Credila Global Pay,0.0,10,weekly
+date,mid,hsbc_tt_sell,iob_tt_sell,wire_total_inr,globalpay_total_inr,globalpay_breakeven_rate,wise_total_inr,wsfx_card_total_inr,thomas_cook_total_inr,best_route,cheapness_pct,days_left,reason
+2026-09-28,95.9279,97.75,96.21,100810.84,98517.47,99.1431,97415.51,,,Credila Global Pay,14.4,1,manual
+2026-10-05,96.4006,98.09,96.56,101156.56,99003.0,99.4834,97904.61,,,Credila Global Pay,4.4,10,weekly
+2026-10-11,96.8297,98.55,96.89,101624.28,99443.64,99.9438,97854.82,,,Credila Global Pay,0.0,10,manual
+2026-10-12,96.9643,97.67,95.97,100729.49,99581.91,99.0631,97404.35,,,Credila Global Pay,0.0,10,weekly
+2026-10-15,95.2528,96.71,95.16,99753.34,99974.99,96.363,96304.37,98294.18,96534.06,Thomas Cook card → ATM,67.8,10,manual
