@@ -543,7 +543,10 @@ def send_email(config: Config, subject: str, html: str) -> None:
     message = MIMEMultipart("alternative")
     message["Subject"] = subject
     message["From"] = config.sender_email
-    message["To"] = ", ".join(config.receivers)
+    # Every recipient is BCC: the visible To is the sender's own address, and
+    # the real recipients go only in the SMTP envelope below. No Bcc header is
+    # written, because smtplib would transmit it verbatim and expose the list.
+    message["To"] = config.sender_email
     message["Message-ID"] = mid
     for header_name, header_value in thread_headers.items():
         message[header_name] = header_value
@@ -555,7 +558,7 @@ def send_email(config: Config, subject: str, html: str) -> None:
         server.login(config.sender_email, config.sender_password)
         server.sendmail(config.sender_email, config.receivers, message.as_string())
     thread_note = "(new thread)" if not thread_headers else "(threaded reply)"
-    print(f"Email sent to {', '.join(config.receivers)} {thread_note}")
+    print(f"Email sent to {len(config.receivers)} recipient(s), all BCC {thread_note}")
 
 
 # --------------------------------------------------------------------------
@@ -704,7 +707,7 @@ def main(argv: list[str] | None = None) -> int:
     save_state(state)
     # Persist spot rate for next run's change gate.
     email_thread.record_rate("usd_inr", stats.spot, key="last_rate")
-    print(f"sent to {', '.join(config.receivers)} — {summary}")
+    print(f"sent to {len(config.receivers)} recipient(s) — {summary}")
     return 0
 
 

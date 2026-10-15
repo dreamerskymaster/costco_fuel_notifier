@@ -91,6 +91,40 @@ class BreakEvenTests(unittest.TestCase):
         self.assertAlmostEqual(cost_to_land(Route("gp", m, 0, usd_deductions=15), 1000, 96.0).total_inr, target, places=2)
 
 
+class CardRouteTests(unittest.TestCase):
+    def setUp(self):
+        self.config = OutboundConfig()
+        self.config.card_atm_fee_usd, self.config.atm_surcharge_usd, self.config.card_atm_withdrawals = 2.0, 3.0, 2
+
+    def test_routes_use_live_quotes_in_fixed_order(self):
+        from fx_outbound import ProviderRate
+        from inr_usd_tracker import build_routes
+
+        quotes = {
+            "remittance": ProviderRate("gp", 98.0, 1499.0, "live"),
+            "card": ProviderRate("wsfx card", 99.0, 0.0, "live"),
+            "thomas_cook": ProviderRate("tc", 97.0, 0.0, "2026-10-10"),
+        }
+        routes, _ = build_routes(self.config, 96.0, None, quotes)
+        self.assertEqual(
+            [r.name for r in routes],
+            ["Credila wire · OUR", "Credila wire · SHA", "Credila Global Pay",
+             "Global Pay card → ATM", "Thomas Cook card → ATM"],
+        )
+        self.assertAlmostEqual(routes[2].markup_pct, 100 * (98 / 96 - 1))
+        self.assertEqual(routes[2].fee_inr, 1499.0)
+        self.assertAlmostEqual(routes[4].markup_pct, 100 * (97 / 96 - 1))
+        self.assertEqual(routes[4].usd_deductions, 10.0)  # 2 withdrawals x ($2 + $3)
+
+    def test_missing_quotes_fall_back_to_markups(self):
+        from inr_usd_tracker import build_routes
+
+        routes, notes = build_routes(self.config, 96.0, None, {})
+        self.assertEqual(routes[3].markup_pct, self.config.wsfx_card_markup_pct)
+        self.assertEqual(routes[4].markup_pct, self.config.thomas_cook_card_markup_pct)
+        self.assertTrue(any("unavailable" in n for n in notes))
+
+
 class TimingTests(unittest.TestCase):
     def test_cheapness_percentile(self):
         self.assertEqual(cheapness_percentile([90, 91, 92, 89], lookback=4), 75.0)  # cheapest dollar

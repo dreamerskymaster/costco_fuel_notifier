@@ -49,6 +49,7 @@ jobs:
           SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
           FX_RECEIVER_EMAIL: ${{ secrets.FX_RECEIVER_EMAIL || secrets.RECEIVER_EMAIL }}
           FX_EXTRA_RECEIVERS: ${{ secrets.FX_EXTRA_RECEIVERS }}
+          FX_ADDITIONAL_RECEIVERS: ${{ secrets.FX_ADDITIONAL_RECEIVERS }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SEND_AMOUNT_USD: ${{ vars.SEND_AMOUNT_USD }}
