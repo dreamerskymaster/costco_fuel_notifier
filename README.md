@@ -14,7 +14,7 @@ Everything runs on GitHub Actions with free, key-less data sources. There is no 
 | **Mumbai Tracker** (`mumbai_gas_tracker.py`) | Versova → Andheri West → JVLR → Powai → Airoli → Ghansoli | Sorted Petrol & Diesel, Purple Diesel highlights, Nitrogen tyre availability, Hyundai Venue 2019 care card | **Dad's cards** (`recommend_card()`): full tank → **HDFC Regalia** (1% waiver ₹400–₹5,000, ₹500/cycle cap); top-ups ≤ ₹4,000 → **Amazon Pay ICICI**; HSBC RuPay & Mastercard debit have no fuel waiver | Daily @ 7:00 AM IST (`30 1 * * *`) |
 | **Road Trip Digest** (`road_trip_tracker.py`) | Mumbai ↔ Goa (NH48 vs NH66), Mumbai ↔ Pune (Expressway) | Route comparison cards, Google Maps + Waze links, highway tyre advisory | Same card picker as Mumbai | 5:30 AM IST on trip dates only (last trip **2026-10-17**) |
 | **USD→INR Remittance** (`usd_inr_tracker.py`) | USD → India transfers, ~$3,000/month around the 15th | All-in provider cost ranking, trend+AR(1) stopping model, walk-forward backtest, markup-drift detection, threshold alerts | **Provider choice beats rate timing**: best-vs-worst spread ₹9–10k per transfer, vs a measured timing edge of +₹142/mo (not significant) | Daily @ ~08:11 ET + 3-hourly alert poll |
-| **INR→USD Credila Brief** (`inr_usd_tracker.py`) | Credila education loan → student's Chase account, ~$1,000/month | Live HSBC India & IOB TT-selling card rates, Credila wire OUR vs SHA vs Global Pay cost to land an exact dollar amount, Global Pay break-even rate, GST on conversion, Wise yardstick, receipt calibration | **Route and fee handling beat timing**: waiting for a cheap dollar measured −₹108/mo vs sending on day one over 55 windows | Daily check @ ~09:23 ET; emails only on window open / 2 days before close / weekly |
+| **INR→USD Credila Brief** (`inr_usd_tracker.py`) | Credila education loan → student's Chase account, ~$1,000/month | Live HSBC India & IOB card rates plus WSFx and Thomas Cook quotes; cost to land an exact dollar amount via Credila wire (OUR/SHA), Global Pay remittance, or Global Pay / Thomas Cook forex card → ATM → Chase; Global Pay break-even rate, GST on conversion, Wise yardstick, receipt calibration | **Route and fee handling beat timing**: waiting for a cheap dollar measured −₹108/mo vs sending on day one over 55 windows | Daily check @ ~09:23 ET; emails only on window open / 2 days before close / weekly |
 
 ---
 
@@ -88,9 +88,11 @@ Set as repository **Variables** (not secrets), or as env vars locally. All optio
 | `WIRE_OUR_FEE_INR` | `1200` | HSBC charge (pre-GST) for OUR, where the sender pays every bank en route |
 | `WIRE_CORRESPONDENT_USD` | `20` | Dollars shaved by correspondents on SHA |
 | `CHASE_INCOMING_WIRE_USD` | `15` | Chase incoming international wire fee |
-| `GLOBALPAY_MARKUP_PCT` | `1.0` | Guess for Credila Global Pay (WSFx) — unpublished |
+| `GLOBALPAY_MARKUP_PCT` | `1.0` | Fallback if WSFx's live remittance quote is unreachable |
 | `GLOBALPAY_FEE_INR` / `GLOBALPAY_CORRESPONDENT_USD` | `0` / `0` | Extra Global Pay charges, if any |
-| `WIRE_RECEIPT` / `GLOBALPAY_RECEIPT` | unset | `YYYY-MM-DD,inr_debited,usd_received` from a real transfer; calibrates the markup |
+| `WIRE_RECEIPT` / `GLOBALPAY_RECEIPT` | unset | `YYYY-MM-DD,inr_debited,usd_received` from a real transfer; checks quotes against what was charged |
+| `CARD_ATM_FEE_USD` / `ATM_SURCHARGE_USD` / `CARD_ATM_WITHDRAWALS` | `2` / `3.22` / `2` | Forex-card cash-out cost: card fee + ATM owner's surcharge, per withdrawal |
+| `WSFX_CARD_MARKUP_PCT` / `THOMAS_COOK_CARD_MARKUP_PCT` | `2.2` / `0.4` | Card load markups used only if the live quotes are unreachable |
 
 ---
 
@@ -124,9 +126,10 @@ Set as repository **Variables** (not secrets), or as env vars locally. All optio
 ├── fx_outbound.py          # Cost-to-land model, GST slabs, HSBC/IOB card rates, Wise yardstick
 ├── fx_outbound_timing.py   # Walk-forward test of timing in the INR→USD direction
 ├── fx_config.py            # Env parsing for both FX pipelines (empty-string safe)
-├── test_fx_signals.py      # 21 offline tests for the model & window logic
-├── test_fx_outbound.py     # 16 offline tests for the INR→USD brief
-├── test_ml_outlooks.py     # 19 offline tests for the ML outlooks
+├── test_fx_signals.py      # 28 offline tests for the model & window logic
+├── test_fx_outbound.py     # 18 offline tests for the INR→USD brief
+├── test_fx_bcc.py          # 1 offline test: FX recipients are BCC-only
+├── test_ml_outlooks.py     # 12 offline tests for the ML outlooks
 ├── test_gas_cadence.py     # Offline tests for the US email gate
 ├── data/                   # Committed state + price history CSVs (updated by the workflows)
 ├── ARCHITECTURE.md         # Full system architecture, maintenance & troubleshooting memory
@@ -143,7 +146,7 @@ Set as repository **Variables** (not secrets), or as env vars locally. All optio
 - [CLAUDE.md](CLAUDE.md): Low-token summary, current status and next steps.
 - [AGENTS.md](AGENTS.md): Vehicles, routes, card rules and schedules.
 
-Run all offline tests with `python -m unittest test_fx_signals test_fx_outbound test_ml_outlooks test_gas_cadence` (66 tests).
+Run all offline tests with `python -m unittest test_fx_signals test_fx_outbound test_fx_bcc test_ml_outlooks test_gas_cadence` (69 tests).
 
 ---
 
