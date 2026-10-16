@@ -5,14 +5,15 @@
 
 **Runs entirely on GitHub Actions.** There is no maintained local checkout; work in a fresh clone or worktree. Vehicles, routes, card rules and schedules live in `AGENTS.md` (`MEMORY.md` points there).
 
-## Status (2026-10-14)
-- All 6 workflows green; last 100 runs had 0 failures. 69 offline tests pass (`python -m unittest test_fx_signals test_fx_outbound test_fx_bcc test_ml_outlooks test_gas_cadence`).
-- Merged: PR #1–#5 (USD→INR, Credila brief, ML outlooks + India price fix, gas cadence + self-graded prediction). Dad's card picker is on `main`.
-- Combined PR (supersedes #6, #7, #8): INR→USD forex-card routes + live Global Pay quote; FX briefs BCC all recipients + `FX_ADDITIONAL_RECEIVERS`; finalized docs. 69 offline tests (add `test_fx_bcc`).
+## Status (2026-10-15) — closed out, running unattended
+- All workflows green. 69 offline tests pass (`python -m unittest test_fx_signals test_fx_outbound test_fx_bcc test_ml_outlooks test_gas_cadence`).
+- PRs #1–#9 merged; no open PRs. #9 combined #6 (forex-card routes + live Global Pay quote), #7 (FX BCC + `FX_ADDITIONAL_RECEIVERS`) and #8 (docs).
+- No local checkout anywhere: the old OneDrive copy was deleted 2026-10-15. Work from a fresh clone. The GCP service-account key now exists only as the `GCP_SERVICE_ACCOUNT` secret; if it's ever needed again, mint a new key for the Sheets service account in the GCP console and paste it into the secret.
 
-## Next
+## Next (only if reopened)
 - After the last road trip (2026-10-17), disable or delete `.github/workflows/road_trip_schedule.yml`.
 - Confirm Dad's HSBC card variant: RuPay **Cashback** = no fuel waiver (current assumption); RuPay **Platinum** = 1% on ₹400–₹4,000, ₹250/month cap → edit its `DAD_CARDS` entry. If his Regalia is now Regalia Gold, recheck the waiver range.
+- INR→USD: once the student makes a real transfer, store it as `GLOBALPAY_RECEIPT` / `WIRE_RECEIPT` to check the live quotes against what was charged.
 
 ## Pipelines & Data Flow
 
@@ -62,7 +63,7 @@
 - **Landmines**: forecasts must anchor on today's close (invariant: horizon 0 == spot, reservation at `days_left=0` == spot); don't replace the elementwise weighted sums in `fx_signals.py` with `@` (macOS Accelerate BLAS raises spurious FP warnings); Yahoo 429s are normal and expected; `.gitignore`'s blanket `*.json` is negated for `data/events.json` and `data/state.json`.
 
 ### 5. INR→USD Credila Brief (`inr_usd_tracker.py`)
-- **Purpose**: a student in the US moves ~$1,000/month from a **Credila** education loan to her **Chase** account, choosing between a **Credila wire** (funds sit in the HSBC India account opened at loan signing and leave by SWIFT at HSBC's TT-selling card rate) and **Credila Global Pay** (WSFx GlobalPay; markup unpublished).
+- **Purpose**: a student in the US moves ~$1,000/month from a **Credila** education loan to her **Chase** account, choosing between a **Credila wire** (funds sit in the HSBC India account opened at loan signing and leave by SWIFT at HSBC's TT-selling card rate) and **Credila Global Pay** (WSFx GlobalPay, priced from WSFx's live calculator), plus two forex cards she holds (see below).
 - **Core finding (do not undo)**: timing loses in this direction too — waiting for a cheap dollar within a 14-day window cost **₹108/mo** vs sending on day one over 55 windows (hindsight ceiling ₹312/mo), because the rupee drifts weaker. The brief says "send on day one" and leads with route choice: the Global Pay **break-even rate** vs a wire with charges set to **OUR**.
 - **Data**: HSBC India + IOB card-rate HTML pages (parsed by cell offset; a layout change returns None and falls back to `WIRE_MARKUP_PCT`), Frankfurter/Yahoo mid, Wise `v3/quotes` as a yardstick (not usable by a US-resident sender).
 - **Facts baked in** (checked Sept 2026): Chase $15 incoming international wire (College Checking too); HSBC OUR ₹1,200 + GST, app remittance otherwise free; GST on conversion per CGST Rule 32(2)(b); loan-funded education remittance = 0% TCS. Convera GlobalPay for Students pays institutions only — not a route to a personal Chase account.
@@ -109,14 +110,15 @@ SENDER_EMAIL="me@gmail.com" SENDER_PASSWORD="pass" MUMBAI_RECEIVER_EMAIL="dad@gm
 # Run USD→INR remittance brief locally
 python usd_inr_tracker.py --mode dry-run        # render preview.html, send nothing
 SENDER_EMAIL="me@gmail.com" SENDER_PASSWORD="pass" FX_RECEIVER_EMAIL="me@gmail.com" python usd_inr_tracker.py --mode digest
-python -m unittest test_fx_signals              # 21 offline tests
+python -m unittest test_fx_signals              # 28 offline tests
 
 # Run INR→USD Credila brief locally
 python inr_usd_tracker.py --mode dry-run        # render inr_usd_preview.html
 python -m unittest test_fx_outbound             # 18 offline tests
+python -m unittest test_fx_bcc                  # 1 offline test (BCC-only delivery)
 
 # ML outlooks
 python us_fuel_forecast.py                      # print this week's fill-up outlook + reliability table
-python -m unittest test_ml_outlooks             # 19 offline tests
+python -m unittest test_ml_outlooks             # 12 offline tests
 python -m unittest test_gas_cadence             # 10 offline tests
 ```
