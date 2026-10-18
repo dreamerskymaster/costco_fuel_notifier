@@ -1,9 +1,9 @@
 {
   "last_low_alert_price": 4.35,
   "last_reason": "weekend",
-  "last_sent_date": "2026-10-16",
+  "last_sent_date": "2026-10-18",
   "weekend_sent": {
     "FRIDAY_DEPARTURE": "2026-10-16",
-    "SUNDAY_RETURN": "2026-10-11"
+    "SUNDAY_RETURN": "2026-10-18"
   }
 }
