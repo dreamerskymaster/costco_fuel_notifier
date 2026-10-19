@@ -52,3 +52,4 @@ date,spot,verdict,score,reservation_rate,edge_pct,best_provider,best_received_in
 2026-10-17,95.112,HOLD,38,95.4556,-0.36,Remitly,284610.0,284610.0,8
 2026-10-17,95.112,HOLD,38,95.4556,-0.36,Remitly,284610.0,284610.0,8
 2026-10-18,95.0757,HOLD,37,95.425,-0.3661,Remitly,284610.0,284610.0,8
+2026-10-19,95.1849,HOLD,39,95.5171,-0.3478,Xoom (PayPal),284632.61,284435.17,8
