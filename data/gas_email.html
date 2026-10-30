@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#334155;margin:0;padding:12px;background-color:#f8fafc;">
+    <div style="max-width:720px;margin:0 auto;background:#ffffff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg, #0284c7, #1e3a8a);padding:20px;color:#ffffff;">
+        <span style="background:rgba(255,255,255,0.2);color:#ffffff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
+          Norwalk ↔ Jersey City Fuel Tracker
+        </span>
+        <h2 style="margin:8px 0 4px 0;font-size:20px;font-weight:800;">
+          ⛽ Fuel Digest &amp; Weekend Arbitrage
+        </h2>
+        <p style="margin:0;font-size:12px;opacity:0.9;">
+          CT (Norwalk/Stamford) → NY (New Rochelle) → NJ (GWB/Rt 46 → Tonnelle Ave → Jersey City → Bayonne)
+        </p>
+      </div>
+
+      <!-- ML Fill-Up Outlook -->
+      
+      <div style="padding:14px 18px;background-color:#f8fafc;border-bottom:1px solid #e2e8f0;font-size:12px;line-height:1.6;color:#334155;">
+        <div style="font-weight:800;font-size:13px;margin-bottom:4px;color:#0f172a;">🔮 ML Fill-Up Outlook (EIA week of Oct 26)</div>
+        <div style="font-weight:700;font-size:14px;color:#b45309;">Buy only what you need — prices are likely to ease.</div>
+        <div style='margin-top:4px;'>Next week (NY/NJ average): 99% chance prices fall, expected -7.1¢/gal (typical error ±3.1¢). Confidence: High.</div><div style='margin-top:4px;'>Expect about -7¢/gal next week; waiting on a full fill saves ~$1.31. Today&#x27;s price is already low versus recent weeks, so filling now is reasonable.</div><div style='margin-top:4px;'>Is today&#x27;s price low? It is low: cheaper than or equal to 100% of this station&#x27;s last 24 logged days.</div>
+        <div style="margin-top:6px;font-size:11px;color:#64748b;">Model record since 2008: right 77% of 981 weeks vs 56% for always guessing the usual direction. When it leaned this hard before it was right 92% of 311 weeks. Source: EIA weekly retail &amp; NY Harbor wholesale.</div>
+      </div>
+      
+      <div style="padding:12px 18px;background-color:#f8fafc;border-bottom:1px solid #e2e8f0;font-size:12px;line-height:1.6;color:#334155;">
+        <div style="font-weight:800;font-size:13px;color:#0f172a;">🎯 Tomorrow's Norwalk price (graded every day)</div>
+        <div style='margin-top:3px;'>• Tomorrow (Norwalk cheapest): $4.277, 80% range $4.211–$4.342, 52% confident it lands within ±2¢ (down).</div><div style='margin-top:3px;'>• Last 21 days: average miss 3.6¢, inside range 57%, direction right 33%. Self-correction now -0.3¢.</div>
+      </div>
+
+      <!-- Strategy Callout Banner -->
+      <div style="padding:14px 18px;background-color:#f0f9ff;border-bottom:1px solid #bae6fd;color:#0369a1;font-size:12px;line-height:1.6;">
+        <div style="font-weight:800;font-size:13px;margin-bottom:6px;">
+          📊 Corridor Fuel Arbitrage: CT vs NJ • Volkswagen Passat (2013 SE)
+        </div>
+        
+        • 📍 <strong>Commute Route</strong>: Norwalk, CT ↔ 850 Westside Ave, Jersey City, NJ (~60.0 miles each way).<br>
+        • 🚘 <strong>Vehicle Profile</strong>: Volkswagen Passat (2013 SE) • 18.5 Gal Tank • 34 PSI (Normal) / 38 PSI (Loaded Highway).<br>
+        • 💰 <strong>Price Benchmark</strong>: no current CT price to compare (lowest NJ net $3.77).<br>
+        • 🛣️ <strong>Non-Toll Travel Tip</strong>: Use Merritt Pkwy (CT-15) + GWB (free westbound) + US-1&9 for a 100% toll-free Friday drive!
+        
+        <div style="margin-top:10px;">
+          <a href="https://www.google.com/maps/dir/?api=1&origin=Norwalk%2C+CT&destination=850+Westside+Ave%2C+Jersey+City%2C+NJ&travelmode=driving&avoid=tolls" style="background:#0284c7;color:#ffffff;padding:8px 14px;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;margin-right:6px;">🛣️ Toll-Free Route (Maps)</a>
+          <a href="https://waze.com/ul?q=850+Westside+Ave%2C+Jersey+City%2C+NJ&navigate=yes" style="background:#059669;color:#ffffff;padding:8px 14px;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;">🧭 Waze Navigation</a>
+        </div>
+      </div>
+
+      <!-- Costco vs NJ Discounters Spotlight -->
+      
+        <div style="padding:14px 18px;background-color:#fffbeb;border-bottom:1px solid #fde68a;font-size:12px;line-height:1.6;color:#78350f;">
+          <div style="font-weight:800;font-size:13px;margin-bottom:6px;color:#92400e;">
+            🏆 Costco vs NJ Commute Discounters (Decide for Yourself!)
+          </div>
+          • 🌟 <strong>Costco NJ Champion</strong>: <strong>Costco</strong> (Teterboro (Costco)) — Listed <strong>$3.93</strong> → Net <strong>$3.77</strong> with <strong>Citi Costco Visa (4%)</strong>. <em>Requires Visa &amp; membership.</em><br>
+          • 🏪 <strong>Top NJ Discounter (No Membership)</strong>: <strong>US Gas</strong> (Ridgefield (Rt 46 / GWB Exit)) — Listed <strong>$3.95</strong> → Net <strong>$3.79</strong> with <strong>Citi 4% / Amex 3%</strong>. <em>24/7 access, no lines.</em><br>
+          • ⛽ <strong>Tonnelle Ave / Rt 46 Corridor Picks</strong>: High-volume stations like <strong>Wawa</strong> (7408 Tonnelle Ave), <strong>Delta</strong> (5100 Tonnelle Ave), and <strong>QuickChek</strong> (Rt 46 Ridgefield &amp; Bayonne) sit directly along your toll-free route!
+        </div>
+        
+
+      <!-- Card Savings Banner -->
+      <div style="padding:10px 18px;background-color:#f1f5f9;border-bottom:1px solid #e2e8f0;font-size:11px;color:#475569;">
+        💳 <strong>Card Optimization Applied</strong>: Net prices include <strong>4% Citi Costco Anywhere Visa</strong> (at Costco &amp; standalone pumps) or <strong>3% Amex Blue Cash Everyday</strong>. Supermarket gas earns 1%.
+      </div>
+
+      <!-- Table Container (Top 20 Ranked Pumps) -->
+      <div style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <table class="gb-table" style="width:100%;border-collapse:collapse;text-align:left;min-width:540px;">
+          <thead>
+            <tr style="background-color:#f8fafc;border-bottom:2px solid #e2e8f0;color:#475569;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">
+              <th style="padding:10px 8px;">Station &amp; Area</th>
+              <th style="padding:10px 8px;">Listed</th>
+              <th style="padding:10px 8px;">Best Card</th>
+              <th style="padding:10px 8px;">Net Price</th>
+              <th style="padding:10px 8px;text-align:right;">Navigate</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Costco 🌟<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Teterboro (Costco)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $3.93
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi Costco (4%)
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.77</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Costco+07608" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Costco+07608&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Costco 🌟<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Bayonne (Costco / ~4 mi South)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $3.93
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi Costco (4%)
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.77</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Costco+07002" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Costco+07002&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            US Gas 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Ridgefield (Rt 46 / GWB Exit)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $3.95
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.79</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=US+Gas+07657" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=US+Gas+07657&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            QuickChek 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Ridgefield (Rt 46 / GWB Exit)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $3.95
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.79</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=QuickChek+07657" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=QuickChek+07657&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Fuel 4 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Hackensack (Rt 17 Corridor)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $3.95
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.79</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Fuel+4+07601" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Fuel+4+07601&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Delta 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> North Bergen (Tonnelle Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $3.95
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.79</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Delta+07047" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Delta+07047&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            QuickChek 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Hackensack (Rt 17 Corridor)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $3.99
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.83</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=QuickChek+07601" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=QuickChek+07601&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            QuickChek 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Bayonne (Costco / ~4 mi South)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $3.99
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.83</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=QuickChek+07002" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=QuickChek+07002&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            BP<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> North Bergen (Tonnelle Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.01
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.85</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=BP+07047" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=BP+07047&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Fuel 4 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Jersey City (Westside Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.03
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.87</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Fuel+4+07306" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Fuel+4+07306&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Lukoil 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Jersey City (Westside Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.03
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.87</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Lukoil+07306" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Lukoil+07306&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Broadway Diesel & Gas<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Jersey City (Westside Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.04
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.88</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Broadway+Diesel+%26+Gas+07306" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Broadway+Diesel+%26+Gas+07306&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            BP<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Hackensack (Rt 17 Corridor)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.05
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.89</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=BP+07601" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=BP+07601&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Delta 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> North Bergen (Tonnelle Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.05
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.89</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Delta+07047" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Delta+07047&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            BP<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> North Bergen (Tonnelle Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.05
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.89</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=BP+07047" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=BP+07047&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Lukoil 🏪<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Hackensack (Rt 17 Corridor)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.07
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.91</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Lukoil+07601" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Lukoil+07601&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Shell<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> North Bergen (Tonnelle Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.07
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.91</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Shell+07047" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Shell+07047&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            CITGO<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> North Bergen (Tonnelle Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.07
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.91</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=CITGO+07047" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=CITGO+07047&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#ffffff;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Exxon<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Jersey City (Westside Ave)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.07
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.91</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Exxon+07306" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Exxon+07306&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+        <tr class="gb-row" style="background-color:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+            Unbranded<br>
+            <span style="font-size:11px;color:#64748b;font-weight:normal;"><span style="background-color:#dcfce7;color:#15803d;padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;">NJ</span> Hackensack (Rt 17 Corridor)</span>
+          </td>
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+            $4.09
+          </td>
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+            Citi 4% / Amex 3%
+          </td>
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
+            <span style="color:#15803d;font-weight:700;font-size:15px;">$3.93</span>
+          </td>
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Unbranded+07601" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
+            <a href="https://waze.com/ul?q=Unbranded+07601&navigate=yes" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
+          </td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <div style="padding:12px 18px;background-color:#f8fafc;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;text-align:center;">
+        Costco &amp; Fuel Notifier • Commute Edition for you • 🌟 Costco &nbsp; 🏪 24/7 Top Discounter
+      </div>
+    </div>
+  </body>
+</html>
