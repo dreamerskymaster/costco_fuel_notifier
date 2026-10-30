@@ -1,6 +1,6 @@
 {
- "fetched_at": "2026-10-30T03:13:03+00:00",
- "generated_at": "2026-10-30T03:13:06+00:00",
+ "fetched_at": "2026-10-30T03:23:45+00:00",
+ "generated_at": "2026-10-30T03:24:16+00:00",
  "best": {
   "name": "Delta",
   "price": 3.93,
@@ -355,6 +355,23 @@
    ]
   },
   {
+   "label": "Teterboro (Costco)",
+   "zip": "07608",
+   "stations": [
+    {
+     "name": "Costco",
+     "price": 3.93,
+     "net_price": 3.77,
+     "best_card": "Citi Costco (4%)",
+     "card_note": "Visa Only",
+     "last_updated": "Oct 29, 11:05 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
+     "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
+    }
+   ]
+  },
+  {
    "label": "Hackensack (Rt 17 Corridor)",
    "zip": "07601",
    "stations": [
@@ -469,7 +486,7 @@
      "net_price": 3.89,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 29, 02:03 PM",
+     "last_updated": "Oct 29, 05:51 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047",
      "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes"
@@ -512,6 +529,67 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032",
      "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "Jersey City (Westside Ave)",
+   "zip": "07306",
+   "stations": [
+    {
+     "name": "Fuel 4",
+     "price": 4.03,
+     "net_price": 3.87,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 03:19 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07306",
+     "waze_link": "https://waze.com/ul?q=Fuel+4+07306&navigate=yes"
+    },
+    {
+     "name": "Lukoil",
+     "price": 4.03,
+     "net_price": 3.87,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 02:33 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Lukoil+07306",
+     "waze_link": "https://waze.com/ul?q=Lukoil+07306&navigate=yes"
+    },
+    {
+     "name": "Broadway Diesel & Gas",
+     "price": 4.04,
+     "net_price": 3.88,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 07:58 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Broadway+Diesel+%26+Gas+07306",
+     "waze_link": "https://waze.com/ul?q=Broadway+Diesel+%26+Gas+07306&navigate=yes"
+    },
+    {
+     "name": "Exxon",
+     "price": 4.07,
+     "net_price": 3.91,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 03:20 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306",
+     "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes"
+    },
+    {
+     "name": "Exxon",
+     "price": 4.09,
+     "net_price": 3.93,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 02:33 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306",
+     "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes"
     }
    ]
   },
