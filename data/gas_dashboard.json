@@ -1,0 +1,630 @@
+{
+ "fetched_at": "2026-10-30T03:13:03+00:00",
+ "generated_at": "2026-10-30T03:13:06+00:00",
+ "best": {
+  "name": "Delta",
+  "price": 3.93,
+  "net_price": 3.77,
+  "best_card": "Citi 4% / Amex 3%",
+  "card_note": "Standalone Gas Station",
+  "last_updated": "Oct 29, 06:46 AM",
+  "stale": true,
+  "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07657",
+  "waze_link": "https://waze.com/ul?q=Delta+07657&navigate=yes",
+  "area": "Ridgefield (Rt 46 / GWB Exit)"
+ },
+ "home": {
+  "cheapest": {
+   "name": "Exxon",
+   "price": 4.29,
+   "net_price": 4.12,
+   "best_card": "Citi 4% / Amex 3%",
+   "card_note": "Standalone Gas Station",
+   "last_updated": "Oct 29, 07:10 AM",
+   "stale": true,
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+06854",
+   "waze_link": "https://waze.com/ul?q=Exxon+06854&navigate=yes"
+  },
+  "low_90d": {
+   "date": "2026-10-23",
+   "price": 4.25
+  },
+  "decision_note": "no new Norwalk low"
+ },
+ "trend": {
+  "norwalk": [
+   [
+    "2026-10-05",
+    4.43
+   ],
+   [
+    "2026-10-06",
+    4.43
+   ],
+   [
+    "2026-10-07",
+    4.43
+   ],
+   [
+    "2026-10-08",
+    4.45
+   ],
+   [
+    "2026-10-09",
+    4.45
+   ],
+   [
+    "2026-10-10",
+    4.45
+   ],
+   [
+    "2026-10-11",
+    4.39
+   ],
+   [
+    "2026-10-12",
+    4.39
+   ],
+   [
+    "2026-10-13",
+    4.45
+   ],
+   [
+    "2026-10-14",
+    4.39
+   ],
+   [
+    "2026-10-15",
+    4.39
+   ],
+   [
+    "2026-10-16",
+    4.35
+   ],
+   [
+    "2026-10-17",
+    4.35
+   ],
+   [
+    "2026-10-18",
+    4.35
+   ],
+   [
+    "2026-10-19",
+    4.27
+   ],
+   [
+    "2026-10-20",
+    4.27
+   ],
+   [
+    "2026-10-21",
+    4.35
+   ],
+   [
+    "2026-10-22",
+    4.35
+   ],
+   [
+    "2026-10-23",
+    4.25
+   ],
+   [
+    "2026-10-24",
+    4.25
+   ],
+   [
+    "2026-10-25",
+    4.25
+   ],
+   [
+    "2026-10-26",
+    4.25
+   ],
+   [
+    "2026-10-29",
+    4.29
+   ]
+  ],
+  "nj_costco": [
+   [
+    "2026-10-04",
+    4.09
+   ],
+   [
+    "2026-10-05",
+    4.05
+   ],
+   [
+    "2026-10-06",
+    4.05
+   ],
+   [
+    "2026-10-07",
+    3.99
+   ],
+   [
+    "2026-10-08",
+    3.99
+   ],
+   [
+    "2026-10-09",
+    3.97
+   ],
+   [
+    "2026-10-10",
+    3.99
+   ],
+   [
+    "2026-10-11",
+    3.99
+   ],
+   [
+    "2026-10-12",
+    3.99
+   ],
+   [
+    "2026-10-13",
+    3.99
+   ],
+   [
+    "2026-10-14",
+    3.97
+   ],
+   [
+    "2026-10-15",
+    3.99
+   ],
+   [
+    "2026-10-16",
+    3.97
+   ],
+   [
+    "2026-10-17",
+    3.97
+   ],
+   [
+    "2026-10-18",
+    3.97
+   ],
+   [
+    "2026-10-19",
+    3.99
+   ],
+   [
+    "2026-10-20",
+    3.97
+   ],
+   [
+    "2026-10-21",
+    3.95
+   ],
+   [
+    "2026-10-22",
+    3.95
+   ],
+   [
+    "2026-10-23",
+    3.95
+   ],
+   [
+    "2026-10-24",
+    3.95
+   ],
+   [
+    "2026-10-25",
+    3.95
+   ],
+   [
+    "2026-10-26",
+    3.93
+   ],
+   [
+    "2026-10-29",
+    3.93
+   ]
+  ]
+ },
+ "areas": [
+  {
+   "label": "Norwalk (Home)",
+   "zip": "06854",
+   "stations": [
+    {
+     "name": "Exxon",
+     "price": 4.29,
+     "net_price": 4.12,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 07:10 AM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+06854",
+     "waze_link": "https://waze.com/ul?q=Exxon+06854&navigate=yes"
+    },
+    {
+     "name": "Shell",
+     "price": 4.53,
+     "net_price": 4.35,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 07:11 AM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854",
+     "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "New Rochelle (Costco)",
+   "zip": "10801",
+   "stations": [
+    {
+     "name": "Gulf",
+     "price": 4.35,
+     "net_price": 4.18,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 06:59 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Gulf+10801",
+     "waze_link": "https://waze.com/ul?q=Gulf+10801&navigate=yes"
+    },
+    {
+     "name": "BP",
+     "price": 4.35,
+     "net_price": 4.18,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 09:41 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+10801",
+     "waze_link": "https://waze.com/ul?q=BP+10801&navigate=yes"
+    },
+    {
+     "name": "CITGO",
+     "price": 4.4,
+     "net_price": 4.22,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 28, 07:24 AM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=CITGO+10801",
+     "waze_link": "https://waze.com/ul?q=CITGO+10801&navigate=yes"
+    },
+    {
+     "name": "BP",
+     "price": 4.49,
+     "net_price": 4.31,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 07:12 AM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+10801",
+     "waze_link": "https://waze.com/ul?q=BP+10801&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "Ridgefield (Rt 46 / GWB Exit)",
+   "zip": "07657",
+   "stations": [
+    {
+     "name": "Delta",
+     "price": 3.93,
+     "net_price": 3.77,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 06:46 AM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07657",
+     "waze_link": "https://waze.com/ul?q=Delta+07657&navigate=yes"
+    },
+    {
+     "name": "US Gas",
+     "price": 3.95,
+     "net_price": 3.79,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 07:06 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=US+Gas+07657",
+     "waze_link": "https://waze.com/ul?q=US+Gas+07657&navigate=yes"
+    },
+    {
+     "name": "QuickChek",
+     "price": 3.95,
+     "net_price": 3.79,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 10:02 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
+     "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
+    },
+    {
+     "name": "Sunoco",
+     "price": 4.27,
+     "net_price": 4.1,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 12:16 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07657",
+     "waze_link": "https://waze.com/ul?q=Sunoco+07657&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "Hackensack (Rt 17 Corridor)",
+   "zip": "07601",
+   "stations": [
+    {
+     "name": "Fuel 4",
+     "price": 3.95,
+     "net_price": 3.79,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 01:29 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07601",
+     "waze_link": "https://waze.com/ul?q=Fuel+4+07601&navigate=yes"
+    },
+    {
+     "name": "QuickChek",
+     "price": 3.99,
+     "net_price": 3.83,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 10:02 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
+     "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
+    },
+    {
+     "name": "Delta",
+     "price": 4.03,
+     "net_price": 3.87,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 28, 03:49 PM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07601",
+     "waze_link": "https://waze.com/ul?q=Delta+07601&navigate=yes"
+    },
+    {
+     "name": "BP",
+     "price": 4.05,
+     "net_price": 3.89,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 09:41 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07601",
+     "waze_link": "https://waze.com/ul?q=BP+07601&navigate=yes"
+    },
+    {
+     "name": "Lukoil",
+     "price": 4.07,
+     "net_price": 3.91,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 04:41 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Lukoil+07601",
+     "waze_link": "https://waze.com/ul?q=Lukoil+07601&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "North Bergen (Tonnelle Ave)",
+   "zip": "07047",
+   "stations": [
+    {
+     "name": "Delta",
+     "price": 3.95,
+     "net_price": 3.79,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 12:01 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047",
+     "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes"
+    },
+    {
+     "name": "BP",
+     "price": 3.99,
+     "net_price": 3.83,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 28, 03:13 PM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047",
+     "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes"
+    },
+    {
+     "name": "BP",
+     "price": 4.01,
+     "net_price": 3.85,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 03:12 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047",
+     "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes"
+    },
+    {
+     "name": "Fuel Express",
+     "price": 4.03,
+     "net_price": 3.87,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 07:51 AM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Express+07047",
+     "waze_link": "https://waze.com/ul?q=Fuel+Express+07047&navigate=yes"
+    },
+    {
+     "name": "Delta",
+     "price": 4.05,
+     "net_price": 3.89,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 02:03 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047",
+     "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "Kearny (Rt 7 / ~2 mi West)",
+   "zip": "07032",
+   "stations": [
+    {
+     "name": "Gulf",
+     "price": 4.15,
+     "net_price": 3.98,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 06:51 AM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Gulf+07032",
+     "waze_link": "https://waze.com/ul?q=Gulf+07032&navigate=yes"
+    },
+    {
+     "name": "Wawa",
+     "price": 4.27,
+     "net_price": 4.1,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 04:21 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032",
+     "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes"
+    },
+    {
+     "name": "Exxon",
+     "price": 4.45,
+     "net_price": 4.27,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 09:41 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032",
+     "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "Jersey City (Route 440)",
+   "zip": "07305",
+   "stations": [
+    {
+     "name": "Speedway",
+     "price": 4.09,
+     "net_price": 3.93,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 03:31 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Speedway+07305",
+     "waze_link": "https://waze.com/ul?q=Speedway+07305&navigate=yes"
+    },
+    {
+     "name": "GetGo",
+     "price": 4.39,
+     "net_price": 4.21,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 07:44 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=GetGo+07305",
+     "waze_link": "https://waze.com/ul?q=GetGo+07305&navigate=yes"
+    },
+    {
+     "name": "Exxon",
+     "price": 4.39,
+     "net_price": 4.21,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 02:12 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07305",
+     "waze_link": "https://waze.com/ul?q=Exxon+07305&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "Bayonne (Costco / ~4 mi South)",
+   "zip": "07002",
+   "stations": [
+    {
+     "name": "Costco",
+     "price": 3.93,
+     "net_price": 3.77,
+     "best_card": "Citi Costco (4%)",
+     "card_note": "Visa Only",
+     "last_updated": "Oct 29, 11:05 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
+     "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
+    },
+    {
+     "name": "QuickChek",
+     "price": 3.99,
+     "net_price": 3.83,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 10:31 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
+     "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
+    },
+    {
+     "name": "Shell",
+     "price": 4.19,
+     "net_price": 4.02,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 28, 05:56 PM",
+     "stale": true,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07002",
+     "waze_link": "https://waze.com/ul?q=Shell+07002&navigate=yes"
+    },
+    {
+     "name": "BP",
+     "price": 4.19,
+     "net_price": 4.02,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 03:48 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07002",
+     "waze_link": "https://waze.com/ul?q=BP+07002&navigate=yes"
+    },
+    {
+     "name": "Exxon",
+     "price": 4.27,
+     "net_price": 4.1,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 29, 07:01 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07002",
+     "waze_link": "https://waze.com/ul?q=Exxon+07002&navigate=yes"
+    }
+   ]
+  }
+ ],
+ "prediction_lines": [
+  "Tomorrow (Norwalk cheapest): $4.277, 80% range $4.211–$4.342, 52% confident it lands within ±2¢ (down).",
+  "Last 21 days: average miss 3.6¢, inside range 57%, direction right 33%. Self-correction now -0.3¢."
+ ],
+ "outlook_lines": [
+  "Buy only what you need — prices are likely to ease.",
+  "Next week (NY/NJ average): 99% chance prices fall, expected -7.1¢/gal (typical error ±3.1¢). Confidence: High.",
+  "Expect about -7¢/gal next week; waiting on a full fill saves ~$1.31. Today's price is already low versus recent weeks, so filling now is reasonable.",
+  "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 23 logged days.",
+  "Model record since 2008: right 77% of 981 weeks vs 56% for always guessing the usual direction. When it leaned this hard before it was right 92% of 311 weeks."
+ ]
+}

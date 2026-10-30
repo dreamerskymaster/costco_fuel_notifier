@@ -13,6 +13,16 @@ __pycache__/
 !data/state.json
 !data/inr_usd_state.json
 !data/gas_state.json
+# Mac -> cloud gas hand-off and the phone dashboard's data (both public prices, no secrets)
+!data/gas_snapshot.json
+!data/gas_dashboard.json
 data/cache/
 preview.html
 inr_usd_preview.html
+.venv/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
