@@ -52,6 +52,18 @@ class SnapshotTests(unittest.TestCase):
         fetch.assert_not_called()
         sheets.assert_not_called()
 
+    def test_old_prices_never_logged_or_shown(self):
+        import gas_tracker
+        old = station("Shell", "06854", 4.09)
+        old["stale"] = True
+        gs.save([old], self.path)
+        with mock.patch.dict(os.environ, {"GAS_SNAPSHOT": str(self.path)}), \
+                mock.patch.object(gas_tracker, "log_to_sheets") as sheets, \
+                mock.patch.object(gas_tracker.gas_dashboard, "write") as board:
+            self.assertEqual(asyncio.run(gas_tracker.main()), 0)       # overnight lull is not a failure
+        sheets.assert_not_called()
+        board.assert_not_called()
+
     def test_watchdog_exit_codes(self):
         with mock.patch.object(gs, "SNAPSHOT_PATH", self.path):
             self.assertEqual(gs.main(["check", "--max-age-h", "24"]), 1)          # never fetched
@@ -81,6 +93,15 @@ class DashboardTests(unittest.TestCase):
         self.assertTrue(all(p[1] == 3.89 for p in board["trend"]["nj_costco"]))
         self.assertEqual([a["label"] for a in board["areas"]], ["Norwalk (Home)", "Bayonne (Costco)"])
         self.assertEqual(board["fetched_at"], "2026-10-29T22:30:00+00:00")
+        costco = {c["zip"]: c for c in board["costco"]}
+        self.assertEqual(costco["07002"]["net_price"], round(3.85 * 0.96, 2))
+        self.assertNotIn("price", costco["10801"])                       # no Costco reported there
+
+    def test_email_copy_drops_every_address(self):
+        html = "<p>Commute Edition for me@northeastern.edu</p><p>from bot@gmail.com</p><p>$3.77 at Costco</p>"
+        out = gd.scrub(html, private=["me@northeastern.edu"])
+        self.assertNotIn("@", out)
+        self.assertIn("$3.77 at Costco", out)
 
     def test_areas_keep_top_five_by_net_price(self):
         stations = [station(f"S{i}", "06854", 4.00 + i / 100, "Norwalk") for i in range(8, 0, -1)]

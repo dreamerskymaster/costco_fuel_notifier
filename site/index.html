@@ -199,16 +199,35 @@ function chart(el, series) {
   new ResizeObserver(() => draw()).observe(el);
 }
 
-function stationRow(s) {
-  const flag = s.stale ? ` · <span class="flag" title="Posted over 12 hours before the fetch">⚠ old</span>` : "";
+function costcoRow(c) {
   return `<div class="row">
-    <div><a class="name" href="${esc(s.maps_link)}" target="_blank" rel="noopener">${esc(s.name)}</a>
-      <div class="meta">${esc(s.best_card)} · ${esc(s.last_updated)}${flag}</div></div>
-    <div class="price"><div class="net">${usd(s.net_price)}</div><div class="listed">${usd(s.price)} listed</div></div>
+    <div><a class="name" href="${esc(c.maps_link)}" target="_blank" rel="noopener">Costco ${esc(c.where)}</a>
+      <div class="meta">${esc(c.best_card)} · ${esc(c.last_updated)}</div></div>
+    <div class="price"><div class="net">${usd(c.net_price)}</div><div class="listed">${usd(c.price)} listed</div></div>
   </div>`;
 }
 
-function render(b, snap) {
+function mountEmail(el, html) {
+  // The digest exactly as emailed, isolated in a shadow root so its inline styles stay intact.
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  doc.querySelectorAll("script").forEach(n => n.remove());
+  const root = el.shadowRoot || el.attachShadow({mode: "open"});
+  root.innerHTML = `<style>:host{display:block} .wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+    a{-webkit-tap-highlight-color:transparent}
+    @media (max-width: 560px) {  /* the emailed table needs 540px; on a phone each pump becomes a card */
+      .gb-table{min-width:0!important} .gb-table thead{display:none}
+      .gb-table tbody{display:block}
+      .gb-row{display:grid!important;grid-template-columns:1fr auto;grid-template-areas:"name net" "card listed" "nav nav";
+              gap:2px 12px;padding:12px 14px}
+      .gb-row td{display:block;padding:0!important}
+      .gb-name{grid-area:name} .gb-net{grid-area:net;text-align:right}
+      .gb-card{grid-area:card;white-space:normal!important} .gb-listed{grid-area:listed;text-align:right}
+      .gb-nav{grid-area:nav;text-align:left!important;margin-top:8px}
+      .gb-nav a{padding:8px 14px!important;font-size:13px!important}
+    }</style><div class="wrap" style="${esc(doc.body.getAttribute("style") || "")};padding:0;background:transparent">${doc.body.innerHTML}</div>`;
+}
+
+function render(b, snap, email) {
   const f = freshness(b.fetched_at);
   const css = getComputedStyle(document.documentElement);
   const c1 = css.getPropertyValue("--s1").trim(), c2 = css.getPropertyValue("--s2").trim();
@@ -223,27 +242,12 @@ function render(b, snap) {
       <p class="note">The Mac fetched ${ago(Date.now() - new Date(snap.fetched_at))}, but the cloud run hasn't processed them.
       Check <a href="https://github.com/${REPO}/actions">GitHub Actions</a>.</p></div>`);
   }
-
-  const best = b.best;
-  parts.push(`<section class="card"><h2>Best fill right now</h2>
-    <div class="hero-price">${usd(best.net_price)}</div>
-    <div class="hero-sub"><b>${esc(best.name)}</b>, ${esc(best.area)} · ${usd(best.price)} listed, ${esc(best.best_card)}</div>
-    <div class="actions"><a class="btn" href="${esc(best.waze_link)}">Waze</a><a class="btn" href="${esc(best.maps_link)}" target="_blank" rel="noopener">Maps</a></div>
-  </section>`);
-
-  const h = b.home || {};
-  if (h.cheapest) {
-    const low = h.low_90d;
-    const gap = low ? Math.round((h.cheapest.price - low.price) * 100) : null;
-    const gapText = gap == null ? "" : gap <= 0 ? `<span class="good-text">✓ a new 90-day low</span>` : `${gap}¢ above the 90-day low`;
-    parts.push(`<section class="card"><h2>Norwalk (home)</h2>
-      <div class="stats">
-        <div class="stat"><div class="v">${usd(h.cheapest.price, 2)}</div><div class="l">cheapest listed · ${esc(h.cheapest.name)}</div></div>
-        <div class="stat"><div class="v">${low ? usd(low.price, 2) : "–"}</div><div class="l">90-day low${low ? " · " + fmtDay(low.date) : ""}</div></div>
-      </div>
-      <p class="note">${gapText}${h.decision_note ? (gapText ? " · " : "") + "Email: " + esc(h.decision_note) : ""}</p>
-    </section>`);
+  const costco = (b.costco || []).filter(c => c.price != null && !c.stale);   // only current prices
+  if (costco.length) {
+    parts.push(`<section class="card area"><h2>Costco right now</h2>${costco.map(costcoRow).join("")}</section>`);
   }
+  parts.push(email ? `<div id="email"></div>` :
+    `<div class="card"><p class="note">The email view appears after the next cloud run.</p></div>`);
 
   const trend = b.trend || {};
   parts.push(`<section class="card"><h2>Cheapest regular, last 90 days</h2>
@@ -251,17 +255,8 @@ function render(b, snap) {
     <div class="chart" id="trend"></div>
     <details><summary>Show as a table</summary><table id="trend-table"></table></details>
   </section>`);
-
-  for (const a of b.areas || []) {
-    parts.push(`<section class="card area"><h3>${esc(a.label)}</h3>${a.stations.map(stationRow).join("")}</section>`);
-  }
-  if ((b.prediction_lines || []).length) {
-    parts.push(`<section class="card"><h2>Tomorrow's Norwalk call</h2><ul class="lines">${b.prediction_lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></section>`);
-  }
-  if ((b.outlook_lines || []).length) {
-    parts.push(`<section class="card"><h2>Week-ahead outlook</h2><ul class="lines">${b.outlook_lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></section>`);
-  }
   $("#app").innerHTML = parts.join("");
+  if (email) mountEmail($("#email"), email);
 
   const series = [{name: "Norwalk", color: c1, points: trend.norwalk || []}, {name: "NJ Costco", color: c2, points: trend.nj_costco || []}];
   chart($("#trend"), series);
@@ -278,12 +273,13 @@ function render(b, snap) {
 let last = null;
 async function load() {
   try {
-    const [b, snap] = await Promise.all([
+    const [b, snap, email] = await Promise.all([
       fetch(raw("data/gas_dashboard.json")).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }),
       fetch(raw("data/gas_snapshot.json")).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(raw("data/gas_email.html")).then(r => r.ok ? r.text() : null).catch(() => null),
     ]);
     last = b;
-    render(b, snap);
+    render(b, snap, email);
   } catch (e) {
     $("#fresh").dataset.status = "critical";
     $("#fresh-text").textContent = "Couldn't load";
