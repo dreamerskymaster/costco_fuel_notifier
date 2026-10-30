@@ -1,7 +1,7 @@
 # CLAUDE.md - Project Context & Token-Efficient Developer Guide
 
 ## Project Overview
-**Costco & Fuel Notifier** is an automated multi-pipeline monitoring suite built with Python and GitHub Actions. It monitors live regular gas/petrol/diesel prices along US and India commute routes, picks the best credit card per fill (US: Citi Costco Visa 4% / Amex BCE 3%; Mumbai: Dad's HDFC Regalia / Amazon Pay ICICI surcharge waivers), logs US trends to Google Sheets, tracks USD→INR and INR→USD transfer costs, and dispatches responsive daily HTML email digests.
+**Costco & Fuel Notifier** is an automated multi-pipeline monitoring suite built with Python and GitHub Actions. It monitors live regular gas/petrol/diesel prices along US and India commute routes, picks the best credit card per fill (US: Citi Costco Visa 4% / Amex Blue Cash Preferred 3% on gas; Mumbai: Dad's HDFC Regalia / Amazon Pay ICICI surcharge waivers), logs US trends to Google Sheets, tracks USD→INR and INR→USD transfer costs, and dispatches responsive daily HTML email digests.
 
 **Runs on GitHub Actions, except the US gas fetch.** GasBuddy turns away GitHub's runners (since 2026-10-26), so a Mac launchd job fetches those prices and pushes them (see pipeline 1). The only local checkout is the launchd clone `~/Projects/costco_fuel_notifier`; don't edit there, work in a fresh clone or worktree. Vehicles, routes, card rules and schedules live in `AGENTS.md` (`MEMORY.md` points there).
 
@@ -29,7 +29,7 @@
 - **Arbitrage Strategy**: Leveraging Passat's 18.5-gal capacity and 570-mile range (~120 mi round trip), user can complete multiple trips on a single fill-up, completely avoiding high CT fuel taxes. Fills 100% at Costco Bayonne or Teterboro (saving ~$10+ per fill).
 - **Card Optimization**:
   - **Costco Gas**: Citi Costco Anywhere Visa (4% cash back, Visa only).
-  - **Standalone Gas**: Citi Costco Visa (4%) / Amex Blue Cash Everyday (3%).
+  - **Standalone Gas**: Citi Costco Visa (4%) / Amex Blue Cash Preferred (3%).
   - **Supermarket Gas (Stop & Shop)**: Excluded by MCC rules (1% base).
 - **Workflow**: `.github/workflows/schedule.yml` runs on each Mac push of `data/gas_snapshot.json` (paths filter, main only). The old 3-hourly and Fri/Sun crons are gone: weekend alerts go out on the first Mac push inside the window, so an asleep Mac means no alert. A daily `0 14 * * *` watchdog job only runs `gas_snapshot.py check --max-age-h 24` and fails if the Mac has gone quiet. Manual runs use the current snapshot and email only with the `force_email` input.
 - **Mac fetcher**: `mac/gas_fetch.sh`, installed by `zsh mac/install.sh` from `~/Projects/costco_fuel_notifier` on main (launchd `com.local.gasfetch`, every 30 min; it fetches only when the snapshot is ≥170 min old and waits 60 min after a failed fetch). Log: `~/Library/Logs/costco-fuel-notifier/gas-fetch.log`. Uninstall: `launchctl bootout gui/$(id -u)/com.local.gasfetch`.

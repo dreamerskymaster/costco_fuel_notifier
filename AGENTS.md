@@ -45,7 +45,7 @@
 
 ### US Cards:
 1. **Costco Gas**: Citi Costco Anywhere Visa (4% cash back, Visa only).
-2. **Standalone Gas** (Mobil, Shell, CITGO, Lukoil, QuickChek, BP, Exxon, Speedway): Citi Costco Anywhere Visa (4% primary) or Amex Blue Cash Everyday (3% secondary).
+2. **Standalone Gas** (Mobil, Shell, CITGO, Lukoil, QuickChek, BP, Exxon, Speedway): Citi Costco Anywhere Visa (4% primary) or Amex Blue Cash Preferred (3% secondary).
 3. **Supermarket Gas** (Stop & Shop, Walmart, BJ's): Excluded from 4%/3% bonus; earns base 1%.
 
 ### India Cards (Dad):
