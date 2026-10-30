@@ -118,7 +118,7 @@ def get_card_optimization(station_name, listed_price):
        - Amex & Mastercard: NOT accepted at US Costco fuel pumps.
     2. Standalone Gas Stations (Mobil, Shell, CITGO, Speedway, 7-Eleven, Cumberland Farms, Global, BP, Exxon, Lukoil, QuickChek):
        - Citi Costco Anywhere Visa: 4% cash back (Primary, up to $7,000/yr).
-       - Amex Blue Cash Everyday: 3% cash back (Secondary, up to $6,000/yr).
+       - Amex Blue Cash Preferred: 3% cash back on U.S. gas (Secondary, no cap; its 6% is U.S. supermarkets only).
     3. Supermarket / Superstore Gas Pumps (Stop & Shop, Kroger, Sam's Club, BJ's, Walmart):
        - Excluded from 4% Citi and 3% Amex bonus categories by issuer MCC rules. Earns base 1%.
     """
@@ -553,7 +553,7 @@ def build_email_content(stations, mode: str, outlook=None, prediction_lines=None
 
       <!-- Card Savings Banner -->
       <div style="padding:10px 18px;background-color:#f1f5f9;border-bottom:1px solid #e2e8f0;font-size:11px;color:#475569;">
-        💳 <strong>Card Optimization Applied</strong>: Net prices include <strong>4% Citi Costco Anywhere Visa</strong> (at Costco &amp; standalone pumps) or <strong>3% Amex Blue Cash Everyday</strong>. Supermarket gas earns 1%.
+        💳 <strong>Card Optimization Applied</strong>: Net prices include <strong>4% Citi Costco Anywhere Visa</strong> (at Costco &amp; standalone pumps) or <strong>3% Amex Blue Cash Preferred</strong>. Supermarket gas earns 1%.
       </div>
 
       <!-- Table Container (Top 20 Ranked Pumps) -->

@@ -59,7 +59,7 @@ The **Costco & Fuel Price Notifier** is an automated dual-pipeline system design
   - Sunday (Jersey City → Norwalk): Toll-Minimized via US-1&9 North + GWB Eastbound ($13.38 off-peak NY E-ZPass) + Hutchinson/Merritt Pkwy North.
 - **Credit Card Reward Optimization Rules**:
   - **Costco Gas**: Citi Costco Anywhere Visa (4% cash back; Visa only accepted).
-  - **Standalone Gas (CITGO, Shell, Mobil, Speedway, etc.)**: Citi Costco Visa (4%) or Amex Blue Cash Everyday (3%).
+  - **Standalone Gas (CITGO, Shell, Mobil, Speedway, etc.)**: Citi Costco Visa (4%) or Amex Blue Cash Preferred (3%).
   - **Supermarket Gas (Stop & Shop)**: Excluded from 4%/3% bonus categories by MCC rules (1% base reward).
 
 ---
