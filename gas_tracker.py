@@ -404,11 +404,18 @@ def build_email_content(stations, mode: str, outlook=None, prediction_lines=None
         banner_bg = "#f0f9ff"
         banner_border = "#bae6fd"
         banner_text_color = "#0369a1"
+        if lowest_ct and lowest_nj:
+            benchmark_html = (f"• 💰 <strong>Price Benchmark</strong>: Lowest CT Net: <strong>{lowest_ct['formatted_net_price']}</strong> "
+                              f"vs Lowest NJ Net: <strong>{lowest_nj['formatted_net_price']}</strong>.<br>\n"
+                              f"        • 💡 <strong>Savings</strong>: Filling up in NJ saves you <strong>${price_diff:.2f}/gal</strong> "
+                              f"(~<strong>${tank_savings:.2f}</strong> on an 18.5-gal Passat fill).<br>")
+        else:  # old prices are hidden, so overnight CT can have none
+            benchmark_html = ("• 💰 <strong>Price Benchmark</strong>: no current CT price to compare "
+                              f"(lowest NJ net {lowest_nj['formatted_net_price'] if lowest_nj else 'n/a'}).<br>")
         banner_body = f"""
         • 📍 <strong>Commute Route</strong>: Norwalk, CT ↔ 850 Westside Ave, Jersey City, NJ (~{COMMUTE_ONE_WAY_MI} miles each way).<br>
         • 🚘 <strong>Vehicle Profile</strong>: {VEHICLE_NAME} • {TANK_CAPACITY_GAL} Gal Tank • {REC_TYRE_PSI}.<br>
-        • 💰 <strong>Price Benchmark</strong>: Lowest CT Net: <strong>${lowest_ct['formatted_net_price'] if lowest_ct else 'N/A'}</strong> vs Lowest NJ Net: <strong>${lowest_nj['formatted_net_price'] if lowest_nj else 'N/A'}</strong>.<br>
-        • 💡 <strong>Savings</strong>: Filling up in NJ saves you <strong>${price_diff:.2f}/gal</strong> (~<strong>${tank_savings:.2f}</strong> on an 18.5-gal Passat fill).<br>
+        {benchmark_html}
         • 🛣️ <strong>Non-Toll Travel Tip</strong>: Use Merritt Pkwy (CT-15) + GWB (free westbound) + US-1&9 for a 100% toll-free Friday drive!
         """
         route_primary_btn = f'<a href="{ROUTE_NON_TOLL_FRIDAY}" style="background:#0284c7;color:#ffffff;padding:8px 14px;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;margin-right:6px;">🛣️ Toll-Free Route (Maps)</a>'
@@ -468,21 +475,21 @@ def build_email_content(stations, mode: str, outlook=None, prediction_lines=None
         type_icon = " 🌟" if is_costco else (" 🏪" if is_popular_discounter else "")
 
         html_rows += f"""
-        <tr style="background-color:{bg_color};border-bottom:1px solid #e2e8f0;">
-          <td style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
+        <tr class="gb-row" style="background-color:{bg_color};border-bottom:1px solid #e2e8f0;">
+          <td class="gb-name" style="padding:10px 8px;font-weight:600;color:#0f172a;font-size:13px;">
             {s['name']}{type_icon}<br>
             <span style="font-size:11px;color:#64748b;font-weight:normal;">{state_badge} {s['area_label']}</span>
           </td>
-          <td style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
+          <td class="gb-listed" style="padding:10px 8px;color:#94a3b8;text-decoration:line-through;font-size:12px;white-space:nowrap;">
             {s['formatted_price']}
           </td>
-          <td style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
+          <td class="gb-card" style="padding:10px 8px;font-size:12px;color:#0284c7;font-weight:600;white-space:nowrap;">
             {s['best_card']}
           </td>
-          <td style="padding:10px 8px;white-space:nowrap;">
+          <td class="gb-net" style="padding:10px 8px;white-space:nowrap;">
             <span style="color:#15803d;font-weight:700;font-size:15px;">{s['formatted_net_price']}</span>
           </td>
-          <td style="padding:10px 8px;text-align:right;white-space:nowrap;">
+          <td class="gb-nav" style="padding:10px 8px;text-align:right;white-space:nowrap;">
             <a href="{s['maps_link']}" style="background-color:#0284c7;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;margin-right:4px;">📍 Maps</a>
             <a href="{s['waze_link']}" style="background-color:#059669;color:#ffffff;padding:5px 9px;text-decoration:none;border-radius:5px;font-weight:bold;display:inline-block;white-space:nowrap;font-size:11px;">🚗 Waze</a>
           </td>
@@ -551,7 +558,7 @@ def build_email_content(stations, mode: str, outlook=None, prediction_lines=None
 
       <!-- Table Container (Top 20 Ranked Pumps) -->
       <div style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;">
-        <table style="width:100%;border-collapse:collapse;text-align:left;min-width:540px;">
+        <table class="gb-table" style="width:100%;border-collapse:collapse;text-align:left;min-width:540px;">
           <thead>
             <tr style="background-color:#f8fafc;border-bottom:2px solid #e2e8f0;color:#475569;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">
               <th style="padding:10px 8px;">Station &amp; Area</th>
@@ -729,6 +736,15 @@ async def main():
     if not stations:
         print("No stations found.")
         return 1
+    # Only current prices reach the email, dashboard, Sheet and history: GasBuddy keeps showing a
+    # station's last report for days, and Ajith asked that old ones never be shown.
+    fresh = [s for s in stations if not s.get("stale")]
+    if len(fresh) < len(stations):
+        print(f"Hiding {len(stations) - len(fresh)} of {len(stations)} stations whose price is over 12 h old.")
+    if not fresh:
+        print("Every price is over 12 h old (overnight lull); nothing logged or sent.")
+        return 0
+    stations = fresh
 
     mode = get_commute_mode()
     print(f"Detected commute mode: {mode}")
@@ -762,16 +778,17 @@ async def main():
         log_prediction(graded)
     prediction_lines = price_predictor.summary_lines(graded, made, learned)
 
-    try:  # the phone dashboard is an extra too
+    subject, text_summary, html_content = build_email_content(stations, mode, outlook, prediction_lines)
+    try:  # the phone dashboard is an extra too; it shows this same email, address scrubbed
         gas_dashboard.write(stations, fetched_at, us_fuel_forecast.load_station_history(), zip_order=ZIP_CODES,
                             outlook_lines=us_fuel_forecast.outlook_lines(outlook) if outlook else [],
                             prediction_lines=prediction_lines, decision_note=decision.note)
+        gas_dashboard.write_email_copy(html_content, private=[RECEIVER_EMAIL, SENDER_EMAIL])
     except Exception as e:
         print(f"Dashboard skipped: {e}")
 
     sent = False
     if decision.send:
-        subject, text_summary, html_content = build_email_content(stations, mode, outlook, prediction_lines)
         if decision.reason == "low":
             subject = f"📉 Norwalk low: ${home_price:.3f}/gal — " + subject.lstrip("⛽ ")
             text_summary = f"WHY THIS EMAIL: {decision.note}.\n\n" + text_summary

@@ -7,12 +7,16 @@ straight from GitHub, so a fresh push shows up without redeploying the site.
 from __future__ import annotations
 
 import json
+import re
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 ET = ZoneInfo("America/New_York")
 DASHBOARD_JSON = Path(__file__).parent / "data" / "gas_dashboard.json"
+EMAIL_COPY = Path(__file__).parent / "data" / "gas_email.html"   # the digest as the page shows it
+EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+COSTCOS = (("07608", "Teterboro, NJ"), ("07002", "Bayonne, NJ"), ("10801", "New Rochelle, NY"))
 HOME_ZIP = "06854"
 NJ_COSTCO_ZIPS = ("07002", "07608")    # Bayonne, Teterboro
 TREND_DAYS = 90
@@ -53,6 +57,11 @@ def build(stations: list[dict], fetched_at: datetime, history: list[dict], *, zi
         if len(area["stations"]) < TOP_PER_AREA:
             area["stations"].append(_station(s))
 
+    costco = []
+    for z, where in COSTCOS:
+        found = [s for s in stations if s["zip"] == z and "costco" in s["name"].lower()]
+        costco.append({"zip": z, "where": where, **(_station(min(found, key=lambda s: s["net_price"])) if found else {})})
+
     best = min(stations, key=lambda s: s["net_price"])
     return {
         "fetched_at": fetched_at.astimezone(timezone.utc).isoformat(timespec="seconds"),
@@ -64,6 +73,7 @@ def build(stations: list[dict], fetched_at: datetime, history: list[dict], *, zi
             "decision_note": decision_note,
         },
         "trend": {"norwalk": norwalk, "nj_costco": nj_costco},
+        "costco": costco,
         "areas": list(areas.values()),
         "prediction_lines": list(prediction_lines),
         "outlook_lines": list(outlook_lines),
@@ -76,3 +86,17 @@ def write(stations: list[dict], fetched_at: datetime, history: list[dict], path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(board, indent=1, ensure_ascii=False) + "\n")
     return board
+
+
+def scrub(html: str, private: list[str] = ()) -> str:
+    """The repo and page are public: drop the recipient/sender addresses (and any other) from the email copy."""
+    for addr in private:
+        if addr:
+            html = html.replace(addr, "you")
+    return EMAIL_RE.sub("you", html)
+
+
+def write_email_copy(html: str, path: Path | None = None, private: list[str] = ()) -> None:
+    path = Path(path or EMAIL_COPY)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(scrub(html, private))
