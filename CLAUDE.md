@@ -9,7 +9,7 @@
 - **Why**: from 2026-10-26 22:06 UTC every gas run got "No stations found". Cloudflare challenges GasBuddy `/home` from cloud IPs (a Cloudflare Worker got 403 `cf-mitigated: challenge`); a residential Mac still gets 200. GasBuddy's ToS bans automated access outright, with no personal-use carve-out. Don't add proxies, VPNs, browser impersonation or relays to get past the block. No free, licensed station-level feed exists: TomTom/HERE/INRIX are sales-only; Google Places fuelOptions needs a card, caps free use near 2 runs/day, forbids storing prices and mostly lacks Costco; EIA is weekly regional only.
 - **Now**: the Mac runs `gas_tracker.py --fetch-only` and pushes `data/gas_snapshot.json`. The push runs `schedule.yml`, which reads the snapshot (`GAS_SNAPSHOT`, refuses anything over 6 h old) and does everything else as before, plus `data/gas_dashboard.json` for the phone page https://corridor-gas.skconsulting.workers.dev/ (static `site/`, Cloudflare Workers assets, reads the JSON live from GitHub raw; `?ref=<branch>` previews a branch).
 - Older status (2026-10-15, closed out) follows.
-- All workflows green. 69 offline tests passed then; 78 now with `test_gas_snapshot`.
+- All workflows green. 69 offline tests passed then; 77 now with `test_gas_snapshot`.
 - PRs #1–#9 merged; no open PRs. #9 combined #6 (forex-card routes + live Global Pay quote), #7 (FX BCC + `FX_ADDITIONAL_RECEIVERS`) and #8 (docs).
 - No local checkout anywhere: the old OneDrive copy was deleted 2026-10-15. Work from a fresh clone. The GCP service-account key now exists only as the `GCP_SERVICE_ACCOUNT` secret; if it's ever needed again, mint a new key for the Sheets service account in the GCP console and paste it into the secret.
 
@@ -127,7 +127,7 @@ python -m unittest test_fx_bcc                  # 1 offline test (BCC-only deliv
 python us_fuel_forecast.py                      # print this week's fill-up outlook + reliability table
 python -m unittest test_ml_outlooks             # 12 offline tests
 python -m unittest test_gas_cadence             # 10 offline tests
-python -m unittest test_gas_snapshot            # 9 offline tests (Mac hand-off, dashboard data, address scrub, old-price filter)
+python -m unittest test_gas_snapshot            # 8 offline tests (Mac hand-off, dashboard data, address scrub, old-price filter)
 
 # US gas, Mac side
 python gas_tracker.py --fetch-only              # live GasBuddy fetch -> data/gas_snapshot.json (no secrets)
