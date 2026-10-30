@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f9f9f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)">
+<title>Corridor Gas Board</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛽</text></svg>">
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+    --s1: #2a78d6; --s2: #eb6834;
+    --good: #0ca30c; --good-text: #006300; --warning: #fab219; --critical: #d03b3b;
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+      --s1: #3987e5; --s2: #d95926; --good-text: #0ca30c;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --good-text: #0ca30c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 15px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 20px 16px calc(32px + env(safe-area-inset-bottom)); }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  h1 { font-size: 20px; margin: 0; letter-spacing: -0.01em; }
+  h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); margin: 0 0 10px; }
+  a { color: inherit; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2);
+          border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
+  .pill[data-status="good"] .dot { background: var(--good); }
+  .pill[data-status="warning"] .dot { background: var(--warning); }
+  .pill[data-status="critical"] .dot { background: var(--critical); }
+  .banner { border-left: 3px solid var(--warning); }
+  .banner.critical { border-left-color: var(--critical); }
+  .hero-price { font-size: 44px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .hero-sub { color: var(--ink-2); margin-top: 6px; }
+  .actions { display: flex; gap: 8px; margin-top: 12px; }
+  .btn { flex: 1; text-align: center; text-decoration: none; padding: 10px 12px; border-radius: 10px;
+         border: 1px solid var(--border); font-weight: 600; font-size: 14px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  .stat .v { font-size: 24px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 13px; color: var(--ink-2); }
+  .good-text { color: var(--good-text); }
+  .note { color: var(--ink-2); font-size: 13px; margin: 10px 0 0; }
+  .legend { display: flex; gap: 16px; font-size: 13px; color: var(--ink-2); margin-bottom: 6px; }
+  .legend span::before { content: ""; display: inline-block; width: 12px; height: 2px; vertical-align: middle;
+                         margin-right: 6px; background: var(--c); border-radius: 2px; }
+  .chart { position: relative; }
+  .chart svg { display: block; width: 100%; height: 220px; touch-action: pan-y; }
+  .tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border);
+         border-radius: 8px; padding: 6px 8px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.12);
+         white-space: nowrap; opacity: 0; transition: opacity .1s; font-variant-numeric: tabular-nums; }
+  .tip b { display: block; margin-bottom: 2px; }
+  .tip i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  details { margin-top: 10px; font-size: 13px; color: var(--ink-2); }
+  details table { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  details th, details td { text-align: right; padding: 3px 4px; border-bottom: 1px solid var(--grid); }
+  details th:first-child, details td:first-child { text-align: left; }
+  .area h3 { font-size: 15px; margin: 0 0 6px; }
+  .row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid var(--grid); }
+  .row:first-of-type { border-top: 0; }
+  .row .name { font-weight: 600; text-decoration: none; }
+  .row .meta { font-size: 12px; color: var(--muted); }
+  .row .price { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .row .price .net { font-weight: 650; }
+  .row .price .listed { font-size: 12px; color: var(--muted); }
+  .flag { color: var(--ink-2); }
+  ul.lines { margin: 0; padding-left: 18px; }
+  ul.lines li { margin: 4px 0; }
+  footer { color: var(--muted); font-size: 12px; margin-top: 18px; }
+  .skeleton { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>⛽ Corridor gas</h1>
+    <span class="pill" id="fresh" data-status=""><span class="dot"></span><span id="fresh-text">Loading…</span></span>
+  </header>
+  <div id="app"><div class="card skeleton">Loading prices…</div></div>
+  <footer id="foot"></footer>
+</main>
+<script>
+const REPO = "dreamerskymaster/costco_fuel_notifier";
+const REF = new URLSearchParams(location.search).get("ref") || "main";
+// ?src=http://localhost:PORT/ previews local data files; only localhost is honoured.
+const SRC = (() => { try { const u = new URL(new URLSearchParams(location.search).get("src"));
+  return ["localhost", "127.0.0.1"].includes(u.hostname) ? u.href.replace(/\/?$/, "/") : null; } catch { return null; } })();
+const raw = p => (SRC ? SRC + p : `https://raw.githubusercontent.com/${REPO}/${encodeURIComponent(REF)}/${p}`) + `?t=${Date.now()}`;
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const usd = (v, d = 2) => v == null ? "–" : "$" + Number(v).toFixed(d);
+const fmtDay = iso => new Date(iso + "T12:00:00").toLocaleDateString(undefined, {month: "short", day: "numeric"});
+
+function ago(ms) {
+  const m = Math.round(ms / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m} min ago`;
+  const h = Math.round(m / 60);
+  return h < 48 ? `${h} h ago` : `${Math.round(h / 24)} days ago`;
+}
+
+function freshness(fetchedAt) {
+  const age = Date.now() - new Date(fetchedAt).getTime();
+  const h = age / 3600000;
+  const status = h <= 4 ? "good" : h <= 12 ? "warning" : "critical";
+  const label = {good: "Fresh", warning: "Getting old", critical: "Stale"}[status];
+  const pill = $("#fresh");
+  pill.dataset.status = status;
+  $("#fresh-text").textContent = `${label} · ${ago(age)}`;
+  pill.title = "Prices fetched " + new Date(fetchedAt).toLocaleString();
+  return {status, h};
+}
+
+function chart(el, series) {
+  // series: [{name, color, points: [[iso, price], ...]}]; one $/gal axis for both.
+  const dates = [...new Set(series.flatMap(s => s.points.map(p => p[0])))].sort();
+  if (dates.length < 2) { el.innerHTML = `<p class="note">The trend appears after two days of prices.</p>`; return; }
+  const maps = series.map(s => new Map(s.points));
+  const vals = series.flatMap(s => s.points.map(p => p[1]));
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const pad = Math.max((hi - lo) * 0.12, 0.03); lo -= pad; hi += pad;
+
+  const draw = () => {
+    const W = el.clientWidth || 340, H = 220, m = {t: 10, r: 104, b: 24, l: 44};
+    const x = i => m.l + (i / (dates.length - 1)) * (W - m.l - m.r);
+    const y = v => m.t + (1 - (v - lo) / (hi - lo)) * (H - m.t - m.b);
+    const step = [0.05, 0.1, 0.2, 0.25, 0.5].find(s => (hi - lo) / s <= 5) || 1;
+    let grid = "";
+    for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) {
+      grid += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-width="1"/>`
+           + `<text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">$${v.toFixed(2)}</text>`;
+    }
+    const ticks = [0, Math.round((dates.length - 1) / 2), dates.length - 1];
+    const xl = ticks.map((i, k) => `<text x="${x(i)}" y="${H - 6}" font-size="11" fill="var(--muted)" text-anchor="${["start", "middle", "end"][k]}">${fmtDay(dates[i])}</text>`).join("");
+
+    const lines = [], labels = [];
+    series.forEach((s, si) => {
+      const pts = dates.map((d, i) => maps[si].has(d) ? [x(i), y(maps[si].get(d))] : null);
+      let path = "", pen = false;
+      pts.forEach(p => { if (!p) { pen = false; return; } path += (pen ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); pen = true; });
+      lines.push(`<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`);
+      const last = [...s.points].pop();
+      if (last) labels.push({y: y(last[1]), x: x(dates.indexOf(last[0])), text: `${s.name} ${usd(last[1])}`, color: s.color});
+    });
+    labels.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < labels.length; i++) if (labels[i].y - labels[i - 1].y < 14) labels[i].y = labels[i - 1].y + 14;
+    const lab = labels.map(l => `<text x="${W - m.r + 8}" y="${l.y + 4}" font-size="11" fill="var(--ink-2)">${esc(l.text)}</text>`).join("");
+
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily cheapest regular price, last ${dates.length} days">
+      ${grid}<line x1="${m.l}" x2="${W - m.r}" y1="${H - m.b}" y2="${H - m.b}" stroke="var(--axis)"/>${xl}${lines.join("")}${lab}
+      <g id="hover" opacity="0"><line id="hx" y1="${m.t}" y2="${H - m.b}" stroke="var(--axis)" stroke-width="1"/>
+        ${series.map((s, si) => `<circle id="hd${si}" r="4.5" fill="${s.color}" stroke="var(--surface)" stroke-width="2"/>`).join("")}</g>
+      <rect x="${m.l}" y="0" width="${W - m.l - m.r}" height="${H}" fill="transparent"/>
+    </svg><div class="tip"></div>`;
+
+    const svg = $("svg", el), tip = $(".tip", el), hover = $("#hover", el);
+    const move = ev => {
+      const r = svg.getBoundingClientRect();
+      const px = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+      const i = Math.max(0, Math.min(dates.length - 1, Math.round((px - m.l) / (W - m.l - m.r) * (dates.length - 1))));
+      $("#hx", el).setAttribute("x1", x(i)); $("#hx", el).setAttribute("x2", x(i));
+      let rows = "";
+      series.forEach((s, si) => {
+        const v = maps[si].get(dates[i]), dot = $("#hd" + si, el);
+        dot.setAttribute("opacity", v == null ? 0 : 1);
+        if (v != null) { dot.setAttribute("cx", x(i)); dot.setAttribute("cy", y(v)); }
+        rows += `<div><i style="background:${s.color}"></i>${esc(s.name)} ${v == null ? "–" : usd(v, 3)}</div>`;
+      });
+      tip.innerHTML = `<b>${fmtDay(dates[i])}</b>${rows}`;
+      hover.setAttribute("opacity", 1); tip.style.opacity = 1;
+      const left = Math.min(Math.max(x(i) - tip.offsetWidth / 2, 0), W - tip.offsetWidth);
+      tip.style.left = left + "px"; tip.style.top = "4px";
+    };
+    const leave = () => { hover.setAttribute("opacity", 0); tip.style.opacity = 0; };
+    svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move);
+    svg.addEventListener("pointerleave", leave);
+  };
+  draw();
+  new ResizeObserver(() => draw()).observe(el);
+}
+
+function stationRow(s) {
+  const flag = s.stale ? ` · <span class="flag" title="Posted over 12 hours before the fetch">⚠ old</span>` : "";
+  return `<div class="row">
+    <div><a class="name" href="${esc(s.maps_link)}" target="_blank" rel="noopener">${esc(s.name)}</a>
+      <div class="meta">${esc(s.best_card)} · ${esc(s.last_updated)}${flag}</div></div>
+    <div class="price"><div class="net">${usd(s.net_price)}</div><div class="listed">${usd(s.price)} listed</div></div>
+  </div>`;
+}
+
+function render(b, snap) {
+  const f = freshness(b.fetched_at);
+  const css = getComputedStyle(document.documentElement);
+  const c1 = css.getPropertyValue("--s1").trim(), c2 = css.getPropertyValue("--s2").trim();
+  const parts = [];
+
+  if (f.status === "critical") {
+    parts.push(`<div class="card banner critical"><b>⚠ These prices are ${ago(Date.now() - new Date(b.fetched_at))} old.</b>
+      <p class="note">The Mac fetches only while it's awake and online. Open the lid on Wi-Fi and it catches up within 30 minutes.</p></div>`);
+  }
+  if (snap && new Date(snap.fetched_at) - new Date(b.fetched_at) > 20 * 60000) {
+    parts.push(`<div class="card banner"><b>⚠ Newer prices are waiting.</b>
+      <p class="note">The Mac fetched ${ago(Date.now() - new Date(snap.fetched_at))}, but the cloud run hasn't processed them.
+      Check <a href="https://github.com/${REPO}/actions">GitHub Actions</a>.</p></div>`);
+  }
+
+  const best = b.best;
+  parts.push(`<section class="card"><h2>Best fill right now</h2>
+    <div class="hero-price">${usd(best.net_price)}</div>
+    <div class="hero-sub"><b>${esc(best.name)}</b>, ${esc(best.area)} · ${usd(best.price)} listed, ${esc(best.best_card)}</div>
+    <div class="actions"><a class="btn" href="${esc(best.waze_link)}">Waze</a><a class="btn" href="${esc(best.maps_link)}" target="_blank" rel="noopener">Maps</a></div>
+  </section>`);
+
+  const h = b.home || {};
+  if (h.cheapest) {
+    const low = h.low_90d;
+    const gap = low ? Math.round((h.cheapest.price - low.price) * 100) : null;
+    const gapText = gap == null ? "" : gap <= 0 ? `<span class="good-text">✓ a new 90-day low</span>` : `${gap}¢ above the 90-day low`;
+    parts.push(`<section class="card"><h2>Norwalk (home)</h2>
+      <div class="stats">
+        <div class="stat"><div class="v">${usd(h.cheapest.price, 2)}</div><div class="l">cheapest listed · ${esc(h.cheapest.name)}</div></div>
+        <div class="stat"><div class="v">${low ? usd(low.price, 2) : "–"}</div><div class="l">90-day low${low ? " · " + fmtDay(low.date) : ""}</div></div>
+      </div>
+      <p class="note">${gapText}${h.decision_note ? (gapText ? " · " : "") + "Email: " + esc(h.decision_note) : ""}</p>
+    </section>`);
+  }
+
+  const trend = b.trend || {};
+  parts.push(`<section class="card"><h2>Cheapest regular, last 90 days</h2>
+    <div class="legend"><span style="--c:${c1}">Norwalk</span><span style="--c:${c2}">NJ Costco</span></div>
+    <div class="chart" id="trend"></div>
+    <details><summary>Show as a table</summary><table id="trend-table"></table></details>
+  </section>`);
+
+  for (const a of b.areas || []) {
+    parts.push(`<section class="card area"><h3>${esc(a.label)}</h3>${a.stations.map(stationRow).join("")}</section>`);
+  }
+  if ((b.prediction_lines || []).length) {
+    parts.push(`<section class="card"><h2>Tomorrow's Norwalk call</h2><ul class="lines">${b.prediction_lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></section>`);
+  }
+  if ((b.outlook_lines || []).length) {
+    parts.push(`<section class="card"><h2>Week-ahead outlook</h2><ul class="lines">${b.outlook_lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></section>`);
+  }
+  $("#app").innerHTML = parts.join("");
+
+  const series = [{name: "Norwalk", color: c1, points: trend.norwalk || []}, {name: "NJ Costco", color: c2, points: trend.nj_costco || []}];
+  chart($("#trend"), series);
+  const nj = new Map(trend.nj_costco || []), nw = new Map(trend.norwalk || []);
+  const days = [...new Set([...nw.keys(), ...nj.keys()])].sort().reverse();
+  $("#trend-table").innerHTML = `<tr><th>Day</th><th>Norwalk</th><th>NJ Costco</th></tr>` +
+    days.map(d => `<tr><td>${fmtDay(d)}</td><td>${usd(nw.get(d), 3)}</td><td>${usd(nj.get(d), 3)}</td></tr>`).join("");
+
+  $("#foot").innerHTML = `Prices fetched ${esc(new Date(b.fetched_at).toLocaleString())} by the Mac · GasBuddy community reports ·
+    net price uses the email's card rules${REF !== "main" ? ` · reading branch <b>${esc(REF)}</b>` : ""} ·
+    <a href="https://github.com/${REPO}">repo</a>`;
+}
+
+let last = null;
+async function load() {
+  try {
+    const [b, snap] = await Promise.all([
+      fetch(raw("data/gas_dashboard.json")).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }),
+      fetch(raw("data/gas_snapshot.json")).then(r => r.ok ? r.json() : null).catch(() => null),
+    ]);
+    last = b;
+    render(b, snap);
+  } catch (e) {
+    $("#fresh").dataset.status = "critical";
+    $("#fresh-text").textContent = "Couldn't load";
+    if (!last) $("#app").innerHTML = `<div class="card banner critical"><b>No dashboard data yet.</b>
+      <p class="note">The first cloud run after the Mac pushes prices creates it. (${esc(e.message)})</p></div>`;
+  }
+}
+load();
+setInterval(() => { if (document.visibilityState === "visible") load(); }, 5 * 60000);
+setInterval(() => { if (last) freshness(last.fetched_at); }, 60000);
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") load(); });
+</script>
+</body>
+</html>

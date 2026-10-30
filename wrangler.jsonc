@@ -1,0 +1,7 @@
+// Phone dashboard for the US gas pipeline: static page in site/, data read live from GitHub.
+// Redeploy only when site/ changes:  npx wrangler deploy   ->  https://corridor-gas.skconsulting.workers.dev/
+{
+  "name": "corridor-gas",
+  "compatibility_date": "2026-10-23",
+  "assets": { "directory": "site" }
+}

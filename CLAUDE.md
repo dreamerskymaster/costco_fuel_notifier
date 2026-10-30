@@ -3,14 +3,18 @@
 ## Project Overview
 **Costco & Fuel Notifier** is an automated multi-pipeline monitoring suite built with Python and GitHub Actions. It monitors live regular gas/petrol/diesel prices along US and India commute routes, picks the best credit card per fill (US: Citi Costco Visa 4% / Amex BCE 3%; Mumbai: Dad's HDFC Regalia / Amazon Pay ICICI surcharge waivers), logs US trends to Google Sheets, tracks USD→INR and INR→USD transfer costs, and dispatches responsive daily HTML email digests.
 
-**Runs entirely on GitHub Actions.** There is no maintained local checkout; work in a fresh clone or worktree. Vehicles, routes, card rules and schedules live in `AGENTS.md` (`MEMORY.md` points there).
+**Runs on GitHub Actions, except the US gas fetch.** GasBuddy turns away GitHub's runners (since 2026-10-26), so a Mac launchd job fetches those prices and pushes them (see pipeline 1). The only local checkout is the launchd clone `~/Projects/costco_fuel_notifier`; don't edit there, work in a fresh clone or worktree. Vehicles, routes, card rules and schedules live in `AGENTS.md` (`MEMORY.md` points there).
 
-## Status (2026-10-15) — closed out, running unattended
-- All workflows green. 69 offline tests pass (`python -m unittest test_fx_signals test_fx_outbound test_fx_bcc test_ml_outlooks test_gas_cadence`).
+## Status (2026-10-29) — US gas moved to Mac fetch + cloud pipeline
+- **Why**: from 2026-10-26 22:06 UTC every gas run got "No stations found". Cloudflare challenges GasBuddy `/home` from cloud IPs (a Cloudflare Worker got 403 `cf-mitigated: challenge`); a residential Mac still gets 200. GasBuddy's ToS bans automated access outright, with no personal-use carve-out. Don't add proxies, VPNs, browser impersonation or relays to get past the block. No free, licensed station-level feed exists: TomTom/HERE/INRIX are sales-only; Google Places fuelOptions needs a card, caps free use near 2 runs/day, forbids storing prices and mostly lacks Costco; EIA is weekly regional only.
+- **Now**: the Mac runs `gas_tracker.py --fetch-only` and pushes `data/gas_snapshot.json`. The push runs `schedule.yml`, which reads the snapshot (`GAS_SNAPSHOT`, refuses anything over 6 h old) and does everything else as before, plus `data/gas_dashboard.json` for the phone page https://corridor-gas.skconsulting.workers.dev/ (static `site/`, Cloudflare Workers assets, reads the JSON live from GitHub raw; `?ref=<branch>` previews a branch).
+- Older status (2026-10-15, closed out) follows.
+- All workflows green. 69 offline tests passed then; 75 now with `test_gas_snapshot`.
 - PRs #1–#9 merged; no open PRs. #9 combined #6 (forex-card routes + live Global Pay quote), #7 (FX BCC + `FX_ADDITIONAL_RECEIVERS`) and #8 (docs).
 - No local checkout anywhere: the old OneDrive copy was deleted 2026-10-15. Work from a fresh clone. The GCP service-account key now exists only as the `GCP_SERVICE_ACCOUNT` secret; if it's ever needed again, mint a new key for the Sheets service account in the GCP console and paste it into the secret.
 
 ## Next (only if reopened)
+- After the Mac-fetch PR merges: `git clone https://github.com/dreamerskymaster/costco_fuel_notifier ~/Projects/costco_fuel_notifier && zsh ~/Projects/costco_fuel_notifier/mac/install.sh`. The first push of `data/gas_snapshot.json` starts the cloud run.
 - After the last road trip (2026-10-17), disable or delete `.github/workflows/road_trip_schedule.yml`.
 - Confirm Dad's HSBC card variant: RuPay **Cashback** = no fuel waiver (current assumption); RuPay **Platinum** = 1% on ₹400–₹4,000, ₹250/month cap → edit its `DAD_CARDS` entry. If his Regalia is now Regalia Gold, recheck the waiver range.
 - INR→USD: once the student makes a real transfer, store it as `GLOBALPAY_RECEIPT` / `WIRE_RECEIPT` to check the live quotes against what was charged.
@@ -28,7 +32,9 @@
   - **Costco Gas**: Citi Costco Anywhere Visa (4% cash back, Visa only).
   - **Standalone Gas**: Citi Costco Visa (4%) / Amex Blue Cash Everyday (3%).
   - **Supermarket Gas (Stop & Shop)**: Excluded by MCC rules (1% base).
-- **Workflow**: `.github/workflows/schedule.yml` (Cron: `0 */3 * * *`, plus Friday 4:00 PM EDT `0 20 * * 5` and Sunday 3:00 PM EDT `0 19 * * 0`). Manual runs email only with the `force_email` input.
+- **Workflow**: `.github/workflows/schedule.yml` runs on each Mac push of `data/gas_snapshot.json` (paths filter, main only). The old 3-hourly and Fri/Sun crons are gone: weekend alerts go out on the first Mac push inside the window, so an asleep Mac means no alert. A daily `0 14 * * *` watchdog job only runs `gas_snapshot.py check --max-age-h 24` and fails if the Mac has gone quiet. Manual runs use the current snapshot and email only with the `force_email` input.
+- **Mac fetcher**: `mac/gas_fetch.sh`, installed by `zsh mac/install.sh` from `~/Projects/costco_fuel_notifier` on main (launchd `com.local.gasfetch`, every 30 min; it fetches only when the snapshot is ≥170 min old and waits 60 min after a failed fetch). Log: `~/Library/Logs/costco-fuel-notifier/gas-fetch.log`. Uninstall: `launchctl bootout gui/$(id -u)/com.local.gasfetch`.
+- **Dashboard**: `gas_dashboard.py` writes `data/gas_dashboard.json` every run (best fill, Norwalk vs its 90-day low, 90-day Norwalk vs NJ Costco trend, top 5 per area by net price, prediction and outlook lines). `site/index.html` renders it and shows the fetch age. Redeploy only when `site/` changes: `npx wrangler deploy` (config `wrangler.jsonc`, Cloudflare account skconsulting). Stamford `06901` has never returned stations, which predates this change.
 - **Email cadence (`gas_cadence.py`, state in committed `data/gas_state.json`)**: prices are checked and appended to the Google Sheet's **Price Log** tab every run; emails go out only for (a) one Friday departure + one Sunday return alert per weekend (NJ travel is weekend-only), or (b) Mon–Fri, a new 90-day low in the cheapest Norwalk (06854) listed price (needs 7 logged days). Nothing else. **Landmine**: the old gate stored its memory in git-ignored `data/thread_state.json`, so every CI run started blank and emailed (the Monday emails, Oct 2026). Any gate state must live in a committed file.
 - **Self-graded daily prediction (`price_predictor.py`, `data/predictions.csv`, Sheet tab "Predictions")**: first run each day grades yesterday's forecast of the cheapest Norwalk price (error ¢, in 80% range, direction, "what went wrong"), relearns (bias = ½ mean error of last 14 days; range = 10th–90th pct of last 30 errors; confidence = share within ±2¢), then predicts tomorrow = today + EIA weekly expected move/7 + bias.
 
@@ -121,4 +127,9 @@ python -m unittest test_fx_bcc                  # 1 offline test (BCC-only deliv
 python us_fuel_forecast.py                      # print this week's fill-up outlook + reliability table
 python -m unittest test_ml_outlooks             # 12 offline tests
 python -m unittest test_gas_cadence             # 10 offline tests
+python -m unittest test_gas_snapshot            # 6 offline tests (Mac hand-off + dashboard data)
+
+# US gas, Mac side
+python gas_tracker.py --fetch-only              # live GasBuddy fetch -> data/gas_snapshot.json (no secrets)
+GAS_SNAPSHOT=data/gas_snapshot.json python gas_tracker.py   # cloud path, from the snapshot
 ```

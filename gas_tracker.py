@@ -16,6 +16,8 @@ import gspread
 import re
 
 import gas_cadence
+import gas_dashboard
+import gas_snapshot
 import price_predictor
 import us_fuel_forecast
 import email_thread  # shared threading + rate-change gating
@@ -179,6 +181,16 @@ def get_commute_mode() -> str:
     return "REGULAR"
 
 
+def _post_graphql(session, payload, headers, tries=2):
+    """GasBuddy sometimes stalls on one ZIP (2 of 11 timed out from the Mac, Oct 2026); one retry recovers it."""
+    for attempt in range(tries):
+        try:
+            return session.post("https://www.gasbuddy.com/graphql", json=payload, headers=headers, timeout=15)
+        except requests.Timeout:
+            if attempt == tries - 1:
+                raise
+
+
 async def fetch_gas_prices():
     """
     Fetches regular gas prices across the Norwalk -> Jersey City corridor via GasBuddy GraphQL API.
@@ -195,6 +207,9 @@ async def fetch_gas_prices():
         found = re.search(r"window\.gbcsrf\s*=\s*([\"])((?:\\\1|(?:(?!\1).))*)\1", resp.text)
         if found:
             csrf_token = found.group(2)
+        else:  # a Cloudflare challenge looks like this: 403, cf-mitigated=challenge, no token
+            print(f"Warning: no CSRF token on /home (HTTP {resp.status_code}, "
+                  f"cf-mitigated={resp.headers.get('cf-mitigated')})")
     except Exception as e:
         print(f"Warning: Could not extract CSRF token: {e}")
 
@@ -216,7 +231,7 @@ async def fetch_gas_prices():
                 "variables": {"maxAge": 0, "search": zip_code},
                 "query": LOCATION_QUERY_PRICES
             }
-            r = session.post("https://www.gasbuddy.com/graphql", json=payload, headers=gql_headers, timeout=10)
+            r = _post_graphql(session, payload, gql_headers)
             if r.status_code == 200:
                 res = r.json().get("data", {}).get("locationBySearchTerm", {}).get("stations", {}).get("results", [])
                 for station in res:
@@ -266,6 +281,9 @@ async def fetch_gas_prices():
                         "waze_link": waze_link,
                         "maps_link": maps_link,
                     })
+            else:
+                print(f"GasBuddy answered HTTP {r.status_code} for {zip_code} "
+                      f"(cf-mitigated={r.headers.get('cf-mitigated')}): {r.text[:120]!r}")
         except Exception as e:
             print(f"Failed fetching data for {zip_code}: {e}")
 
@@ -689,9 +707,25 @@ async def main():
 
     Emails: one Friday departure and one Sunday return alert per weekend; on weekdays
     only a new 90-day Norwalk low (FORCE_EMAIL=true overrides).
+
+    With GAS_SNAPSHOT set (the CI default since GasBuddy turned away GitHub's runners),
+    prices come from the file the Mac pushed instead of a live fetch.
     """
-    print("Fetching gas prices across Norwalk -> Jersey City corridor...")
-    stations = await fetch_gas_prices()
+    snapshot_path = os.environ.get("GAS_SNAPSHOT")
+    if snapshot_path:
+        snap = gas_snapshot.load(snapshot_path)
+        hours = gas_snapshot.age_hours(snap)
+        if hours > gas_snapshot.MAX_AGE_H:
+            print(f"Gas snapshot {snapshot_path} is {hours:.1f} h old (limit {gas_snapshot.MAX_AGE_H} h); "
+                  f"the Mac hasn't pushed fresh prices. Nothing logged or sent.")
+            return 1
+        stations = snap["stations"]
+        fetched_at = datetime.fromisoformat(snap["fetched_at"])
+        print(f"Using {len(stations)} station prices the Mac fetched {hours * 60:.0f} min ago.")
+    else:
+        print("Fetching gas prices across Norwalk -> Jersey City corridor...")
+        stations = await fetch_gas_prices()
+        fetched_at = datetime.now(timezone.utc)
     if not stations:
         print("No stations found.")
         return 1
@@ -699,7 +733,7 @@ async def main():
     mode = get_commute_mode()
     print(f"Detected commute mode: {mode}")
 
-    today = datetime.now(ET).date()
+    today = fetched_at.astimezone(ET).date()          # the prices' day, not the run's
     home = [s for s in stations if s["zip"] == gas_cadence.HOME_ZIP]
     home_price = min(s["price"] for s in home) if home else None
     history = us_fuel_forecast.load_station_history()      # read before today's prices are added
@@ -728,6 +762,13 @@ async def main():
         log_prediction(graded)
     prediction_lines = price_predictor.summary_lines(graded, made, learned)
 
+    try:  # the phone dashboard is an extra too
+        gas_dashboard.write(stations, fetched_at, us_fuel_forecast.load_station_history(), zip_order=ZIP_CODES,
+                            outlook_lines=us_fuel_forecast.outlook_lines(outlook) if outlook else [],
+                            prediction_lines=prediction_lines, decision_note=decision.note)
+    except Exception as e:
+        print(f"Dashboard skipped: {e}")
+
     sent = False
     if decision.send:
         subject, text_summary, html_content = build_email_content(stations, mode, outlook, prediction_lines)
@@ -746,5 +787,16 @@ async def main():
     return 0 if sent or not decision.send else 1
 
 
+async def fetch_only() -> int:
+    """Mac side: fetch and write data/gas_snapshot.json. No secrets, no Sheet, no email."""
+    stations = await fetch_gas_prices()
+    if not stations:
+        print("No stations found; snapshot left unchanged.")
+        return 1
+    snap = gas_snapshot.save(stations)
+    print(f"Wrote {len(stations)} stations to {gas_snapshot.SNAPSHOT_PATH.name} ({snap['fetched_at']}).")
+    return 0
+
+
 if __name__ == "__main__":
-    sys.exit(asyncio.run(main()) or 0)
+    sys.exit(asyncio.run(fetch_only() if "--fetch-only" in sys.argv else main()) or 0)

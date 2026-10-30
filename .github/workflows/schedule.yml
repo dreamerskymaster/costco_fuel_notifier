@@ -1,13 +1,14 @@
 name: Daily Gas Price Tracker
 
 on:
+  # GasBuddy turns away GitHub's runners (since 2026-10-26), so the Mac fetches prices and
+  # pushes data/gas_snapshot.json (mac/gas_fetch.sh, ~every 3 h while awake). That push runs this.
+  push:
+    branches: [main]
+    paths: ['data/gas_snapshot.json']
   schedule:
-    # Price check + Sheet log every 3 hours; gas_cadence decides whether to email
-    - cron: '0 */3 * * *'
-    # Friday 4:00 PM EDT (20:00 UTC) — Pre-departure alert from Norwalk to 850 Westside Ave, Jersey City
-    - cron: '0 20 * * 5'
-    # Sunday 3:00 PM EDT (19:00 UTC) — Pre-return alert from Jersey City back to Norwalk
-    - cron: '0 19 * * 0'
+    # Daily watchdog only: fails (so GitHub emails) when the Mac hasn't pushed for 24 h
+    - cron: '0 14 * * *'
 
   workflow_dispatch:
     inputs:
@@ -24,7 +25,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  watchdog:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Has the Mac pushed prices in the last 24 h?
+        run: python3 gas_snapshot.py check --max-age-h 24
+
   run-tracker:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -53,13 +63,14 @@ jobs:
           FORCE_EMAIL: ${{ inputs.force_email && 'true' || 'false' }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          GAS_SNAPSHOT: data/gas_snapshot.json
         run: python gas_tracker.py
 
       - name: Commit price history
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/us_station_history.csv data/gas_state.json data/predictions.csv 2>/dev/null || true
+          git add data/us_station_history.csv data/gas_state.json data/predictions.csv data/gas_dashboard.json 2>/dev/null || true
           git diff --staged --quiet && echo "nothing to commit" && exit 0
           git commit -m "chore(data): US fuel price history $(date -u +%Y-%m-%d)"
           for i in 1 2 3; do git pull --rebase --autostash origin ${{ github.ref_name }} && git push && exit 0; sleep 5; done

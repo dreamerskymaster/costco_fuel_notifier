@@ -58,9 +58,9 @@
 ## 4. Workflows & Schedules
 
 - **US Tracker (`gas_tracker.py`)**:
-  - Every 3 hours: `0 */3 * * *`
-  - Friday Pre-Departure Alert: `0 20 * * 5` (4:00 PM EDT / 20:00 UTC)
-  - Sunday Pre-Return Alert: `0 19 * * 0` (3:00 PM EDT / 19:00 UTC)
+  - Runs on each push of `data/gas_snapshot.json` from the Mac (`mac/gas_fetch.sh`, launchd `com.local.gasfetch`, ~every 3 h while the Mac is awake and online). GasBuddy turns away GitHub's runners since 2026-10-26.
+  - Daily watchdog `0 14 * * *`: fails (GitHub emails) if the Mac hasn't pushed for 24 h.
+  - Friday/Sunday alerts go out on the first Mac push inside the window (Fri 12–7 PM ET, Sun 12–8 PM ET); no push in the window, no alert.
 - **Mumbai Daily Digest (`mumbai_gas_tracker.py`)**: `30 1 * * *` (7:00 AM IST)
 - **Road Trip Digest (`road_trip_tracker.py`)**: `0 0 * * *` (5:30 AM IST on trip dates; last trip 2026-10-17, then retire the workflow)
 - **USD→INR Remittance Brief (`usd_inr_tracker.py`)**: `11 12 * * *` daily digest; `37 */3 * * *` threshold alerts (silent unless triggered)
