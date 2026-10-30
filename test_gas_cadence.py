@@ -67,27 +67,28 @@ class PredictorTests(unittest.TestCase):
 
     def test_predicts_once_a_day_and_grades_next_day(self):
         d0 = date(2026, 10, 5)
-        _, made, _ = pp.run_daily(d0, 3.900, 7.0)            # +7¢/week -> +1¢ tomorrow
-        self.assertAlmostEqual(float(made["predicted"]), 3.910, places=3)
+        _, made, _ = pp.run_daily(d0, 3.900, 7.0)            # same as today; the EIA week is not used
+        self.assertAlmostEqual(float(made["predicted"]), 3.900, places=3)
+        self.assertEqual(made["dir_pred"], "flat")
         _, again, _ = pp.run_daily(d0, 3.950, 7.0)           # later run same day keeps the morning call
         self.assertEqual(again["predicted"], made["predicted"])
         graded, _, lr = pp.run_daily(d0 + timedelta(days=1), 3.990, 7.0)
-        self.assertAlmostEqual(float(graded["error_c"]), 8.0, places=1)
+        self.assertAlmostEqual(float(graded["error_c"]), 9.0, places=1)
         self.assertIn("Missed high", graded["note"])
         self.assertEqual(lr.graded, 1)
 
-    def test_learns_a_persistent_bias_and_widens_after_misses(self):
-        day, price = date(2026, 9, 1), 3.50
-        for _ in range(25):                                   # real price rises 3¢/day; model expects flat
-            pp.run_daily(day, price, 0.0)
-            day, price = day + timedelta(days=1), price + 0.03
+    def test_range_is_sized_from_recent_jumps(self):
+        day, price = date(2026, 9, 1), 4.30
+        steps = [0, 0, -6, 0, 0, 6, 0, -8, 0, 0, 0, 8, 0, -10, 0, 0]       # Oct-2026-like step moves, in ¢
+        for step in steps:
+            pp.run_daily(day, price, None)
+            day, price = day + timedelta(days=1), round(price + step / 100, 3)
         lr = pp.learn(pp.load())
-        self.assertGreater(lr.bias_c, 2.0)                    # it has learned most of the 3¢/day drift
-        self.assertLess(abs(float(pp.load()[-2]["error_c"])), 1.5)   # and its recent misses have shrunk
-        _, made, _ = pp.run_daily(day, price, 0.0)
-        self.assertGreater(float(made["predicted"]), price)
-        self.assertIn("Self-correction", " ".join(pp.summary_lines(None, made, lr)))
-
+        self.assertGreaterEqual(lr.hi_c, 6.0)                 # covers a typical 6-10¢ jump
+        self.assertEqual(lr.lo_c, -lr.hi_c)
+        self.assertAlmostEqual(lr.confidence, 10 / 15, places=2)   # share of graded days that stayed put
+        _, made, _ = pp.run_daily(day, price, None)
+        self.assertIn("sized from recent daily jumps", " ".join(pp.summary_lines(None, made, lr)))
 
 if __name__ == "__main__":
     unittest.main()

@@ -4,16 +4,19 @@ Every day the tracker:
   1. grades yesterday's prediction against today's actual cheapest Norwalk price
      (error in cents, inside the range or not, direction right or not, and a
      one-line "what went wrong");
-  2. relearns from its graded history:
-       bias  - the base model's average miss over the last 14 days (before any
-               correction, shrunk while there are few days) is added to the next
-               forecast, so a model that keeps guessing low corrects itself;
-       range - the 80% range is the 10th-90th percentile of the last 30 errors,
-               so it widens after misses and tightens when it is right;
+  2. relearns from its graded history (the last 30 day-over-day moves);
   3. makes tomorrow's prediction:
-       point      = today + (EIA week-ahead expected move)/7 + bias
-       confidence = share of recent days the actual landed within ±2¢ of the
-                    prediction (a prior of 60% until 10 days are graded).
+       point      = today's price. The cheapest Norwalk price moves in steps: it sat
+                    still on 62% of days (Oct 5-26, 2026) and otherwise jumped 6-10¢.
+                    Walk-forward over 21 graded days, "same as today" beat the old
+                    today + EIA-weekly/7 + bias model: average miss 3.05¢ vs 3.60¢,
+                    direction right 52% vs 33%. Any share of the EIA trend made it worse.
+       direction  = "flat", the most common day.
+       range      = ± the 90th percentile of recent |daily moves| (at least 2¢), so it
+                    covers the typical jump; old error quantiles covered 57%, this ~75%.
+       confidence = share of recent days that moved less than 2¢.
+     Re-run the backtest once a few months of history exist; with more data a
+     direction call (e.g. from the EIA weekly model) may start to pay.
 
 Everything is stored in data/predictions.csv (committed by the workflow) and the
 graded row is appended to the Google Sheet's "Predictions" tab.
@@ -33,8 +36,9 @@ FIELDS = ["made_on", "target", "today_price", "predicted", "low", "high", "confi
           "bias_c", "dir_pred", "actual", "error_c", "in_range", "dir_actual", "note"]
 FLAT_C = 1.0            # moves under 1¢ count as "flat"
 CLOSE_C = 2.0           # "within ±2¢" defines the confidence score
-BIAS_WINDOW, RANGE_WINDOW, MIN_GRADED = 14, 30, 10
-PRIOR_HALF_RANGE_C, PRIOR_CONFIDENCE = 3.0, 0.60
+RANGE_WINDOW, MIN_GRADED = 30, 10
+RANGE_QUANTILE, MIN_HALF_RANGE_C = 0.90, 2.0
+PRIOR_HALF_RANGE_C, PRIOR_CONFIDENCE = 6.0, 0.60    # until 10 days are graded (Oct 2026 jumps were 6-10¢)
 
 
 def load() -> list[dict]:
@@ -88,43 +92,33 @@ class Learned:
     direction_rate: float | None
 
 
-def _bias(done: list[dict]) -> float:
-    """Average miss of the uncorrected model (error + the correction that was applied), shrunk toward 0."""
-    raw = [float(r["error_c"]) + float(r.get("bias_c") or 0) for r in done[-BIAS_WINDOW:]]
-    return float(np.mean(raw)) * len(raw) / (len(raw) + 4) if raw else 0.0
-
-
 def learn(rows: list[dict]) -> Learned:
     done = [r for r in rows if r["actual"]]
     errs = np.array([float(r["error_c"]) for r in done])
-    bias = _bias(done)
     if len(errs) < MIN_GRADED:
-        return Learned(bias, -PRIOR_HALF_RANGE_C, PRIOR_HALF_RANGE_C, PRIOR_CONFIDENCE, len(errs),
+        return Learned(0.0, -PRIOR_HALF_RANGE_C, PRIOR_HALF_RANGE_C, PRIOR_CONFIDENCE, len(errs),
                        float(np.abs(errs).mean()) if len(errs) else None, None, None)
-    recent = errs[-RANGE_WINDOW:]
-    centred = recent - float(np.mean(errs[-BIAS_WINDOW:]))      # spread around the remaining miss
-    lo, hi = np.quantile(centred, [0.1, 0.9])
-    lo, hi = min(lo, -1.0), max(hi, 1.0)                    # never claim sub-cent precision
     last = done[-RANGE_WINDOW:]
+    moves = np.array([(float(r["actual"]) - float(r["today_price"])) * 100 for r in last])
+    half = max(float(np.quantile(np.abs(moves), RANGE_QUANTILE)), MIN_HALF_RANGE_C)
     return Learned(
-        bias_c=bias, lo_c=float(lo), hi_c=float(hi),
-        confidence=float(np.mean(np.abs(centred) <= CLOSE_C)),
-        graded=len(errs), mae_c=float(np.abs(recent).mean()),
+        bias_c=0.0, lo_c=-half, hi_c=half,
+        confidence=float(np.mean(np.abs(moves) < CLOSE_C)),
+        graded=len(errs), mae_c=float(np.abs(errs[-RANGE_WINDOW:]).mean()),
         in_range_rate=float(np.mean([r["in_range"] == "True" for r in last])),
         direction_rate=float(np.mean([r["dir_pred"] == r["dir_actual"] for r in last])),
     )
 
 
-def predict(rows: list[dict], today: date, today_price: float, weekly_expected_c: float) -> dict:
-    """Add (or replace) today's prediction for tomorrow."""
+def predict(rows: list[dict], today: date, today_price: float, weekly_expected_c: float | None = None) -> dict:
+    """Add (or replace) today's prediction for tomorrow. The EIA weekly move is not used (see the docstring)."""
     lr = learn(rows)
-    drift_c = weekly_expected_c / 7
-    point = today_price + (drift_c + lr.bias_c) / 100
+    point = today_price
     row = {
         "made_on": today.isoformat(), "target": (today + timedelta(days=1)).isoformat(),
         "today_price": f"{today_price:.3f}", "predicted": f"{point:.3f}",
         "low": f"{point + lr.lo_c / 100:.3f}", "high": f"{point + lr.hi_c / 100:.3f}",
-        "confidence": f"{lr.confidence:.2f}", "bias_c": f"{lr.bias_c:.2f}", "dir_pred": _direction(drift_c + lr.bias_c),
+        "confidence": f"{lr.confidence:.2f}", "bias_c": "0.00", "dir_pred": "flat",
         "actual": "", "error_c": "", "in_range": "", "dir_actual": "", "note": "",
     }
     rows[:] = [r for r in rows if r["made_on"] != row["made_on"]] + [row]
@@ -136,7 +130,7 @@ def run_daily(today: date, today_price: float | None, weekly_expected_c: float |
     rows = load()
     graded = grade(rows, today, today_price) if today_price is not None else None
     made = next((r for r in rows if r["made_on"] == today.isoformat()), None)
-    if made is None and today_price is not None and weekly_expected_c is not None:
+    if made is None and today_price is not None:
         made = predict(rows, today, today_price, weekly_expected_c)
     _save(rows)
     return graded, made, learn(rows)
@@ -148,13 +142,13 @@ def summary_lines(graded: dict | None, made: dict | None, lr: Learned) -> list[s
         lines.append(f"Yesterday's call: ${float(graded['predicted']):.3f} → actual ${float(graded['actual']):.3f}. "
                      f"{graded['note']}.")
     if made:
-        lines.append(f"Tomorrow (Norwalk cheapest): ${float(made['predicted']):.3f}, 80% range "
+        lines.append(f"Tomorrow (Norwalk cheapest): ${float(made['predicted']):.3f}, likely range "
                      f"${float(made['low']):.3f}–${float(made['high']):.3f}, "
-                     f"{float(made['confidence']):.0%} confident it lands within ±2¢ ({made['dir_pred']}).")
+                     f"{float(made['confidence']):.0%} chance it stays within 2¢ (recent days that did).")
     if lr.graded >= MIN_GRADED:
         lines.append(f"Last {min(lr.graded, RANGE_WINDOW)} days: average miss {lr.mae_c:.1f}¢, inside range "
                      f"{lr.in_range_rate:.0%}, direction right {lr.direction_rate:.0%}. "
-                     f"Self-correction now {lr.bias_c:+.1f}¢.")
+                     f"Range now ±{lr.hi_c:.0f}¢, sized from recent daily jumps.")
     else:
         lines.append(f"Learning: {lr.graded}/{MIN_GRADED} days graded so far; confidence uses a 60% prior until then.")
     return lines
