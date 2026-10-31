@@ -1,13 +1,13 @@
 {
- "fetched_at": "2026-10-30T19:05:22+00:00",
- "generated_at": "2026-10-30T19:05:48+00:00",
+ "fetched_at": "2026-10-31T01:29:14+00:00",
+ "generated_at": "2026-10-31T01:29:39+00:00",
  "best": {
   "name": "Costco",
   "price": 3.93,
   "net_price": 3.77,
   "best_card": "Citi Costco (4%)",
   "card_note": "Visa Only",
-  "last_updated": "Oct 30, 03:03 PM",
+  "last_updated": "Oct 30, 09:03 PM",
   "stale": false,
   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
   "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
@@ -15,21 +15,21 @@
  },
  "home": {
   "cheapest": {
-   "name": "Shell",
-   "price": 4.47,
-   "net_price": 4.29,
+   "name": "Global",
+   "price": 4.19,
+   "net_price": 4.02,
    "best_card": "Citi 4% / Amex 3%",
    "card_note": "Standalone Gas Station",
-   "last_updated": "Oct 30, 07:43 AM",
+   "last_updated": "Oct 30, 06:38 PM",
    "stale": false,
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854",
-   "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes"
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
+   "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
   },
   "low_90d": {
-   "date": "2026-10-23",
-   "price": 4.25
+   "date": "2026-10-30",
+   "price": 4.19
   },
-  "decision_note": "FRIDAY_DEPARTURE"
+  "decision_note": "Norwalk $4.190/gal is the lowest in 22 logged days (previous low $4.250)"
  },
  "trend": {
   "norwalk": [
@@ -123,7 +123,7 @@
    ],
    [
     "2026-10-30",
-    4.47
+    4.19
    ]
   ],
   "nj_costco": [
@@ -238,7 +238,7 @@
    "net_price": 3.77,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Oct 30, 03:03 PM",
+   "last_updated": "Oct 30, 09:03 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -251,7 +251,7 @@
    "net_price": 3.78,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Oct 30, 03:03 PM",
+   "last_updated": "Oct 30, 09:03 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -267,15 +267,15 @@
    "zip": "06854",
    "stations": [
     {
-     "name": "Shell",
-     "price": 4.47,
-     "net_price": 4.29,
+     "name": "Global",
+     "price": 4.19,
+     "net_price": 4.02,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 07:43 AM",
+     "last_updated": "Oct 30, 06:38 PM",
      "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854",
-     "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes"
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
+     "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
     }
    ]
   },
@@ -300,7 +300,7 @@
      "net_price": 3.79,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 03:00 PM",
+     "last_updated": "Oct 30, 08:01 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
      "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
@@ -317,7 +317,7 @@
      "net_price": 3.77,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Oct 30, 03:03 PM",
+     "last_updated": "Oct 30, 09:03 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
      "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -334,10 +334,21 @@
      "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 03:00 PM",
+     "last_updated": "Oct 30, 09:00 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
      "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
+    },
+    {
+     "name": "Wawa",
+     "price": 4.13,
+     "net_price": 3.96,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Oct 30, 04:19 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07601",
+     "waze_link": "https://waze.com/ul?q=Wawa+07601&navigate=yes"
     }
    ]
   },
@@ -351,7 +362,7 @@
      "net_price": 3.85,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 12:00 PM",
+     "last_updated": "Oct 30, 03:11 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047",
      "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes"
@@ -362,7 +373,7 @@
      "net_price": 3.89,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 05:44 AM",
+     "last_updated": "Oct 30, 03:09 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047",
      "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes"
@@ -373,21 +384,10 @@
      "net_price": 3.91,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 12:01 PM",
+     "last_updated": "Oct 30, 03:10 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07047",
      "waze_link": "https://waze.com/ul?q=Shell+07047&navigate=yes"
-    },
-    {
-     "name": "CITGO",
-     "price": 4.07,
-     "net_price": 3.91,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 06:54 AM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=CITGO+07047",
-     "waze_link": "https://waze.com/ul?q=CITGO+07047&navigate=yes"
     },
     {
      "name": "BP",
@@ -412,7 +412,7 @@
      "net_price": 3.87,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 05:39 AM",
+     "last_updated": "Oct 30, 03:17 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07306",
      "waze_link": "https://waze.com/ul?q=Fuel+4+07306&navigate=yes"
@@ -423,7 +423,7 @@
      "net_price": 3.88,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 05:38 AM",
+     "last_updated": "Oct 30, 03:24 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Broadway+Diesel+%26+Gas+07306",
      "waze_link": "https://waze.com/ul?q=Broadway+Diesel+%26+Gas+07306&navigate=yes"
@@ -434,7 +434,7 @@
      "net_price": 3.91,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 11:59 AM",
+     "last_updated": "Oct 30, 03:18 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306",
      "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes"
@@ -447,11 +447,11 @@
    "stations": [
     {
      "name": "Speedway",
-     "price": 4.09,
-     "net_price": 3.93,
+     "price": 3.99,
+     "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 05:33 AM",
+     "last_updated": "Oct 30, 03:36 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Speedway+07305",
      "waze_link": "https://waze.com/ul?q=Speedway+07305&navigate=yes"
@@ -462,7 +462,7 @@
      "net_price": 4.21,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 05:25 AM",
+     "last_updated": "Oct 30, 03:49 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=GetGo+07305",
      "waze_link": "https://waze.com/ul?q=GetGo+07305&navigate=yes"
@@ -479,7 +479,7 @@
      "net_price": 3.78,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Oct 30, 03:03 PM",
+     "last_updated": "Oct 30, 09:03 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
      "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -490,29 +490,18 @@
      "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 02:01 PM",
+     "last_updated": "Oct 30, 08:01 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
     },
     {
      "name": "BP",
-     "price": 4.05,
-     "net_price": 3.89,
+     "price": 4.09,
+     "net_price": 3.93,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 06:10 AM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07002",
-     "waze_link": "https://waze.com/ul?q=BP+07002&navigate=yes"
-    },
-    {
-     "name": "BP",
-     "price": 4.19,
-     "net_price": 4.02,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Oct 30, 05:16 AM",
+     "last_updated": "Oct 30, 04:57 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07002",
      "waze_link": "https://waze.com/ul?q=BP+07002&navigate=yes"
