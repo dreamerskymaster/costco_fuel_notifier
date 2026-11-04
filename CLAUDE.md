@@ -17,6 +17,8 @@
 - After the last road trip (2026-10-17), disable or delete `.github/workflows/road_trip_schedule.yml`.
 - Confirm Dad's HSBC card variant: RuPay **Cashback** = no fuel waiver (current assumption); RuPay **Platinum** = 1% on ₹400–₹4,000, ₹250/month cap → edit its `DAD_CARDS` entry. If his Regalia is now Regalia Gold, recheck the waiver range.
 - INR→USD: once the student makes a real transfer, store it as `GLOBALPAY_RECEIPT` / `WIRE_RECEIPT` to check the live quotes against what was charged.
+- USD→INR: refresh `data/events.json` with 2027 RBI MPC and FOMC dates; the current list ends Dec 2026.
+- USD→INR: `data/history.csv` appends a second row when the digest and an alert both fire on one day (18 dates as of 2026-11-04). Dedupe by date (keep the last) before analysing, or make `append_history` upsert by date.
 
 ## Pipelines & Data Flow
 
@@ -66,6 +68,8 @@
 - **Data**: Frankfurter/ECB (history, primary), Yahoo Finance (intraday spot + DXY/Brent/Nifty), open.er-api.com (spot fallback), Wise public comparison API (provider rates, incl. competitors).
 - **Modes**: `--mode digest` | `--mode alert` (silent unless triggered) | `--mode dry-run` (writes `preview.html`).
 - **Workflows**: `.github/workflows/usd_inr_schedule.yml` (`11 12 * * *`), `usd_inr_alert.yml` (`37 */3 * * *`).
+- **Live config (2026-09-26)**: repo variable `CURRENT_PROVIDER=Remitly` (Ajith mostly uses Remitly, so the email prices switching *from* it). Recipients = `RECEIVER_EMAIL` + `FX_EXTRA_RECEIVERS` (a second person, PR #2) + `FX_ADDITIONAL_RECEIVERS`, all BCC. Other tunables unset → defaults ($3,000, payday 15, 14 days flex, 85th percentile, γ=3).
+- **Observed 2026-09-22 → 11-04 (44 logged days)**: Remitly was best of 9 on 30/39 days after it was set; median gap to the best ₹0, max ₹622; Remitly markup median 0.15%, no promo decay (negative readings are the once-daily mid-market reference lagging, not real). Spot 95.87 → 94.83 (low 94.59, high 96.96). The whole October window was HOLD then FORCED_SEND because the rupee strengthened, so the rule didn't invent urgency. Leader rotates (Remitly/WorldRemit/Xoom/SBI); the laggards are stable (Wise ~₹1,000 behind on its $19.62 fee, US banks 3.3–3.9% all-in).
 - **Landmines**: forecasts must anchor on today's close (invariant: horizon 0 == spot, reservation at `days_left=0` == spot); don't replace the elementwise weighted sums in `fx_signals.py` with `@` (macOS Accelerate BLAS raises spurious FP warnings); Yahoo 429s are normal and expected; `.gitignore`'s blanket `*.json` is negated for `data/events.json` and `data/state.json`.
 
 ### 5. INR→USD Credila Brief (`inr_usd_tracker.py`)
