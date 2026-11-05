@@ -26,4 +26,5 @@ made_on,target,today_price,predicted,low,high,confidence,bias_c,dir_pred,actual,
 2026-11-01,2026-11-02,4.190,4.190,4.110,4.270,0.50,0.00,flat,4.190,0.00,True,flat,"Good: off by +0.0¢, inside the range"
 2026-11-02,2026-11-03,4.190,4.190,4.110,4.270,0.52,0.00,flat,4.470,28.00,False,up,"Missed high: price came in 28.0¢ above the forecast (rose more / fell less than expected); called flat, was up"
 2026-11-03,2026-11-04,4.470,4.470,4.376,4.564,0.50,0.00,flat,4.470,0.00,True,flat,"Good: off by +0.0¢, inside the range"
-2026-11-04,2026-11-05,4.470,4.470,4.378,4.562,0.52,0.00,flat,,,,,
+2026-11-04,2026-11-05,4.470,4.470,4.378,4.562,0.52,0.00,flat,4.150,-32.00,False,down,"Missed low: price came in 32.0¢ below the forecast (fell more / rose less than expected); called flat, was down"
+2026-11-05,2026-11-06,4.150,4.150,4.010,4.290,0.50,0.00,flat,,,,,
