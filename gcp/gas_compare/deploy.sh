@@ -82,10 +82,10 @@ retry g secrets add-iam-policy-binding "$SECRET" \
 say "Build image"
 TAG=$(git rev-parse --short HEAD)$(git diff --quiet HEAD -- . && echo "" || echo "-dirty")
 IMAGE=$REGION-docker.pkg.dev/$PROJECT/$REPO/gas-compare:$TAG
-g builds submit --region "$REGION" --tag "$IMAGE" \
+g builds submit --region "$REGION" --config cloudbuild.yaml \
+  --substitutions "_IMAGE=$IMAGE" \
   --service-account "projects/$PROJECT/serviceAccounts/$BUILDER" \
-  --gcs-source-staging-dir "gs://$BUILD_BUCKET/source" \
-  --default-buckets-behavior regional-user-owned-bucket .
+  --gcs-source-staging-dir "gs://$BUILD_BUCKET/source" .
 
 say "Cloud Run job"
 g run jobs deploy gas-compare --region "$REGION" --image "$IMAGE" \
