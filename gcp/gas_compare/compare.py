@@ -194,22 +194,25 @@ def google_stations(places_by_zip: dict[str, list[dict]]) -> list[dict]:
     return out
 
 
-def fetch_google(token: str, project: str) -> dict[str, list[dict]]:
+def fetch_google(token: str, project: str) -> tuple[dict[str, list[dict]], dict[str, int]]:
+    """11 Text Search calls. Returns (places by ZIP, {ZIP: HTTP status} for refused ones)."""
     headers = {
         "Authorization": f"Bearer {token}",
         "X-Goog-User-Project": project,
         "X-Goog-FieldMask": PLACES_FIELDS,
         "Content-Type": "application/json",
     }
-    results = {}
+    results, failed = {}, {}
     for zip_code in ZIP_LABELS:
         body = json.dumps({"textQuery": f"gas station {zip_code}", "includedType": "gas_station",
                            "strictTypeFiltering": True, "pageSize": 20}).encode()
         status, raw = http("POST", PLACES_URL, headers=headers, body=body)
-        if status != 200:
-            raise RuntimeError(f"Places {zip_code}: HTTP {status} {raw[:200]!r}")
-        results[zip_code] = json.loads(raw).get("places", [])
-    return results
+        if status == 200:
+            results[zip_code] = json.loads(raw).get("places", [])
+        else:
+            failed[zip_code] = status
+            log(f"Places {zip_code}: HTTP {status} {raw[:160]!r}")
+    return results, failed
 
 
 # -- comparing ---------------------------------------------------------------------
@@ -347,6 +350,12 @@ def build_email(records: list[dict], today: date, start: date, end: date, final:
     run_at = datetime.fromisoformat(latest["at"]).astimezone(NY).strftime("%b %d, %I:%M %p")
     snap_note = (f"Mac snapshot was {fmt(gbs.get('snapshot_age_h'), ' h')} old"
                  + ("" if gbs.get("available") else " (too old: the real email would skip it)"))
+    if ggs.get("zips_failed"):
+        snap_note += (f". Google answered for {11 - ggs['zips_failed']} of 11 ZIPs"
+                      + (f" ({ggs['quota_refusals']} stopped by the free-tier safety cap)"
+                         if ggs.get("quota_refusals") else ""))
+    if ggs.get("error"):
+        snap_note += f". Google failed: {ggs['error'][:120]}"
     latest_rows = [
         ("Stations with any price", gbs.get("priced"), ggs.get("priced")),
         ("…with a price under 12 h old", gbs.get("fresh"), ggs.get("fresh")),
@@ -440,8 +449,10 @@ def run(args: list[str]) -> int:
     record["gasbuddy"] = gb
 
     try:
-        gg = summarize(google_stations(fetch_google(token, project)), now)
-        gg["available"] = gg["fresh"] > 0
+        places, failed = fetch_google(token, project)
+        gg = summarize(google_stations(places), now)
+        gg.update(available=gg["fresh"] > 0, zips_failed=len(failed),
+                  quota_refusals=sum(1 for s in failed.values() if s == 429))
     except Exception as exc:
         gg = {"available": False, "error": f"{type(exc).__name__}: {exc}"[:300]}
     record["google"] = gg
