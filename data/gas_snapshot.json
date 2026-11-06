@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-05T23:27:12+00:00",
+ "fetched_at": "2026-11-06T02:27:26+00:00",
  "source": "mac",
  "stations": [
   {
@@ -16,7 +16,7 @@
    "formatted_net_price": "$3.72",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 05, 06:01 PM",
+   "last_updated": "Nov 05, 09:05 PM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -52,7 +52,7 @@
    "formatted_net_price": "$3.72",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 05, 06:03 PM",
+   "last_updated": "Nov 05, 09:05 PM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -124,7 +124,7 @@
    "formatted_net_price": "$3.76",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 06:01 PM",
+   "last_updated": "Nov 05, 08:01 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
@@ -142,7 +142,7 @@
    "formatted_net_price": "$3.77",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 05:26 PM",
+   "last_updated": "Nov 05, 07:54 PM",
    "waze_link": "https://waze.com/ul?q=Delta+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07657"
   },
@@ -195,8 +195,8 @@
    "net_price": 3.79,
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 04, 05:42 PM",
+   "stale": false,
+   "last_updated": "Nov 05, 06:47 PM",
    "waze_link": "https://waze.com/ul?q=US+Gas+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=US+Gas+07657"
   },
@@ -237,24 +237,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
   {
-   "name": "Fuel Stop",
-   "zip": "07047",
-   "city": "North Bergen",
-   "state": "NJ",
-   "area_label": "North Bergen (Tonnelle Ave)",
-   "distance": "N/A",
-   "price": 3.97,
-   "formatted_price": "$3.97",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.81,
-   "formatted_net_price": "$3.81",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 05, 07:09 AM",
-   "waze_link": "https://waze.com/ul?q=Fuel+Stop+07047&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Stop+07047"
-  },
-  {
    "name": "Shell",
    "zip": "07047",
    "city": "North Bergen",
@@ -271,6 +253,24 @@
    "last_updated": "Nov 05, 03:19 PM",
    "waze_link": "https://waze.com/ul?q=Shell+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07047"
+  },
+  {
+   "name": "Fuel Stop",
+   "zip": "07047",
+   "city": "North Bergen",
+   "state": "NJ",
+   "area_label": "North Bergen (Tonnelle Ave)",
+   "distance": "N/A",
+   "price": 3.97,
+   "formatted_price": "$3.97",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.81,
+   "formatted_net_price": "$3.81",
+   "card_note": "Standalone Gas Station",
+   "stale": true,
+   "last_updated": "Nov 05, 07:09 AM",
+   "waze_link": "https://waze.com/ul?q=Fuel+Stop+07047&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Stop+07047"
   },
   {
    "name": "Broadway Diesel & Gas",
@@ -358,7 +358,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 05:01 PM",
+   "last_updated": "Nov 05, 08:01 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -399,6 +399,24 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
   {
+   "name": "Exxon",
+   "zip": "07306",
+   "city": "Jersey City",
+   "state": "NJ",
+   "area_label": "Jersey City (Westside Ave)",
+   "distance": "N/A",
+   "price": 3.99,
+   "formatted_price": "$3.99",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.83,
+   "formatted_net_price": "$3.83",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 05, 07:10 PM",
+   "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306"
+  },
+  {
    "name": "Speedway",
    "zip": "07305",
    "city": "Jersey City",
@@ -430,7 +448,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 05:01 PM",
+   "last_updated": "Nov 05, 08:01 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -484,7 +502,7 @@
    "formatted_net_price": "$3.89",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 03:13 PM",
+   "last_updated": "Nov 05, 07:54 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07657"
   },
@@ -613,24 +631,6 @@
    "last_updated": "Nov 04, 05:52 PM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
-  },
-  {
-   "name": "Exxon",
-   "zip": "07306",
-   "city": "Jersey City",
-   "state": "NJ",
-   "area_label": "Jersey City (Westside Ave)",
-   "distance": "N/A",
-   "price": 4.09,
-   "formatted_price": "$4.09",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.93,
-   "formatted_net_price": "$3.93",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 04, 07:10 PM",
-   "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306"
   },
   {
    "name": "Shell",
@@ -861,8 +861,8 @@
    "net_price": 4.1,
    "formatted_net_price": "$4.10",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 04, 04:20 PM",
+   "stale": false,
+   "last_updated": "Nov 05, 06:40 PM",
    "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032"
   },
@@ -951,7 +951,7 @@
    "net_price": 4.21,
    "formatted_net_price": "$4.21",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 05, 07:11 AM",
    "waze_link": "https://waze.com/ul?q=Exxon+07305&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07305"
