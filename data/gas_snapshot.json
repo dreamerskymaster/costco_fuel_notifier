@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-06T08:27:50+00:00",
+ "fetched_at": "2026-11-06T11:28:06+00:00",
  "source": "mac",
  "stations": [
   {
@@ -16,7 +16,7 @@
    "formatted_net_price": "$3.72",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 06, 03:05 AM",
+   "last_updated": "Nov 06, 05:04 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -34,7 +34,7 @@
    "formatted_net_price": "$3.72",
    "card_note": "Standalone Gas Station",
    "stale": true,
-   "last_updated": "Nov 04, 07:07 PM",
+   "last_updated": "Nov 04, 07:58 PM",
    "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
   },
@@ -52,7 +52,7 @@
    "formatted_net_price": "$3.72",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 06, 03:05 AM",
+   "last_updated": "Nov 06, 05:18 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -69,7 +69,7 @@
    "net_price": 3.73,
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 05, 03:42 PM",
    "waze_link": "https://waze.com/ul?q=Fuel+4+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07601"
@@ -124,7 +124,7 @@
    "formatted_net_price": "$3.76",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 06, 03:03 AM",
+   "last_updated": "Nov 06, 05:57 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
@@ -159,8 +159,8 @@
    "net_price": 3.77,
    "formatted_net_price": "$3.77",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 05, 03:21 PM",
+   "stale": false,
+   "last_updated": "Nov 06, 05:43 AM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
@@ -177,8 +177,8 @@
    "net_price": 3.77,
    "formatted_net_price": "$3.77",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 05, 03:24 PM",
+   "stale": false,
+   "last_updated": "Nov 06, 05:42 AM",
    "waze_link": "https://waze.com/ul?q=Fuel+4+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07306"
   },
@@ -249,8 +249,8 @@
    "net_price": 3.81,
    "formatted_net_price": "$3.81",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 05, 03:19 PM",
+   "stale": false,
+   "last_updated": "Nov 06, 05:44 AM",
    "waze_link": "https://waze.com/ul?q=Shell+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07047"
   },
@@ -268,7 +268,7 @@
    "formatted_net_price": "$3.81",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 10:09 PM",
+   "last_updated": "Nov 06, 05:38 AM",
    "waze_link": "https://waze.com/ul?q=Broadway+Diesel+%26+Gas+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Broadway+Diesel+%26+Gas+07306"
   },
@@ -286,7 +286,7 @@
    "formatted_net_price": "$3.81",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 10:10 PM",
+   "last_updated": "Nov 06, 05:42 AM",
    "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306"
   },
@@ -358,7 +358,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 06, 03:02 AM",
+   "last_updated": "Nov 06, 06:02 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -375,8 +375,8 @@
    "net_price": 3.83,
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 05, 03:18 PM",
+   "stale": false,
+   "last_updated": "Nov 06, 05:45 AM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
@@ -394,7 +394,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 07:10 PM",
+   "last_updated": "Nov 06, 05:43 AM",
    "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306"
   },
@@ -412,7 +412,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 03:40 PM",
+   "last_updated": "Nov 06, 05:34 AM",
    "waze_link": "https://waze.com/ul?q=Speedway+07305&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Speedway+07305"
   },
@@ -430,7 +430,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 06, 02:30 AM",
+   "last_updated": "Nov 06, 05:30 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -465,7 +465,7 @@
    "net_price": 3.87,
    "formatted_net_price": "$3.87",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 05, 03:41 PM",
    "waze_link": "https://waze.com/ul?q=Wawa+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07601"
@@ -573,7 +573,7 @@
    "net_price": 3.93,
    "formatted_net_price": "$3.93",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 05, 04:40 PM",
    "waze_link": "https://waze.com/ul?q=Sunoco+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07601"
@@ -664,7 +664,7 @@
    "formatted_net_price": "$3.93",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 03:44 PM",
+   "last_updated": "Nov 06, 05:28 AM",
    "waze_link": "https://waze.com/ul?q=GetGo+07305&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=GetGo+07305"
   },
@@ -682,7 +682,7 @@
    "formatted_net_price": "$3.93",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 05, 03:52 PM",
+   "last_updated": "Nov 06, 05:16 AM",
    "waze_link": "https://waze.com/ul?q=BP+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07002"
   },
