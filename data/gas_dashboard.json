@@ -1,20 +1,30 @@
 {
- "fetched_at": "2026-11-07T17:29:30+00:00",
- "generated_at": "2026-11-07T17:29:50+00:00",
+ "fetched_at": "2026-11-07T20:29:51+00:00",
+ "generated_at": "2026-11-07T20:30:19+00:00",
  "best": {
   "name": "Costco",
   "price": 3.83,
   "net_price": 3.68,
   "best_card": "Citi Costco (4%)",
   "card_note": "Visa Only",
-  "last_updated": "Nov 07, 12:05 PM",
+  "last_updated": "Nov 07, 03:04 PM",
   "stale": false,
   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
   "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
   "area": "Teterboro (Costco)"
  },
  "home": {
-  "cheapest": null,
+  "cheapest": {
+   "name": "Global",
+   "price": 4.09,
+   "net_price": 3.93,
+   "best_card": "Citi 4% / Amex 3%",
+   "card_note": "Standalone Gas Station",
+   "last_updated": "Nov 07, 01:36 PM",
+   "stale": false,
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
+   "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
+  },
   "low_90d": {
    "date": "2026-11-05",
    "price": 4.09
@@ -138,6 +148,10 @@
    [
     "2026-11-06",
     4.15
+   ],
+   [
+    "2026-11-07",
+    4.09
    ]
   ],
   "nj_costco": [
@@ -280,7 +294,7 @@
    "net_price": 3.68,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 07, 12:05 PM",
+   "last_updated": "Nov 07, 03:04 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -293,7 +307,7 @@
    "net_price": 3.68,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 07, 11:05 AM",
+   "last_updated": "Nov 07, 02:05 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -305,6 +319,23 @@
  ],
  "areas": [
   {
+   "label": "Norwalk (Home)",
+   "zip": "06854",
+   "stations": [
+    {
+     "name": "Global",
+     "price": 4.09,
+     "net_price": 3.93,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 07, 01:36 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
+     "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
+    }
+   ]
+  },
+  {
    "label": "Ridgefield (Rt 46 / GWB Exit)",
    "zip": "07657",
    "stations": [
@@ -314,7 +345,7 @@
      "net_price": 3.73,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 07, 11:20 AM",
+     "last_updated": "Nov 07, 02:01 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
      "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
@@ -353,7 +384,7 @@
      "net_price": 3.68,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 07, 12:05 PM",
+     "last_updated": "Nov 07, 03:04 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
      "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -364,6 +395,17 @@
    "label": "Hackensack (Rt 17 Corridor)",
    "zip": "07601",
    "stations": [
+    {
+     "name": "Delta",
+     "price": 3.95,
+     "net_price": 3.79,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 07, 12:39 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07601",
+     "waze_link": "https://waze.com/ul?q=Delta+07601&navigate=yes"
+    },
     {
      "name": "Unbranded",
      "price": 3.99,
@@ -381,7 +423,7 @@
      "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 07, 12:01 PM",
+     "last_updated": "Nov 07, 03:01 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
      "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
@@ -416,6 +458,17 @@
     },
     {
      "name": "BP",
+     "price": 3.99,
+     "net_price": 3.83,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 07, 01:26 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047",
+     "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes"
+    },
+    {
+     "name": "BP",
      "price": 4.09,
      "net_price": 3.93,
      "best_card": "Citi 4% / Amex 3%",
@@ -441,6 +494,34 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032",
      "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "Jersey City (Westside Ave)",
+   "zip": "07306",
+   "stations": [
+    {
+     "name": "Lukoil",
+     "price": 3.93,
+     "net_price": 3.77,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 07, 01:40 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Lukoil+07306",
+     "waze_link": "https://waze.com/ul?q=Lukoil+07306&navigate=yes"
+    },
+    {
+     "name": "Exxon",
+     "price": 3.97,
+     "net_price": 3.81,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 07, 01:04 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306",
+     "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes"
     }
    ]
   },
@@ -482,7 +563,7 @@
      "net_price": 3.68,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 07, 11:05 AM",
+     "last_updated": "Nov 07, 02:05 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
      "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -493,7 +574,7 @@
      "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 07, 12:01 PM",
+     "last_updated": "Nov 07, 02:30 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
@@ -524,7 +605,9 @@
   }
  ],
  "prediction_lines": [
-  "Last 27 days: average miss 6.8¢, inside range 52%, direction right 33%. Range now ±22¢, sized from recent daily jumps."
+  "Yesterday's call: $4.430 → actual $4.090. Missed low: price came in 34.0¢ below the forecast (fell more / rose less than expected); called flat, was down.",
+  "Tomorrow (Norwalk cheapest): $4.090, likely range $3.810–$4.370, 46% chance it stays within 2¢ (recent days that did).",
+  "Last 28 days: average miss 7.8¢, inside range 50%, direction right 32%. Range now ±28¢, sized from recent daily jumps."
  ],
  "outlook_lines": [
   "Buy only what you need — prices are likely to ease.",
