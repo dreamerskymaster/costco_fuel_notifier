@@ -1,6 +1,6 @@
 {
- "fetched_at": "2026-11-09T03:20:11+00:00",
- "generated_at": "2026-11-09T03:20:33+00:00",
+ "fetched_at": "2026-11-09T06:20:26+00:00",
+ "generated_at": "2026-11-09T06:20:52+00:00",
  "best": {
   "name": "Fuel 4",
   "price": 3.77,
@@ -14,12 +14,22 @@
   "area": "Hackensack (Rt 17 Corridor)"
  },
  "home": {
-  "cheapest": null,
+  "cheapest": {
+   "name": "Atlantis",
+   "price": 4.09,
+   "net_price": 3.93,
+   "best_card": "Citi 4% / Amex 3%",
+   "card_note": "Standalone Gas Station",
+   "last_updated": "Nov 09, 12:40 AM",
+   "stale": false,
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Atlantis+06854",
+   "waze_link": "https://waze.com/ul?q=Atlantis+06854&navigate=yes"
+  },
   "low_90d": {
    "date": "2026-11-05",
    "price": 4.09
   },
-  "decision_note": "weekend outside the Friday/Sunday alert windows"
+  "decision_note": "no new Norwalk low"
  },
  "trend": {
   "norwalk": [
@@ -141,6 +151,10 @@
    ],
    [
     "2026-11-07",
+    4.09
+   ],
+   [
+    "2026-11-09",
     4.09
    ]
   ],
@@ -276,6 +290,10 @@
    [
     "2026-11-08",
     3.83
+   ],
+   [
+    "2026-11-09",
+    3.83
    ]
   ]
  },
@@ -288,7 +306,7 @@
    "net_price": 3.68,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 08, 09:06 PM",
+   "last_updated": "Nov 09, 01:05 AM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -301,7 +319,7 @@
    "net_price": 3.69,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 08, 09:06 PM",
+   "last_updated": "Nov 09, 01:04 AM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -312,6 +330,23 @@
   }
  ],
  "areas": [
+  {
+   "label": "Norwalk (Home)",
+   "zip": "06854",
+   "stations": [
+    {
+     "name": "Atlantis",
+     "price": 4.09,
+     "net_price": 3.93,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 09, 12:40 AM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Atlantis+06854",
+     "waze_link": "https://waze.com/ul?q=Atlantis+06854&navigate=yes"
+    }
+   ]
+  },
   {
    "label": "New Rochelle (Costco)",
    "zip": "10801",
@@ -350,7 +385,7 @@
      "net_price": 3.73,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 08, 09:30 PM",
+     "last_updated": "Nov 09, 01:01 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
      "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
@@ -365,17 +400,6 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Lukoil+07657",
      "waze_link": "https://waze.com/ul?q=Lukoil+07657&navigate=yes"
-    },
-    {
-     "name": "US Gas",
-     "price": 3.95,
-     "net_price": 3.79,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 08, 12:31 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=US+Gas+07657",
-     "waze_link": "https://waze.com/ul?q=US+Gas+07657&navigate=yes"
     }
    ]
   },
@@ -389,7 +413,7 @@
      "net_price": 3.68,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 08, 09:06 PM",
+     "last_updated": "Nov 09, 01:05 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
      "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -417,7 +441,7 @@
      "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 08, 09:30 PM",
+     "last_updated": "Nov 09, 01:01 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
      "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
@@ -445,15 +469,15 @@
      "waze_link": "https://waze.com/ul?q=Sunoco+07601&navigate=yes"
     },
     {
-     "name": "Delta",
+     "name": "Sunoco",
      "price": 4.09,
      "net_price": 3.93,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 08, 08:08 PM",
+     "last_updated": "Nov 08, 11:10 PM",
      "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07601",
-     "waze_link": "https://waze.com/ul?q=Delta+07601&navigate=yes"
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07601",
+     "waze_link": "https://waze.com/ul?q=Sunoco+07601&navigate=yes"
     }
    ]
   },
@@ -489,7 +513,7 @@
      "net_price": 3.93,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 08, 06:40 PM",
+     "last_updated": "Nov 09, 12:18 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047",
      "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes"
@@ -508,37 +532,9 @@
    ]
   },
   {
-   "label": "Kearny (Rt 7 / ~2 mi West)",
-   "zip": "07032",
-   "stations": [
-    {
-     "name": "Wawa",
-     "price": 4.27,
-     "net_price": 4.1,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 08, 01:10 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032",
-     "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes"
-    }
-   ]
-  },
-  {
    "label": "Jersey City (Westside Ave)",
    "zip": "07306",
    "stations": [
-    {
-     "name": "Broadway Diesel & Gas",
-     "price": 3.94,
-     "net_price": 3.78,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 08, 11:31 AM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Broadway+Diesel+%26+Gas+07306",
-     "waze_link": "https://waze.com/ul?q=Broadway+Diesel+%26+Gas+07306&navigate=yes"
-    },
     {
      "name": "Exxon",
      "price": 3.99,
@@ -579,21 +575,10 @@
      "net_price": 3.69,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 08, 09:06 PM",
+     "last_updated": "Nov 09, 01:04 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
      "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
-    },
-    {
-     "name": "QuickChek",
-     "price": 3.99,
-     "net_price": 3.83,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 08, 10:11 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
-     "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
     },
     {
      "name": "BP",
@@ -632,14 +617,15 @@
   }
  ],
  "prediction_lines": [
-  "Tomorrow (Norwalk cheapest): $4.090, likely range $3.810–$4.370, 48% chance it stays within 2¢ (recent days that did).",
-  "Last 29 days: average miss 7.5¢, inside range 52%, direction right 34%. Range now ±28¢, sized from recent daily jumps."
+  "Yesterday's call: $4.090 → actual $4.090. Good: off by +0.0¢, inside the range.",
+  "Tomorrow (Norwalk cheapest): $4.090, likely range $3.810–$4.370, 50% chance it stays within 2¢ (recent days that did).",
+  "Last 30 days: average miss 7.2¢, inside range 53%, direction right 37%. Range now ±28¢, sized from recent daily jumps."
  ],
  "outlook_lines": [
   "Buy only what you need — prices are likely to ease.",
   "Next week (NY/NJ average): 97% chance prices fall, expected -5.7¢/gal (typical error ±3.1¢). Confidence: High.",
   "Expect about -6¢/gal next week; waiting on a full fill saves ~$1.05. Today's price is already low versus recent weeks, so filling now is reasonable.",
-  "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 30 logged days.",
+  "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 31 logged days.",
   "Model record since 2008: right 77% of 982 weeks vs 56% for always guessing the usual direction. When it leaned this hard before it was right 92% of 312 weeks."
  ]
 }
