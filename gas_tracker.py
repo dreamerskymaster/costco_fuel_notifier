@@ -709,6 +709,69 @@ def log_price_run(stations, mode: str, emailed: str) -> bool:
         return False
 
 
+def weekend_catchup(snapshot_path: str | None, now: datetime | None = None) -> int:
+    """Friday/Sunday safety net, run by schedule.yml at 12:30 and 3:30 PM ET.
+
+    The weekend trip alerts used to depend on the Mac pushing prices inside the alert window;
+    when it slept all afternoon (6 Nov 2026) the Friday email never went out. This sends only
+    the weekend alert, from the last snapshot (up to CATCHUP_MAX_AGE_H old) with every price
+    re-checked against the 12 h rule at send time. Prices were already logged when the Mac
+    pushed them, so nothing is recorded again: no Sheet, history or prediction updates.
+    """
+    now = now or datetime.now(timezone.utc)
+    mode = get_commute_mode()
+    if mode not in gas_cadence.WEEKEND_MODES:
+        print(f"Catch-up: {mode} is not a weekend alert window; nothing to do.")
+        return 0
+    today = now.astimezone(ET).date()
+    state = gas_cadence.load_state()
+    if state.get("weekend_sent", {}).get(mode) == today.isoformat():
+        print(f"Catch-up: {mode} alert already sent today.")
+        return 0
+
+    snap = gas_snapshot.load(snapshot_path) if snapshot_path else None
+    hours = gas_snapshot.age_hours(snap, now)
+    if hours > gas_snapshot.CATCHUP_MAX_AGE_H:
+        print(f"Catch-up: snapshot is {hours:.1f} h old (limit {gas_snapshot.CATCHUP_MAX_AGE_H} h); "
+              f"no {mode} alert possible without fresher prices from the Mac.")
+        return 1
+    fetched_at = datetime.fromisoformat(snap["fetched_at"])
+    stations = gas_snapshot.still_fresh(snap["stations"], fetched_at, now)
+    print(f"Catch-up: snapshot {hours:.1f} h old; {len(stations)} of {len(snap['stations'])} prices "
+          f"are still under {gas_snapshot.PRICE_MAX_AGE_H} h old.")
+    if not stations:
+        print("Catch-up: every price is over 12 h old; not sending.")
+        return 1
+    stations = sorted(stations, key=lambda s: s["net_price"])
+
+    try:
+        outlook = us_fuel_forecast.forecast(
+            best_price=stations[0]["price"], tank_gal=TANK_CAPACITY_GAL,
+            station_history=us_fuel_forecast.load_station_history(), best_station=stations[0]["name"],
+        )
+    except Exception as e:
+        print(f"ML outlook skipped: {e}")
+        outlook = None
+    subject, text_summary, html_content = build_email_content(stations, mode, outlook, [])
+    note = (f"Prices from the Mac's last check, {hours:.1f} h ago "
+            f"(it was asleep during the alert window). Prices older than 12 h are hidden.")
+    text_summary = f"{note}\n\n" + text_summary
+    html_content = (
+        f'<p style="font-family:Arial,sans-serif;font-size:12px;color:#92400e;background:#fef3c7;'
+        f'padding:8px 12px;border-radius:6px;max-width:720px;margin:0 auto 8px;">{note}</p>' + html_content)
+
+    print(f"Catch-up: sending {mode} alert...")
+    if not send_email_smtp(subject, text_summary, html_content):
+        print("Catch-up: email failed to send.")
+        return 1
+    decision = gas_cadence.Decision(True, "weekend", mode)
+    home = [s for s in stations if s["zip"] == gas_cadence.HOME_ZIP]
+    home_price = min(s["price"] for s in home) if home else None
+    gas_cadence.save_state(gas_cadence.mark_sent(state, decision, mode, home_price, today))
+    print(f"Catch-up: {mode} alert sent.")
+    return 0
+
+
 async def main():
     """Fetch prices every run, log them, and email only when gas_cadence says so.
 
@@ -719,6 +782,8 @@ async def main():
     prices come from the file the Mac pushed instead of a live fetch.
     """
     snapshot_path = os.environ.get("GAS_SNAPSHOT")
+    if os.environ.get("WEEKEND_CATCHUP", "").lower() == "true":
+        return weekend_catchup(snapshot_path)
     if snapshot_path:
         snap = gas_snapshot.load(snapshot_path)
         hours = gas_snapshot.age_hours(snap)
