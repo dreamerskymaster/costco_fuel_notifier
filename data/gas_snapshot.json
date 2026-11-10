@@ -1,7 +1,25 @@
 {
- "fetched_at": "2026-11-10T13:08:42+00:00",
+ "fetched_at": "2026-11-10T16:24:24+00:00",
  "source": "mac",
  "stations": [
+  {
+   "name": "Costco",
+   "zip": "07608",
+   "city": "Teterboro",
+   "state": "NJ",
+   "area_label": "Teterboro (Costco)",
+   "distance": "N/A",
+   "price": 3.77,
+   "formatted_price": "$3.77",
+   "best_card": "Citi Costco (4%)",
+   "net_price": 3.62,
+   "formatted_net_price": "$3.62",
+   "card_note": "Visa Only",
+   "stale": false,
+   "last_updated": "Nov 10, 11:05 AM",
+   "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
+  },
   {
    "name": "Fuel 4",
    "zip": "07601",
@@ -39,24 +57,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
   },
   {
-   "name": "Costco",
-   "zip": "07608",
-   "city": "Teterboro",
-   "state": "NJ",
-   "area_label": "Teterboro (Costco)",
-   "distance": "N/A",
-   "price": 3.83,
-   "formatted_price": "$3.83",
-   "best_card": "Citi Costco (4%)",
-   "net_price": 3.68,
-   "formatted_net_price": "$3.68",
-   "card_note": "Visa Only",
-   "stale": false,
-   "last_updated": "Nov 10, 07:04 AM",
-   "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
-  },
-  {
    "name": "Fuel Stop",
    "zip": "07047",
    "city": "North Bergen",
@@ -88,7 +88,7 @@
    "formatted_net_price": "$3.69",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 10, 07:04 AM",
+   "last_updated": "Nov 10, 10:19 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -124,7 +124,7 @@
    "formatted_net_price": "$3.72",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 10, 07:31 AM",
+   "last_updated": "Nov 10, 10:31 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
@@ -358,7 +358,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 10, 07:31 AM",
+   "last_updated": "Nov 10, 10:30 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -412,7 +412,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 10, 07:01 AM",
+   "last_updated": "Nov 10, 10:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -447,7 +447,7 @@
    "net_price": 3.84,
    "formatted_net_price": "$3.84",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 09, 10:07 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07002"
@@ -777,6 +777,24 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07047"
   },
   {
+   "name": "Sunoco",
+   "zip": "07657",
+   "city": "Ridgefield",
+   "state": "NJ",
+   "area_label": "Ridgefield (Rt 46 / GWB Exit)",
+   "distance": "N/A",
+   "price": 4.16,
+   "formatted_price": "$4.16",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.99,
+   "formatted_net_price": "$3.99",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 10, 10:48 AM",
+   "waze_link": "https://waze.com/ul?q=Sunoco+07657&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07657"
+  },
+  {
    "name": "BP",
    "zip": "10801",
    "city": "New Rochelle",
@@ -789,7 +807,7 @@
    "net_price": 4.02,
    "formatted_net_price": "$4.02",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 09, 09:41 PM",
    "waze_link": "https://waze.com/ul?q=BP+10801&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+10801"
