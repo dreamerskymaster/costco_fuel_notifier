@@ -1,13 +1,13 @@
 {
- "fetched_at": "2026-11-10T13:08:42+00:00",
- "generated_at": "2026-11-10T13:09:11+00:00",
+ "fetched_at": "2026-11-10T16:24:24+00:00",
+ "generated_at": "2026-11-10T16:24:54+00:00",
  "best": {
   "name": "Costco",
-  "price": 3.83,
-  "net_price": 3.68,
+  "price": 3.77,
+  "net_price": 3.62,
   "best_card": "Citi Costco (4%)",
   "card_note": "Visa Only",
-  "last_updated": "Nov 10, 07:04 AM",
+  "last_updated": "Nov 10, 11:05 AM",
   "stale": false,
   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
   "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
@@ -287,7 +287,7 @@
    ],
    [
     "2026-11-10",
-    3.83
+    3.77
    ]
   ]
  },
@@ -296,11 +296,11 @@
    "zip": "07608",
    "where": "Teterboro, NJ",
    "name": "Costco",
-   "price": 3.83,
-   "net_price": 3.68,
+   "price": 3.77,
+   "net_price": 3.62,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 10, 07:04 AM",
+   "last_updated": "Nov 10, 11:05 AM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -313,7 +313,7 @@
    "net_price": 3.69,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 10, 07:04 AM",
+   "last_updated": "Nov 10, 10:19 AM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -325,23 +325,6 @@
  ],
  "areas": [
   {
-   "label": "New Rochelle (Costco)",
-   "zip": "10801",
-   "stations": [
-    {
-     "name": "BP",
-     "price": 4.19,
-     "net_price": 4.02,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 09, 09:41 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+10801",
-     "waze_link": "https://waze.com/ul?q=BP+10801&navigate=yes"
-    }
-   ]
-  },
-  {
    "label": "Ridgefield (Rt 46 / GWB Exit)",
    "zip": "07657",
    "stations": [
@@ -351,10 +334,21 @@
      "net_price": 3.72,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 10, 07:31 AM",
+     "last_updated": "Nov 10, 10:31 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
      "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
+    },
+    {
+     "name": "Sunoco",
+     "price": 4.16,
+     "net_price": 3.99,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 10, 10:48 AM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07657",
+     "waze_link": "https://waze.com/ul?q=Sunoco+07657&navigate=yes"
     }
    ]
   },
@@ -364,11 +358,11 @@
    "stations": [
     {
      "name": "Costco",
-     "price": 3.83,
-     "net_price": 3.68,
+     "price": 3.77,
+     "net_price": 3.62,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 10, 07:04 AM",
+     "last_updated": "Nov 10, 11:05 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
      "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -385,7 +379,7 @@
      "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 10, 07:31 AM",
+     "last_updated": "Nov 10, 10:30 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
      "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
@@ -519,7 +513,7 @@
      "net_price": 3.69,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 10, 07:04 AM",
+     "last_updated": "Nov 10, 10:19 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
      "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -530,21 +524,10 @@
      "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 10, 07:01 AM",
+     "last_updated": "Nov 10, 10:01 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
-    },
-    {
-     "name": "Exxon",
-     "price": 4,
-     "net_price": 3.84,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 09, 10:07 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07002",
-     "waze_link": "https://waze.com/ul?q=Exxon+07002&navigate=yes"
     },
     {
      "name": "BP",
@@ -566,9 +549,9 @@
  ],
  "outlook_lines": [
   "Buy only what you need — prices are likely to ease.",
-  "Next week (NY/NJ average): 97% chance prices fall, expected -5.7¢/gal (typical error ±3.1¢). Confidence: High.",
-  "Expect about -6¢/gal next week; waiting on a full fill saves ~$1.05. Today's price is already low versus recent weeks, so filling now is reasonable.",
+  "Next week (NY/NJ average): 96% chance prices fall, expected -4.8¢/gal (typical error ±3.1¢). Confidence: High.",
+  "Expect about -5¢/gal next week; waiting on a full fill saves ~$0.89. Small stakes either way. Today's price is already low versus recent weeks, so filling now is reasonable.",
   "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 35 logged days.",
-  "Model record since 2008: right 77% of 982 weeks vs 56% for always guessing the usual direction. When it leaned this hard before it was right 92% of 312 weeks."
+  "Model record since 2008: right 77% of 983 weeks vs 56% for always guessing the usual direction. When it leaned this hard before it was right 92% of 313 weeks."
  ]
 }
