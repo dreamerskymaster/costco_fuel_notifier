@@ -7,8 +7,11 @@ on:
     branches: [main]
     paths: ['data/gas_snapshot.json']
   schedule:
-    # Daily watchdog only: fails (so GitHub emails) when the Mac hasn't pushed for 24 h
+    # Daily watchdog: fails (so GitHub emails) when the Mac hasn't pushed for 24 h
     - cron: '0 14 * * *'
+    # Friday/Sunday catch-up: sends the weekend trip alert from the last Mac prices (up to 12 h
+    # old) if the Mac slept through the window. 17:30/20:30 UTC = 12:30/3:30 PM EST, 1:30/4:30 PM EDT.
+    - cron: '30 17,20 * * 5,0'
 
   workflow_dispatch:
     inputs:
@@ -26,7 +29,7 @@ concurrency:
 
 jobs:
   watchdog:
-    if: github.event_name == 'schedule'
+    if: github.event_name == 'schedule' && github.event.schedule == '0 14 * * *'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -34,7 +37,7 @@ jobs:
         run: python3 gas_snapshot.py check --max-age-h 24
 
   run-tracker:
-    if: github.event_name != 'schedule'
+    if: github.event_name != 'schedule' || github.event.schedule != '0 14 * * *'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -64,6 +67,7 @@ jobs:
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           GAS_SNAPSHOT: data/gas_snapshot.json
+          WEEKEND_CATCHUP: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
         run: python gas_tracker.py
 
       - name: Commit price history
