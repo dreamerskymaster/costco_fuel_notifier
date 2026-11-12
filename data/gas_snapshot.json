@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-12T02:13:08+00:00",
+ "fetched_at": "2026-11-12T05:13:23+00:00",
  "source": "mac",
  "stations": [
   {
@@ -16,7 +16,7 @@
    "formatted_net_price": "$3.62",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 11, 09:04 PM",
+   "last_updated": "Nov 12, 12:04 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -70,7 +70,7 @@
    "formatted_net_price": "$3.64",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 11, 08:16 PM",
+   "last_updated": "Nov 12, 12:04 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -91,24 +91,6 @@
    "last_updated": "Nov 11, 07:52 AM",
    "waze_link": "https://waze.com/ul?q=Fuel+Stop+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Stop+07047"
-  },
-  {
-   "name": "QuickChek",
-   "zip": "07657",
-   "city": "Ridgefield",
-   "state": "NJ",
-   "area_label": "Ridgefield (Rt 46 / GWB Exit)",
-   "distance": "N/A",
-   "price": 3.85,
-   "formatted_price": "$3.85",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.7,
-   "formatted_net_price": "$3.70",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 11, 08:01 PM",
-   "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
   {
    "name": "Lukoil",
@@ -142,7 +124,7 @@
    "formatted_net_price": "$3.70",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 11, 03:22 PM",
+   "last_updated": "Nov 12, 12:10 AM",
    "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
   },
@@ -183,24 +165,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07306"
   },
   {
-   "name": "QuickChek",
-   "zip": "07601",
-   "city": "Hackensack",
-   "state": "NJ",
-   "area_label": "Hackensack (Rt 17 Corridor)",
-   "distance": "N/A",
-   "price": 3.89,
-   "formatted_price": "$3.89",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.73,
-   "formatted_net_price": "$3.73",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 11, 08:01 PM",
-   "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
-  },
-  {
    "name": "BP",
    "zip": "07047",
    "city": "North Bergen",
@@ -219,24 +183,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
   {
-   "name": "QuickChek",
-   "zip": "07002",
-   "city": "Bayonne",
-   "state": "NJ",
-   "area_label": "Bayonne (Costco / ~4 mi South)",
-   "distance": "N/A",
-   "price": 3.89,
-   "formatted_price": "$3.89",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.73,
-   "formatted_net_price": "$3.73",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 11, 08:31 PM",
-   "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
-  },
-  {
    "name": "Exxon",
    "zip": "07306",
    "city": "Jersey City",
@@ -249,8 +195,8 @@
    "net_price": 3.75,
    "formatted_net_price": "$3.75",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 10, 12:43 PM",
+   "stale": false,
+   "last_updated": "Nov 11, 09:40 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306"
   },
@@ -291,6 +237,24 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Broadway+Diesel+%26+Gas+07306"
   },
   {
+   "name": "Speedway",
+   "zip": "07305",
+   "city": "Jersey City",
+   "state": "NJ",
+   "area_label": "Jersey City (Route 440)",
+   "distance": "N/A",
+   "price": 3.94,
+   "formatted_price": "$3.94",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.78,
+   "formatted_net_price": "$3.78",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 11, 10:28 PM",
+   "waze_link": "https://waze.com/ul?q=Speedway+07305&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Speedway+07305"
+  },
+  {
    "name": "BP",
    "zip": "07601",
    "city": "Hackensack",
@@ -303,8 +267,8 @@
    "net_price": 3.79,
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 10, 07:57 PM",
+   "stale": false,
+   "last_updated": "Nov 11, 11:10 PM",
    "waze_link": "https://waze.com/ul?q=BP+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07601"
   },
@@ -340,7 +304,7 @@
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
    "stale": true,
-   "last_updated": "Nov 10, 05:42 AM",
+   "last_updated": "Nov 10, 12:39 PM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
@@ -435,24 +399,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07306"
   },
   {
-   "name": "Speedway",
-   "zip": "07305",
-   "city": "Jersey City",
-   "state": "NJ",
-   "area_label": "Jersey City (Route 440)",
-   "distance": "N/A",
-   "price": 3.99,
-   "formatted_price": "$3.99",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.83,
-   "formatted_net_price": "$3.83",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 10, 12:51 PM",
-   "waze_link": "https://waze.com/ul?q=Speedway+07305&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Speedway+07305"
-  },
-  {
    "name": "Exxon",
    "zip": "07305",
    "city": "Jersey City",
@@ -483,8 +429,8 @@
    "net_price": 3.84,
    "formatted_net_price": "$3.84",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 10, 06:10 PM",
+   "stale": false,
+   "last_updated": "Nov 11, 10:00 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07002"
   },
@@ -502,7 +448,7 @@
    "formatted_net_price": "$3.89",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 11, 03:06 PM",
+   "last_updated": "Nov 11, 09:14 PM",
    "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854"
   },
@@ -628,7 +574,7 @@
    "formatted_net_price": "$3.93",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 11, 03:18 PM",
+   "last_updated": "Nov 12, 12:10 AM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
@@ -669,24 +615,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07002"
   },
   {
-   "name": "Shell",
-   "zip": "07601",
-   "city": "Hackensack",
-   "state": "NJ",
-   "area_label": "Hackensack (Rt 17 Corridor)",
-   "distance": "N/A",
-   "price": 4.11,
-   "formatted_price": "$4.11",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.95,
-   "formatted_net_price": "$3.95",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 10, 07:40 PM",
-   "waze_link": "https://waze.com/ul?q=Shell+07601&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07601"
-  },
-  {
    "name": "Sunoco",
    "zip": "07657",
    "city": "Ridgefield",
@@ -699,7 +627,7 @@
    "net_price": 3.97,
    "formatted_net_price": "$3.97",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 11, 11:11 AM",
    "waze_link": "https://waze.com/ul?q=Sunoco+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07657"
@@ -793,6 +721,24 @@
    "last_updated": "Nov 10, 06:08 PM",
    "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854"
+  },
+  {
+   "name": "Exxon",
+   "zip": "07032",
+   "city": "Kearny",
+   "state": "NJ",
+   "area_label": "Kearny (Rt 7 / ~2 mi West)",
+   "distance": "N/A",
+   "price": 4.37,
+   "formatted_price": "$4.37",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 4.2,
+   "formatted_net_price": "$4.20",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 11, 09:41 PM",
+   "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
   },
   {
    "name": "BP",
