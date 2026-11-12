@@ -1,25 +1,7 @@
 {
- "fetched_at": "2026-11-12T05:13:23+00:00",
+ "fetched_at": "2026-11-12T08:13:35+00:00",
  "source": "mac",
  "stations": [
-  {
-   "name": "Costco",
-   "zip": "07608",
-   "city": "Teterboro",
-   "state": "NJ",
-   "area_label": "Teterboro (Costco)",
-   "distance": "N/A",
-   "price": 3.77,
-   "formatted_price": "$3.77",
-   "best_card": "Citi Costco (4%)",
-   "net_price": 3.62,
-   "formatted_net_price": "$3.62",
-   "card_note": "Visa Only",
-   "stale": false,
-   "last_updated": "Nov 12, 12:04 AM",
-   "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
-  },
   {
    "name": "Fuel 4",
    "zip": "07601",
@@ -51,8 +33,8 @@
    "net_price": 3.62,
    "formatted_net_price": "$3.62",
    "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 11, 03:17 PM",
+   "stale": true,
+   "last_updated": "Nov 11, 02:01 PM",
    "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
   },
@@ -70,7 +52,7 @@
    "formatted_net_price": "$3.64",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 12, 12:04 AM",
+   "last_updated": "Nov 12, 02:04 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -91,6 +73,24 @@
    "last_updated": "Nov 11, 07:52 AM",
    "waze_link": "https://waze.com/ul?q=Fuel+Stop+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Stop+07047"
+  },
+  {
+   "name": "QuickChek",
+   "zip": "07657",
+   "city": "Ridgefield",
+   "state": "NJ",
+   "area_label": "Ridgefield (Rt 46 / GWB Exit)",
+   "distance": "N/A",
+   "price": 3.85,
+   "formatted_price": "$3.85",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.7,
+   "formatted_net_price": "$3.70",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 12, 03:01 AM",
+   "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
   {
    "name": "Lukoil",
@@ -129,24 +129,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
   },
   {
-   "name": "Kearny Gas",
-   "zip": "07032",
-   "city": "Kearny",
-   "state": "NJ",
-   "area_label": "Kearny (Rt 7 / ~2 mi West)",
-   "distance": "N/A",
-   "price": 3.85,
-   "formatted_price": "$3.85",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.7,
-   "formatted_net_price": "$3.70",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 10, 04:43 PM",
-   "waze_link": "https://waze.com/ul?q=Kearny+Gas+07032&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Kearny+Gas+07032"
-  },
-  {
    "name": "Fuel 4",
    "zip": "07306",
    "city": "Jersey City",
@@ -159,10 +141,28 @@
    "net_price": 3.72,
    "formatted_net_price": "$3.72",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 11, 12:46 PM",
    "waze_link": "https://waze.com/ul?q=Fuel+4+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07306"
+  },
+  {
+   "name": "QuickChek",
+   "zip": "07601",
+   "city": "Hackensack",
+   "state": "NJ",
+   "area_label": "Hackensack (Rt 17 Corridor)",
+   "distance": "N/A",
+   "price": 3.89,
+   "formatted_price": "$3.89",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.73,
+   "formatted_net_price": "$3.73",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 12, 02:32 AM",
+   "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
   {
    "name": "BP",
@@ -181,6 +181,24 @@
    "last_updated": "Nov 10, 12:40 PM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
+  },
+  {
+   "name": "QuickChek",
+   "zip": "07002",
+   "city": "Bayonne",
+   "state": "NJ",
+   "area_label": "Bayonne (Costco / ~4 mi South)",
+   "distance": "N/A",
+   "price": 3.89,
+   "formatted_price": "$3.89",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.73,
+   "formatted_net_price": "$3.73",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 12, 02:32 AM",
+   "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
   {
    "name": "Exxon",
@@ -321,7 +339,7 @@
    "net_price": 3.79,
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 11, 02:10 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306"
@@ -339,7 +357,7 @@
    "net_price": 3.79,
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 11, 03:03 PM",
    "waze_link": "https://waze.com/ul?q=BP+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07002"
@@ -375,8 +393,8 @@
    "net_price": 3.83,
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 10, 04:40 PM",
+   "stale": false,
+   "last_updated": "Nov 12, 12:40 AM",
    "waze_link": "https://waze.com/ul?q=Exxon+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07047"
   },
@@ -579,24 +597,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
   {
-   "name": "Exxon",
-   "zip": "07032",
-   "city": "Kearny",
-   "state": "NJ",
-   "area_label": "Kearny (Rt 7 / ~2 mi West)",
-   "distance": "N/A",
-   "price": 4.09,
-   "formatted_price": "$4.09",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.93,
-   "formatted_net_price": "$3.93",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 11, 06:40 PM",
-   "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
-  },
-  {
    "name": "BP",
    "zip": "07002",
    "city": "Bayonne",
@@ -687,24 +687,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+10801"
   },
   {
-   "name": "Wawa",
-   "zip": "07032",
-   "city": "Kearny",
-   "state": "NJ",
-   "area_label": "Kearny (Rt 7 / ~2 mi West)",
-   "distance": "N/A",
-   "price": 4.23,
-   "formatted_price": "$4.23",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 4.06,
-   "formatted_net_price": "$4.06",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 11, 03:40 PM",
-   "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032"
-  },
-  {
    "name": "Shell",
    "zip": "06854",
    "city": "Norwalk",
@@ -721,24 +703,6 @@
    "last_updated": "Nov 10, 06:08 PM",
    "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854"
-  },
-  {
-   "name": "Exxon",
-   "zip": "07032",
-   "city": "Kearny",
-   "state": "NJ",
-   "area_label": "Kearny (Rt 7 / ~2 mi West)",
-   "distance": "N/A",
-   "price": 4.37,
-   "formatted_price": "$4.37",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 4.2,
-   "formatted_net_price": "$4.20",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 11, 09:41 PM",
-   "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
   },
   {
    "name": "BP",
@@ -775,24 +739,6 @@
    "last_updated": "Nov 11, 07:48 PM",
    "waze_link": "https://waze.com/ul?q=Shell+10801&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+10801"
-  },
-  {
-   "name": "Exxon",
-   "zip": "07032",
-   "city": "Kearny",
-   "state": "NJ",
-   "area_label": "Kearny (Rt 7 / ~2 mi West)",
-   "distance": "N/A",
-   "price": 4.49,
-   "formatted_price": "$4.49",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 4.31,
-   "formatted_net_price": "$4.31",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 10, 02:40 PM",
-   "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
   },
   {
    "name": "Mobil",
@@ -879,7 +825,7 @@
    "net_price": 4.79,
    "formatted_net_price": "$4.79",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 11, 02:10 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07002"
