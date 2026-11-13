@@ -1,7 +1,25 @@
 {
- "fetched_at": "2026-11-13T12:57:43+00:00",
+ "fetched_at": "2026-11-13T15:53:19+00:00",
  "source": "mac",
  "stations": [
+  {
+   "name": "Costco",
+   "zip": "07002",
+   "city": "Bayonne",
+   "state": "NJ",
+   "area_label": "Bayonne (Costco / ~4 mi South)",
+   "distance": "N/A",
+   "price": 3.73,
+   "formatted_price": "$3.73",
+   "best_card": "Citi Costco (4%)",
+   "net_price": 3.58,
+   "formatted_net_price": "$3.58",
+   "card_note": "Visa Only",
+   "stale": false,
+   "last_updated": "Nov 13, 10:03 AM",
+   "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
+  },
   {
    "name": "Costco",
    "zip": "07608",
@@ -16,7 +34,7 @@
    "formatted_net_price": "$3.62",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 13, 06:05 AM",
+   "last_updated": "Nov 13, 10:03 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -39,24 +57,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
   },
   {
-   "name": "Costco",
-   "zip": "07002",
-   "city": "Bayonne",
-   "state": "NJ",
-   "area_label": "Bayonne (Costco / ~4 mi South)",
-   "distance": "N/A",
-   "price": 3.79,
-   "formatted_price": "$3.79",
-   "best_card": "Citi Costco (4%)",
-   "net_price": 3.64,
-   "formatted_net_price": "$3.64",
-   "card_note": "Visa Only",
-   "stale": false,
-   "last_updated": "Nov 13, 07:04 AM",
-   "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
-  },
-  {
    "name": "Fuel Stop",
    "zip": "07047",
    "city": "North Bergen",
@@ -69,7 +69,7 @@
    "net_price": 3.66,
    "formatted_net_price": "$3.66",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 12, 09:25 PM",
    "waze_link": "https://waze.com/ul?q=Fuel+Stop+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Stop+07047"
@@ -88,7 +88,7 @@
    "formatted_net_price": "$3.67",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 13, 07:31 AM",
+   "last_updated": "Nov 13, 10:31 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
@@ -129,24 +129,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Lukoil+07601"
   },
   {
-   "name": "Delta",
-   "zip": "07047",
-   "city": "North Bergen",
-   "state": "NJ",
-   "area_label": "North Bergen (Tonnelle Ave)",
-   "distance": "N/A",
-   "price": 3.85,
-   "formatted_price": "$3.85",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.7,
-   "formatted_net_price": "$3.70",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 12, 07:08 AM",
-   "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
-  },
-  {
    "name": "BP",
    "zip": "07047",
    "city": "North Bergen",
@@ -165,6 +147,24 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
   {
+   "name": "Delta",
+   "zip": "07047",
+   "city": "North Bergen",
+   "state": "NJ",
+   "area_label": "North Bergen (Tonnelle Ave)",
+   "distance": "N/A",
+   "price": 3.85,
+   "formatted_price": "$3.85",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.7,
+   "formatted_net_price": "$3.70",
+   "card_note": "Standalone Gas Station",
+   "stale": true,
+   "last_updated": "Nov 12, 07:08 AM",
+   "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
+  },
+  {
    "name": "CITGO",
    "zip": "07047",
    "city": "North Bergen",
@@ -178,7 +178,7 @@
    "formatted_net_price": "$3.72",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 12, 09:27 PM",
+   "last_updated": "Nov 13, 08:03 AM",
    "waze_link": "https://waze.com/ul?q=CITGO+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=CITGO+07047"
   },
@@ -213,7 +213,7 @@
    "net_price": 3.72,
    "formatted_net_price": "$3.72",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 12, 09:11 PM",
    "waze_link": "https://waze.com/ul?q=Lukoil+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Lukoil+07306"
@@ -250,7 +250,7 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 13, 07:31 AM",
+   "last_updated": "Nov 13, 10:31 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -304,7 +304,7 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 13, 07:01 AM",
+   "last_updated": "Nov 13, 10:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -322,7 +322,7 @@
    "formatted_net_price": "$3.75",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 13, 05:49 AM",
+   "last_updated": "Nov 13, 10:10 AM",
    "waze_link": "https://waze.com/ul?q=Shell+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07047"
   },
@@ -375,7 +375,7 @@
    "net_price": 3.79,
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 12, 09:40 PM",
    "waze_link": "https://waze.com/ul?q=Atlantis+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Atlantis+06854"
@@ -465,7 +465,7 @@
    "net_price": 3.83,
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 12, 10:53 PM",
    "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854"
@@ -897,7 +897,7 @@
    "net_price": 4.31,
    "formatted_net_price": "$4.31",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 12, 09:10 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
