@@ -1,7 +1,25 @@
 {
- "fetched_at": "2026-11-15T17:08:04+00:00",
+ "fetched_at": "2026-11-15T20:08:17+00:00",
  "source": "mac",
  "stations": [
+  {
+   "name": "Fuel Express",
+   "zip": "07047",
+   "city": "North Bergen",
+   "state": "NJ",
+   "area_label": "North Bergen (Tonnelle Ave)",
+   "distance": "N/A",
+   "price": 3.67,
+   "formatted_price": "$3.67",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.52,
+   "formatted_net_price": "$3.52",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 15, 01:11 PM",
+   "waze_link": "https://waze.com/ul?q=Fuel+Express+07047&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Express+07047"
+  },
   {
    "name": "Costco",
    "zip": "07002",
@@ -16,7 +34,7 @@
    "formatted_net_price": "$3.54",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 15, 11:04 AM",
+   "last_updated": "Nov 15, 03:03 PM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -34,7 +52,7 @@
    "formatted_net_price": "$3.56",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 15, 11:04 AM",
+   "last_updated": "Nov 15, 03:03 PM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -73,24 +91,6 @@
    "last_updated": "Nov 15, 11:05 AM",
    "waze_link": "https://waze.com/ul?q=Fuel+4+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07601"
-  },
-  {
-   "name": "Fuel Express",
-   "zip": "07047",
-   "city": "North Bergen",
-   "state": "NJ",
-   "area_label": "North Bergen (Tonnelle Ave)",
-   "distance": "N/A",
-   "price": 3.77,
-   "formatted_price": "$3.77",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.62,
-   "formatted_net_price": "$3.62",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 14, 08:17 PM",
-   "waze_link": "https://waze.com/ul?q=Fuel+Express+07047&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Express+07047"
   },
   {
    "name": "Fuel Stop",
@@ -160,7 +160,7 @@
    "formatted_net_price": "$3.67",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 15, 11:32 AM",
+   "last_updated": "Nov 15, 02:31 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
@@ -177,8 +177,8 @@
    "net_price": 3.69,
    "formatted_net_price": "$3.69",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 13, 03:28 PM",
+   "stale": false,
+   "last_updated": "Nov 15, 12:09 PM",
    "waze_link": "https://waze.com/ul?q=Broadway+Diesel+%26+Gas+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Broadway+Diesel+%26+Gas+07306"
   },
@@ -250,7 +250,7 @@
    "formatted_net_price": "$3.71",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 15, 10:43 AM",
+   "last_updated": "Nov 15, 12:59 PM",
    "waze_link": "https://waze.com/ul?q=Speedway+07305&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Speedway+07305"
   },
@@ -322,7 +322,7 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 15, 11:32 AM",
+   "last_updated": "Nov 15, 02:31 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -357,8 +357,8 @@
    "net_price": 3.73,
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 14, 01:21 PM",
+   "stale": false,
+   "last_updated": "Nov 15, 01:47 PM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
@@ -412,7 +412,7 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 15, 11:32 AM",
+   "last_updated": "Nov 15, 02:31 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -502,7 +502,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 15, 10:52 AM",
+   "last_updated": "Nov 15, 02:11 PM",
    "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854"
   },
@@ -537,7 +537,7 @@
    "net_price": 3.83,
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 15, 12:10 AM",
    "waze_link": "https://waze.com/ul?q=Sunoco+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07601"
@@ -705,24 +705,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Gulf+10801"
   },
   {
-   "name": "Exxon",
-   "zip": "07032",
-   "city": "Kearny",
-   "state": "NJ",
-   "area_label": "Kearny (Rt 7 / ~2 mi West)",
-   "distance": "N/A",
-   "price": 4.09,
-   "formatted_price": "$4.09",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.93,
-   "formatted_net_price": "$3.93",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 14, 09:11 PM",
-   "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
-  },
-  {
    "name": "Wawa",
    "zip": "07032",
    "city": "Kearny",
@@ -739,6 +721,24 @@
    "last_updated": "Nov 14, 09:10 PM",
    "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032"
+  },
+  {
+   "name": "Exxon",
+   "zip": "07032",
+   "city": "Kearny",
+   "state": "NJ",
+   "area_label": "Kearny (Rt 7 / ~2 mi West)",
+   "distance": "N/A",
+   "price": 4.09,
+   "formatted_price": "$4.09",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.93,
+   "formatted_net_price": "$3.93",
+   "card_note": "Standalone Gas Station",
+   "stale": true,
+   "last_updated": "Nov 14, 09:11 PM",
+   "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
   },
   {
    "name": "Shell",
