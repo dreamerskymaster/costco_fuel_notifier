@@ -1,17 +1,17 @@
 {
- "fetched_at": "2026-11-15T17:08:04+00:00",
- "generated_at": "2026-11-15T17:08:23+00:00",
+ "fetched_at": "2026-11-15T20:08:17+00:00",
+ "generated_at": "2026-11-15T20:08:41+00:00",
  "best": {
-  "name": "Costco",
-  "price": 3.69,
-  "net_price": 3.54,
-  "best_card": "Citi Costco (4%)",
-  "card_note": "Visa Only",
-  "last_updated": "Nov 15, 11:04 AM",
+  "name": "Fuel Express",
+  "price": 3.67,
+  "net_price": 3.52,
+  "best_card": "Citi 4% / Amex 3%",
+  "card_note": "Standalone Gas Station",
+  "last_updated": "Nov 15, 01:11 PM",
   "stale": false,
-  "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
-  "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
-  "area": "Bayonne (Costco / ~4 mi South)"
+  "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Express+07047",
+  "waze_link": "https://waze.com/ul?q=Fuel+Express+07047&navigate=yes",
+  "area": "North Bergen (Tonnelle Ave)"
  },
  "home": {
   "cheapest": {
@@ -20,7 +20,7 @@
    "net_price": 3.83,
    "best_card": "Citi 4% / Amex 3%",
    "card_note": "Standalone Gas Station",
-   "last_updated": "Nov 15, 10:52 AM",
+   "last_updated": "Nov 15, 02:11 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
    "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
@@ -29,7 +29,7 @@
    "date": "2026-11-12",
    "price": 3.95
   },
-  "decision_note": "SUNDAY_RETURN"
+  "decision_note": "SUNDAY_RETURN alert already sent today"
  },
  "trend": {
   "norwalk": [
@@ -342,7 +342,7 @@
    "net_price": 3.56,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 15, 11:04 AM",
+   "last_updated": "Nov 15, 03:03 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -355,7 +355,7 @@
    "net_price": 3.54,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 15, 11:04 AM",
+   "last_updated": "Nov 15, 03:03 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -376,7 +376,7 @@
      "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 15, 10:52 AM",
+     "last_updated": "Nov 15, 02:11 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
      "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
@@ -393,7 +393,7 @@
      "net_price": 3.67,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 15, 11:32 AM",
+     "last_updated": "Nov 15, 02:31 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
      "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
@@ -410,7 +410,7 @@
      "net_price": 3.56,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 15, 11:04 AM",
+     "last_updated": "Nov 15, 03:03 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
      "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -449,7 +449,7 @@
      "net_price": 3.73,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 15, 11:32 AM",
+     "last_updated": "Nov 15, 02:31 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
      "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
@@ -464,17 +464,6 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07601",
      "waze_link": "https://waze.com/ul?q=Wawa+07601&navigate=yes"
-    },
-    {
-     "name": "Sunoco",
-     "price": 3.99,
-     "net_price": 3.83,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 15, 12:10 AM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07601",
-     "waze_link": "https://waze.com/ul?q=Sunoco+07601&navigate=yes"
     }
    ]
   },
@@ -483,12 +472,34 @@
    "zip": "07047",
    "stations": [
     {
+     "name": "Fuel Express",
+     "price": 3.67,
+     "net_price": 3.52,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 15, 01:11 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Express+07047",
+     "waze_link": "https://waze.com/ul?q=Fuel+Express+07047&navigate=yes"
+    },
+    {
      "name": "BP",
      "price": 3.85,
      "net_price": 3.7,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
      "last_updated": "Nov 15, 10:47 AM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047",
+     "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes"
+    },
+    {
+     "name": "BP",
+     "price": 3.89,
+     "net_price": 3.73,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 15, 01:47 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047",
      "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes"
@@ -507,6 +518,23 @@
    ]
   },
   {
+   "label": "Jersey City (Westside Ave)",
+   "zip": "07306",
+   "stations": [
+    {
+     "name": "Broadway Diesel & Gas",
+     "price": 3.84,
+     "net_price": 3.69,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 15, 12:09 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Broadway+Diesel+%26+Gas+07306",
+     "waze_link": "https://waze.com/ul?q=Broadway+Diesel+%26+Gas+07306&navigate=yes"
+    }
+   ]
+  },
+  {
    "label": "Jersey City (Route 440)",
    "zip": "07305",
    "stations": [
@@ -516,7 +544,7 @@
      "net_price": 3.71,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 15, 10:43 AM",
+     "last_updated": "Nov 15, 12:59 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Speedway+07305",
      "waze_link": "https://waze.com/ul?q=Speedway+07305&navigate=yes"
@@ -533,7 +561,7 @@
      "net_price": 3.54,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 15, 11:04 AM",
+     "last_updated": "Nov 15, 03:03 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
      "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -544,7 +572,7 @@
      "net_price": 3.73,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 15, 11:32 AM",
+     "last_updated": "Nov 15, 02:31 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
@@ -571,7 +599,7 @@
   "Buy only what you need — prices are likely to ease.",
   "Next week (NY/NJ average): 100% chance prices fall, expected -11.8¢/gal (typical error ±3.1¢). Confidence: High.",
   "Expect about -12¢/gal next week; waiting on a full fill saves ~$2.19. Today's price is already low versus recent weeks, so filling now is reasonable.",
-  "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 39 logged days.",
+  "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 15 logged days.",
   "Model record since 2008: right 77% of 983 weeks vs 56% for always guessing the usual direction. When it leaned this hard before it was right 92% of 313 weeks."
  ]
 }
