@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-16T11:12:37+00:00",
+ "fetched_at": "2026-11-16T14:12:50+00:00",
  "source": "mac",
  "stations": [
   {
@@ -16,7 +16,7 @@
    "formatted_net_price": "$3.54",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 16, 05:26 AM",
+   "last_updated": "Nov 16, 09:03 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -34,7 +34,7 @@
    "formatted_net_price": "$3.56",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 16, 05:05 AM",
+   "last_updated": "Nov 16, 09:03 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -87,7 +87,7 @@
    "net_price": 3.62,
    "formatted_net_price": "$3.62",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 15, 06:42 PM",
    "waze_link": "https://waze.com/ul?q=Fuel+4+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07601"
@@ -123,7 +123,7 @@
    "net_price": 3.64,
    "formatted_net_price": "$3.64",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 15, 06:42 PM",
    "waze_link": "https://waze.com/ul?q=Unbranded+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Unbranded+07601"
@@ -178,7 +178,7 @@
    "formatted_net_price": "$3.67",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 05:03 AM",
+   "last_updated": "Nov 16, 08:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
@@ -291,6 +291,24 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306"
   },
   {
+   "name": "Wawa",
+   "zip": "07601",
+   "city": "Hackensack",
+   "state": "NJ",
+   "area_label": "Hackensack (Rt 17 Corridor)",
+   "distance": "N/A",
+   "price": 3.89,
+   "formatted_price": "$3.89",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.73,
+   "formatted_net_price": "$3.73",
+   "card_note": "Standalone Gas Station",
+   "stale": true,
+   "last_updated": "Nov 15, 11:34 AM",
+   "waze_link": "https://waze.com/ul?q=Wawa+07601&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07601"
+  },
+  {
    "name": "BP",
    "zip": "07601",
    "city": "Hackensack",
@@ -322,27 +340,9 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 05:03 AM",
+   "last_updated": "Nov 16, 08:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
-  },
-  {
-   "name": "Wawa",
-   "zip": "07601",
-   "city": "Hackensack",
-   "state": "NJ",
-   "area_label": "Hackensack (Rt 17 Corridor)",
-   "distance": "N/A",
-   "price": 3.89,
-   "formatted_price": "$3.89",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.73,
-   "formatted_net_price": "$3.73",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 15, 11:34 AM",
-   "waze_link": "https://waze.com/ul?q=Wawa+07601&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07601"
   },
   {
    "name": "Shell",
@@ -376,7 +376,7 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 05:49 AM",
+   "last_updated": "Nov 16, 07:14 AM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
@@ -430,7 +430,7 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 05:03 AM",
+   "last_updated": "Nov 16, 08:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -537,8 +537,8 @@
    "net_price": 3.83,
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 14, 09:10 AM",
+   "stale": false,
+   "last_updated": "Nov 16, 07:12 AM",
    "waze_link": "https://waze.com/ul?q=Shell+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07601"
   },
@@ -807,7 +807,7 @@
    "net_price": 4.41,
    "formatted_net_price": "$4.41",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 15, 07:21 PM",
    "waze_link": "https://waze.com/ul?q=Mobil+10801&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Mobil+10801"
