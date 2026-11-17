@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-16T21:52:00+00:00",
+ "fetched_at": "2026-11-17T03:04:54+00:00",
  "source": "mac",
  "stations": [
   {
@@ -16,7 +16,7 @@
    "formatted_net_price": "$3.54",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 16, 03:43 PM",
+   "last_updated": "Nov 16, 09:08 PM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -52,7 +52,7 @@
    "formatted_net_price": "$3.60",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 16, 03:35 PM",
+   "last_updated": "Nov 16, 08:05 PM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -106,7 +106,7 @@
    "formatted_net_price": "$3.64",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 04:32 PM",
+   "last_updated": "Nov 16, 09:01 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
@@ -141,7 +141,7 @@
    "net_price": 3.64,
    "formatted_net_price": "$3.64",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 16, 09:55 AM",
    "waze_link": "https://waze.com/ul?q=Kearny+Gas+07032&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Kearny+Gas+07032"
@@ -286,7 +286,7 @@
    "formatted_net_price": "$3.70",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 04:31 PM",
+   "last_updated": "Nov 16, 09:01 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -304,7 +304,7 @@
    "formatted_net_price": "$3.70",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 03:31 PM",
+   "last_updated": "Nov 16, 09:02 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -448,7 +448,7 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 04:25 PM",
+   "last_updated": "Nov 16, 09:30 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -465,8 +465,8 @@
    "net_price": 3.73,
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 14, 06:11 PM",
+   "stale": false,
+   "last_updated": "Nov 16, 05:22 PM",
    "waze_link": "https://waze.com/ul?q=BP+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07002"
   },
@@ -556,7 +556,7 @@
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 07:12 AM",
+   "last_updated": "Nov 16, 01:10 PM",
    "waze_link": "https://waze.com/ul?q=Shell+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07601"
   },
@@ -645,8 +645,8 @@
    "net_price": 3.84,
    "formatted_net_price": "$3.84",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 15, 10:05 PM",
+   "stale": false,
+   "last_updated": "Nov 16, 10:02 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07002"
   },
@@ -723,6 +723,24 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032"
   },
   {
+   "name": "Shell",
+   "zip": "06854",
+   "city": "Norwalk",
+   "state": "CT",
+   "area_label": "Norwalk (Home)",
+   "distance": "N/A",
+   "price": 4.37,
+   "formatted_price": "$4.37",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 4.2,
+   "formatted_net_price": "$4.20",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 16, 05:10 PM",
+   "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854"
+  },
+  {
    "name": "Exxon",
    "zip": "07032",
    "city": "Kearny",
@@ -735,8 +753,8 @@
    "net_price": 4.2,
    "formatted_net_price": "$4.20",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 14, 09:10 PM",
+   "stale": false,
+   "last_updated": "Nov 16, 07:40 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
   },
