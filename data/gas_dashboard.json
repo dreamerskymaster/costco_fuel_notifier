@@ -1,13 +1,13 @@
 {
- "fetched_at": "2026-11-16T21:52:00+00:00",
- "generated_at": "2026-11-16T21:52:36+00:00",
+ "fetched_at": "2026-11-17T03:04:54+00:00",
+ "generated_at": "2026-11-17T03:05:24+00:00",
  "best": {
   "name": "Costco",
   "price": 3.69,
   "net_price": 3.54,
   "best_card": "Citi Costco (4%)",
   "card_note": "Visa Only",
-  "last_updated": "Nov 16, 03:43 PM",
+  "last_updated": "Nov 16, 09:08 PM",
   "stale": false,
   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
   "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
@@ -350,7 +350,7 @@
    "net_price": 3.6,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 16, 03:35 PM",
+   "last_updated": "Nov 16, 08:05 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -363,7 +363,7 @@
    "net_price": 3.54,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 16, 03:43 PM",
+   "last_updated": "Nov 16, 09:08 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -399,6 +399,17 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+06854",
      "waze_link": "https://waze.com/ul?q=Exxon+06854&navigate=yes"
+    },
+    {
+     "name": "Shell",
+     "price": 4.37,
+     "net_price": 4.2,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 16, 05:10 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854",
+     "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes"
     },
     {
      "name": "Shell",
@@ -440,7 +451,7 @@
      "net_price": 3.64,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 16, 04:32 PM",
+     "last_updated": "Nov 16, 09:01 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
      "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
@@ -457,7 +468,7 @@
      "net_price": 3.6,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 16, 03:35 PM",
+     "last_updated": "Nov 16, 08:05 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
      "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -485,7 +496,7 @@
      "net_price": 3.7,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 16, 04:31 PM",
+     "last_updated": "Nov 16, 09:01 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
      "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
@@ -496,7 +507,7 @@
      "net_price": 3.83,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 16, 07:12 AM",
+     "last_updated": "Nov 16, 01:10 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07601",
      "waze_link": "https://waze.com/ul?q=Shell+07601&navigate=yes"
@@ -569,23 +580,23 @@
    "zip": "07032",
    "stations": [
     {
-     "name": "Kearny Gas",
-     "price": 3.79,
-     "net_price": 3.64,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 16, 09:55 AM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Kearny+Gas+07032",
-     "waze_link": "https://waze.com/ul?q=Kearny+Gas+07032&navigate=yes"
-    },
-    {
      "name": "Exxon",
      "price": 4.09,
      "net_price": 3.93,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
      "last_updated": "Nov 16, 02:40 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032",
+     "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes"
+    },
+    {
+     "name": "Exxon",
+     "price": 4.37,
+     "net_price": 4.2,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 16, 07:40 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032",
      "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes"
@@ -691,7 +702,7 @@
      "net_price": 3.54,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 16, 03:43 PM",
+     "last_updated": "Nov 16, 09:08 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
      "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -702,7 +713,7 @@
      "net_price": 3.7,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 16, 03:31 PM",
+     "last_updated": "Nov 16, 09:02 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
@@ -713,10 +724,21 @@
      "net_price": 3.73,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 16, 04:25 PM",
+     "last_updated": "Nov 16, 09:30 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
+    },
+    {
+     "name": "BP",
+     "price": 3.89,
+     "net_price": 3.73,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 16, 05:22 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07002",
+     "waze_link": "https://waze.com/ul?q=BP+07002&navigate=yes"
     },
     {
      "name": "BP",
