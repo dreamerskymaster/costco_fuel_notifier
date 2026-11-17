@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-17T03:04:54+00:00",
+ "fetched_at": "2026-11-17T06:05:07+00:00",
  "source": "mac",
  "stations": [
   {
@@ -16,7 +16,7 @@
    "formatted_net_price": "$3.54",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 16, 09:08 PM",
+   "last_updated": "Nov 17, 12:05 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -52,7 +52,7 @@
    "formatted_net_price": "$3.60",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 16, 08:05 PM",
+   "last_updated": "Nov 17, 12:05 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -93,24 +93,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+4+07601"
   },
   {
-   "name": "QuickChek",
-   "zip": "07657",
-   "city": "Ridgefield",
-   "state": "NJ",
-   "area_label": "Ridgefield (Rt 46 / GWB Exit)",
-   "distance": "N/A",
-   "price": 3.79,
-   "formatted_price": "$3.79",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.64,
-   "formatted_net_price": "$3.64",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 16, 09:01 PM",
-   "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
-  },
-  {
    "name": "Unbranded",
    "zip": "07601",
    "city": "Hackensack",
@@ -147,24 +129,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Kearny+Gas+07032"
   },
   {
-   "name": "Delta",
-   "zip": "07047",
-   "city": "North Bergen",
-   "state": "NJ",
-   "area_label": "North Bergen (Tonnelle Ave)",
-   "distance": "N/A",
-   "price": 3.81,
-   "formatted_price": "$3.81",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.66,
-   "formatted_net_price": "$3.66",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 16, 02:12 PM",
-   "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
-  },
-  {
    "name": "Gulf",
    "zip": "07047",
    "city": "North Bergen",
@@ -181,6 +145,24 @@
    "last_updated": "Nov 16, 02:13 PM",
    "waze_link": "https://waze.com/ul?q=Gulf+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Gulf+07047"
+  },
+  {
+   "name": "Delta",
+   "zip": "07047",
+   "city": "North Bergen",
+   "state": "NJ",
+   "area_label": "North Bergen (Tonnelle Ave)",
+   "distance": "N/A",
+   "price": 3.81,
+   "formatted_price": "$3.81",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.66,
+   "formatted_net_price": "$3.66",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 16, 02:12 PM",
+   "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047"
   },
   {
    "name": "Wawa",
@@ -214,7 +196,7 @@
    "formatted_net_price": "$3.68",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 03:14 PM",
+   "last_updated": "Nov 16, 11:11 PM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
@@ -286,7 +268,7 @@
    "formatted_net_price": "$3.70",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 09:01 PM",
+   "last_updated": "Nov 17, 01:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -304,7 +286,7 @@
    "formatted_net_price": "$3.70",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 09:02 PM",
+   "last_updated": "Nov 17, 01:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -412,7 +394,7 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 03:13 PM",
+   "last_updated": "Nov 16, 02:42 PM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
   },
@@ -435,6 +417,24 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306"
   },
   {
+   "name": "Shell",
+   "zip": "07306",
+   "city": "Jersey City",
+   "state": "NJ",
+   "area_label": "Jersey City (Westside Ave)",
+   "distance": "N/A",
+   "price": 3.89,
+   "formatted_price": "$3.89",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.73,
+   "formatted_net_price": "$3.73",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 16, 10:40 PM",
+   "waze_link": "https://waze.com/ul?q=Shell+07306&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07306"
+  },
+  {
    "name": "QuickChek",
    "zip": "07002",
    "city": "Bayonne",
@@ -448,7 +448,7 @@
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 16, 09:30 PM",
+   "last_updated": "Nov 17, 01:00 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -501,7 +501,7 @@
    "net_price": 3.83,
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 16, 11:14 AM",
    "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854"
@@ -519,7 +519,7 @@
    "net_price": 3.83,
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 16, 11:12 AM",
    "waze_link": "https://waze.com/ul?q=Exxon+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+06854"
@@ -651,6 +651,24 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07002"
   },
   {
+   "name": "Wawa",
+   "zip": "07032",
+   "city": "Kearny",
+   "state": "NJ",
+   "area_label": "Kearny (Rt 7 / ~2 mi West)",
+   "distance": "N/A",
+   "price": 4.05,
+   "formatted_price": "$4.05",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.89,
+   "formatted_net_price": "$3.89",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 16, 10:12 PM",
+   "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032"
+  },
+  {
    "name": "GetGo",
    "zip": "07305",
    "city": "Jersey City",
@@ -703,24 +721,6 @@
    "last_updated": "Nov 16, 02:40 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
-  },
-  {
-   "name": "Wawa",
-   "zip": "07032",
-   "city": "Kearny",
-   "state": "NJ",
-   "area_label": "Kearny (Rt 7 / ~2 mi West)",
-   "distance": "N/A",
-   "price": 4.09,
-   "formatted_price": "$4.09",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.93,
-   "formatted_net_price": "$3.93",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 15, 09:40 PM",
-   "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032"
   },
   {
    "name": "Shell",
@@ -807,7 +807,7 @@
    "net_price": 4.41,
    "formatted_net_price": "$4.41",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 16, 12:40 PM",
    "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854"
