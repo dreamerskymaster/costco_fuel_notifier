@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-18T11:23:02+00:00",
+ "fetched_at": "2026-11-18T14:23:15+00:00",
  "source": "mac",
  "stations": [
   {
@@ -16,7 +16,7 @@
    "formatted_net_price": "$3.50",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 18, 05:26 AM",
+   "last_updated": "Nov 18, 09:04 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -52,7 +52,7 @@
    "formatted_net_price": "$3.56",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 18, 06:04 AM",
+   "last_updated": "Nov 18, 09:08 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -88,9 +88,27 @@
    "formatted_net_price": "$3.57",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 18, 06:02 AM",
+   "last_updated": "Nov 18, 09:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
+  },
+  {
+   "name": "Fuel Stop",
+   "zip": "07047",
+   "city": "North Bergen",
+   "state": "NJ",
+   "area_label": "North Bergen (Tonnelle Ave)",
+   "distance": "N/A",
+   "price": 3.73,
+   "formatted_price": "$3.73",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.58,
+   "formatted_net_price": "$3.58",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 18, 07:08 AM",
+   "waze_link": "https://waze.com/ul?q=Fuel+Stop+07047&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Stop+07047"
   },
   {
    "name": "BP",
@@ -109,24 +127,6 @@
    "last_updated": "Nov 18, 05:43 AM",
    "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
-  },
-  {
-   "name": "Fuel Stop",
-   "zip": "07047",
-   "city": "North Bergen",
-   "state": "NJ",
-   "area_label": "North Bergen (Tonnelle Ave)",
-   "distance": "N/A",
-   "price": 3.73,
-   "formatted_price": "$3.73",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.58,
-   "formatted_net_price": "$3.58",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 16, 04:24 PM",
-   "waze_link": "https://waze.com/ul?q=Fuel+Stop+07047&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Stop+07047"
   },
   {
    "name": "Fuel 4",
@@ -232,7 +232,7 @@
    "formatted_net_price": "$3.64",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 18, 05:02 AM",
+   "last_updated": "Nov 18, 08:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -394,7 +394,7 @@
    "formatted_net_price": "$3.67",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 18, 05:01 AM",
+   "last_updated": "Nov 18, 08:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -412,7 +412,7 @@
    "formatted_net_price": "$3.69",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 18, 05:24 AM",
+   "last_updated": "Nov 18, 08:01 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -591,7 +591,7 @@
    "net_price": 3.77,
    "formatted_net_price": "$3.77",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 17, 07:11 PM",
    "waze_link": "https://waze.com/ul?q=Shell+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07601"
@@ -609,7 +609,7 @@
    "net_price": 3.79,
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 17, 06:59 PM",
    "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854"
@@ -627,7 +627,7 @@
    "net_price": 3.79,
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 17, 07:11 PM",
    "waze_link": "https://waze.com/ul?q=Atlantis+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Atlantis+06854"
@@ -825,7 +825,7 @@
    "net_price": 3.89,
    "formatted_net_price": "$3.89",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 17, 09:07 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07657"
@@ -849,24 +849,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=GetGo+07305"
   },
   {
-   "name": "Gulf",
-   "zip": "10801",
-   "city": "New Rochelle",
-   "state": "NY",
-   "area_label": "New Rochelle (Costco)",
-   "distance": "N/A",
-   "price": 4.09,
-   "formatted_price": "$4.09",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.93,
-   "formatted_net_price": "$3.93",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 17, 10:01 PM",
-   "waze_link": "https://waze.com/ul?q=Gulf+10801&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Gulf+10801"
-  },
-  {
    "name": "BP",
    "zip": "10801",
    "city": "New Rochelle",
@@ -883,6 +865,24 @@
    "last_updated": "Nov 17, 05:40 PM",
    "waze_link": "https://waze.com/ul?q=BP+10801&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+10801"
+  },
+  {
+   "name": "Gulf",
+   "zip": "10801",
+   "city": "New Rochelle",
+   "state": "NY",
+   "area_label": "New Rochelle (Costco)",
+   "distance": "N/A",
+   "price": 4.09,
+   "formatted_price": "$4.09",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.93,
+   "formatted_net_price": "$3.93",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 17, 10:01 PM",
+   "waze_link": "https://waze.com/ul?q=Gulf+10801&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Gulf+10801"
   },
   {
    "name": "Exxon",
@@ -969,7 +969,7 @@
    "net_price": 4.1,
    "formatted_net_price": "$4.10",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 17, 06:24 PM",
    "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854"
