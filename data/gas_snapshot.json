@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-20T03:30:48+00:00",
+ "fetched_at": "2026-11-20T06:30:59+00:00",
  "source": "mac",
  "stations": [
   {
@@ -16,7 +16,7 @@
    "formatted_net_price": "$3.50",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 19, 10:09 PM",
+   "last_updated": "Nov 20, 12:05 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -34,7 +34,7 @@
    "formatted_net_price": "$3.50",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 19, 10:09 PM",
+   "last_updated": "Nov 20, 12:05 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -52,7 +52,7 @@
    "formatted_net_price": "$3.54",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 19, 10:08 PM",
+   "last_updated": "Nov 20, 01:13 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
@@ -196,7 +196,7 @@
    "formatted_net_price": "$3.59",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 19, 10:07 PM",
+   "last_updated": "Nov 20, 01:13 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -448,7 +448,7 @@
    "formatted_net_price": "$3.64",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 19, 10:06 PM",
+   "last_updated": "Nov 20, 01:12 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -484,7 +484,7 @@
    "formatted_net_price": "$3.67",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 19, 10:08 PM",
+   "last_updated": "Nov 20, 01:12 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -609,8 +609,8 @@
    "net_price": 3.73,
    "formatted_net_price": "$3.73",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 19, 12:40 AM",
+   "stale": false,
+   "last_updated": "Nov 20, 12:40 AM",
    "waze_link": "https://waze.com/ul?q=Shell+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07601"
   },
@@ -717,7 +717,7 @@
    "net_price": 3.79,
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 19, 11:32 AM",
    "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854"
@@ -753,7 +753,7 @@
    "net_price": 3.83,
    "formatted_net_price": "$3.83",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 19, 11:32 AM",
    "waze_link": "https://waze.com/ul?q=Exxon+06854&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+06854"
@@ -879,7 +879,7 @@
    "net_price": 3.92,
    "formatted_net_price": "$3.92",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 19, 12:56 PM",
    "waze_link": "https://waze.com/ul?q=Sunoco+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07657"
@@ -951,7 +951,7 @@
    "net_price": 4.02,
    "formatted_net_price": "$4.02",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 19, 01:10 PM",
    "waze_link": "https://waze.com/ul?q=Amoco+10801&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Amoco+10801"
@@ -991,6 +991,24 @@
    "last_updated": "Nov 19, 02:10 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032"
+  },
+  {
+   "name": "Shell",
+   "zip": "06854",
+   "city": "Norwalk",
+   "state": "CT",
+   "area_label": "Norwalk (Home)",
+   "distance": "N/A",
+   "price": 4.27,
+   "formatted_price": "$4.27",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 4.1,
+   "formatted_net_price": "$4.10",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 19, 11:10 PM",
+   "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854"
   },
   {
    "name": "Exxon",
