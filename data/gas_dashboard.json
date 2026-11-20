@@ -1,13 +1,13 @@
 {
- "fetched_at": "2026-11-20T03:30:48+00:00",
- "generated_at": "2026-11-20T03:31:19+00:00",
+ "fetched_at": "2026-11-20T06:30:59+00:00",
+ "generated_at": "2026-11-20T06:31:25+00:00",
  "best": {
   "name": "Costco",
   "price": 3.65,
   "net_price": 3.5,
   "best_card": "Citi Costco (4%)",
   "card_note": "Visa Only",
-  "last_updated": "Nov 19, 10:09 PM",
+  "last_updated": "Nov 20, 12:05 AM",
   "stale": false,
   "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
   "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
@@ -29,7 +29,7 @@
    "date": "2026-11-19",
    "price": 3.85
   },
-  "decision_note": "Norwalk $3.850/gal is the lowest in 38 logged days (previous low $3.950)"
+  "decision_note": "no new Norwalk low"
  },
  "trend": {
   "norwalk": [
@@ -187,6 +187,10 @@
    ],
    [
     "2026-11-19",
+    3.85
+   ],
+   [
+    "2026-11-20",
     3.85
    ]
   ],
@@ -362,6 +366,10 @@
    [
     "2026-11-19",
     3.65
+   ],
+   [
+    "2026-11-20",
+    3.65
    ]
   ]
  },
@@ -374,7 +382,7 @@
    "net_price": 3.5,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 19, 10:09 PM",
+   "last_updated": "Nov 20, 12:05 AM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -387,7 +395,7 @@
    "net_price": 3.5,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 19, 10:09 PM",
+   "last_updated": "Nov 20, 12:05 AM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -414,26 +422,15 @@
      "waze_link": "https://waze.com/ul?q=Atlantis+06854&navigate=yes"
     },
     {
-     "name": "Global",
-     "price": 3.95,
-     "net_price": 3.79,
+     "name": "Shell",
+     "price": 4.27,
+     "net_price": 4.1,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 19, 11:32 AM",
+     "last_updated": "Nov 19, 11:10 PM",
      "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
-     "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
-    },
-    {
-     "name": "Exxon",
-     "price": 3.99,
-     "net_price": 3.83,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 19, 11:32 AM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+06854",
-     "waze_link": "https://waze.com/ul?q=Exxon+06854&navigate=yes"
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+06854",
+     "waze_link": "https://waze.com/ul?q=Shell+06854&navigate=yes"
     }
    ]
   },
@@ -462,17 +459,6 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=CITGO+10801",
      "waze_link": "https://waze.com/ul?q=CITGO+10801&navigate=yes"
-    },
-    {
-     "name": "Amoco",
-     "price": 4.19,
-     "net_price": 4.02,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 19, 01:10 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Amoco+10801",
-     "waze_link": "https://waze.com/ul?q=Amoco+10801&navigate=yes"
     }
    ]
   },
@@ -486,7 +472,7 @@
      "net_price": 3.54,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 19, 10:08 PM",
+     "last_updated": "Nov 20, 01:13 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
      "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
@@ -512,17 +498,6 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=US+Gas+07657",
      "waze_link": "https://waze.com/ul?q=US+Gas+07657&navigate=yes"
-    },
-    {
-     "name": "Sunoco",
-     "price": 4.08,
-     "net_price": 3.92,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 19, 12:56 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07657",
-     "waze_link": "https://waze.com/ul?q=Sunoco+07657&navigate=yes"
     }
    ]
   },
@@ -536,7 +511,7 @@
      "net_price": 3.5,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 19, 10:09 PM",
+     "last_updated": "Nov 20, 12:05 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
      "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -553,7 +528,7 @@
      "net_price": 3.59,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 19, 10:07 PM",
+     "last_updated": "Nov 20, 01:13 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
      "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
@@ -579,6 +554,17 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07601",
      "waze_link": "https://waze.com/ul?q=Sunoco+07601&navigate=yes"
+    },
+    {
+     "name": "Shell",
+     "price": 3.89,
+     "net_price": 3.73,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 20, 12:40 AM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07601",
+     "waze_link": "https://waze.com/ul?q=Shell+07601&navigate=yes"
     }
    ]
   },
@@ -748,7 +734,7 @@
      "net_price": 3.5,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 19, 10:09 PM",
+     "last_updated": "Nov 20, 12:05 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
      "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -759,7 +745,7 @@
      "net_price": 3.64,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 19, 10:06 PM",
+     "last_updated": "Nov 20, 01:12 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
@@ -770,7 +756,7 @@
      "net_price": 3.67,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 19, 10:08 PM",
+     "last_updated": "Nov 20, 01:12 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
@@ -801,14 +787,15 @@
   }
  ],
  "prediction_lines": [
-  "Tomorrow (Norwalk cheapest): $4.590, likely range $4.246–$4.934, 43% chance it stays within 2¢ (recent days that did).",
-  "Last 30 days: average miss 12.0¢, inside range 57%, direction right 30%. Range now ±34¢, sized from recent daily jumps."
+  "Yesterday's call: $4.590 → actual $3.850. Missed low: price came in 74.0¢ below the forecast (fell more / rose less than expected); called flat, was down.",
+  "Tomorrow (Norwalk cheapest): $3.850, likely range $3.466–$4.234, 43% chance it stays within 2¢ (recent days that did).",
+  "Last 30 days: average miss 14.3¢, inside range 57%, direction right 30%. Range now ±38¢, sized from recent daily jumps."
  ],
  "outlook_lines": [
   "Buy only what you need — prices are likely to ease.",
   "Next week (NY/NJ average): 100% chance prices fall, expected -10.7¢/gal (typical error ±3.1¢). Confidence: High.",
   "Expect about -11¢/gal next week; waiting on a full fill saves ~$1.99. Today's price is already low versus recent weeks, so filling now is reasonable.",
-  "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 43 logged days.",
+  "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 44 logged days.",
   "Model record since 2008: right 77% of 984 weeks vs 56% for always guessing the usual direction. When it leaned this hard before it was right 92% of 314 weeks."
  ]
 }
