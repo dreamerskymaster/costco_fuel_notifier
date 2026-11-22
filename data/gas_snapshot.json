@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-22T03:26:34+00:00",
+ "fetched_at": "2026-11-22T06:17:10+00:00",
  "source": "mac",
  "stations": [
   {
@@ -52,7 +52,7 @@
    "formatted_net_price": "$3.48",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 21, 09:06 PM",
+   "last_updated": "Nov 22, 12:08 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -106,7 +106,7 @@
    "formatted_net_price": "$3.49",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 21, 10:13 PM",
+   "last_updated": "Nov 22, 12:08 AM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -129,24 +129,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Stop+07047"
   },
   {
-   "name": "QuickChek",
-   "zip": "07657",
-   "city": "Ridgefield",
-   "state": "NJ",
-   "area_label": "Ridgefield (Rt 46 / GWB Exit)",
-   "distance": "N/A",
-   "price": 3.69,
-   "formatted_price": "$3.69",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.54,
-   "formatted_net_price": "$3.54",
-   "card_note": "Standalone Gas Station",
-   "stale": false,
-   "last_updated": "Nov 21, 09:01 PM",
-   "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
-  },
-  {
    "name": "Unbranded",
    "zip": "07601",
    "city": "Hackensack",
@@ -159,7 +141,7 @@
    "net_price": 3.54,
    "formatted_net_price": "$3.54",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 21, 12:34 PM",
    "waze_link": "https://waze.com/ul?q=Unbranded+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Unbranded+07601"
@@ -268,7 +250,7 @@
    "formatted_net_price": "$3.59",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 21, 09:01 PM",
+   "last_updated": "Nov 22, 01:02 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -429,7 +411,7 @@
    "net_price": 3.64,
    "formatted_net_price": "$3.64",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 21, 12:53 PM",
    "waze_link": "https://waze.com/ul?q=BP+07305&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07305"
@@ -448,7 +430,7 @@
    "formatted_net_price": "$3.64",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 21, 10:08 PM",
+   "last_updated": "Nov 22, 01:02 AM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -705,6 +687,24 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07002"
   },
   {
+   "name": "BP",
+   "zip": "07047",
+   "city": "North Bergen",
+   "state": "NJ",
+   "area_label": "North Bergen (Tonnelle Ave)",
+   "distance": "N/A",
+   "price": 3.91,
+   "formatted_price": "$3.91",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.75,
+   "formatted_net_price": "$3.75",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 22, 12:40 AM",
+   "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
+  },
+  {
    "name": "Exxon",
    "zip": "07657",
    "city": "Ridgefield",
@@ -723,24 +723,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07657"
   },
   {
-   "name": "BP",
-   "zip": "07047",
-   "city": "North Bergen",
-   "state": "NJ",
-   "area_label": "North Bergen (Tonnelle Ave)",
-   "distance": "N/A",
-   "price": 3.93,
-   "formatted_price": "$3.93",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.77,
-   "formatted_net_price": "$3.77",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 20, 04:10 PM",
-   "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047"
-  },
-  {
    "name": "Wawa",
    "zip": "07032",
    "city": "Kearny",
@@ -753,7 +735,7 @@
    "net_price": 3.77,
    "formatted_net_price": "$3.77",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 21, 11:10 AM",
    "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032"
@@ -843,7 +825,7 @@
    "net_price": 3.93,
    "formatted_net_price": "$3.93",
    "card_note": "Standalone Gas Station",
-   "stale": false,
+   "stale": true,
    "last_updated": "Nov 21, 01:10 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07047&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07047"
@@ -987,8 +969,8 @@
    "net_price": 4.79,
    "formatted_net_price": "$4.79",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 20, 10:40 AM",
+   "stale": false,
+   "last_updated": "Nov 21, 10:40 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07002"
   }
