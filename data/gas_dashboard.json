@@ -1,17 +1,17 @@
 {
- "fetched_at": "2026-11-22T06:17:10+00:00",
- "generated_at": "2026-11-22T06:17:40+00:00",
+ "fetched_at": "2026-11-22T09:21:08+00:00",
+ "generated_at": "2026-11-22T09:21:31+00:00",
  "best": {
-  "name": "Delta",
-  "price": 3.61,
-  "net_price": 3.47,
-  "best_card": "Citi 4% / Amex 3%",
-  "card_note": "Standalone Gas Station",
-  "last_updated": "Nov 21, 03:26 PM",
+  "name": "Costco",
+  "price": 3.63,
+  "net_price": 3.48,
+  "best_card": "Citi Costco (4%)",
+  "card_note": "Visa Only",
+  "last_updated": "Nov 22, 04:06 AM",
   "stale": false,
-  "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047",
-  "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes",
-  "area": "North Bergen (Tonnelle Ave)"
+  "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
+  "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
+  "area": "Teterboro (Costco)"
  },
  "home": {
   "cheapest": {
@@ -398,7 +398,7 @@
    "net_price": 3.48,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 22, 12:08 AM",
+   "last_updated": "Nov 22, 04:06 AM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -411,7 +411,7 @@
    "net_price": 3.49,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 22, 12:08 AM",
+   "last_updated": "Nov 22, 04:06 AM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -436,28 +436,6 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=CITGO+06854",
      "waze_link": "https://waze.com/ul?q=CITGO+06854&navigate=yes"
-    },
-    {
-     "name": "Global",
-     "price": 3.89,
-     "net_price": 3.73,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 21, 03:47 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
-     "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
-    },
-    {
-     "name": "Exxon",
-     "price": 3.89,
-     "net_price": 3.73,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 21, 02:40 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+06854",
-     "waze_link": "https://waze.com/ul?q=Exxon+06854&navigate=yes"
     },
     {
      "name": "Shell",
@@ -505,6 +483,28 @@
    "zip": "07657",
    "stations": [
     {
+     "name": "Lukoil",
+     "price": 3.69,
+     "net_price": 3.54,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 22, 01:36 AM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Lukoil+07657",
+     "waze_link": "https://waze.com/ul?q=Lukoil+07657&navigate=yes"
+    },
+    {
+     "name": "QuickChek",
+     "price": 3.69,
+     "net_price": 3.54,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 22, 03:30 AM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
+     "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
+    },
+    {
      "name": "Exxon",
      "price": 3.93,
      "net_price": 3.77,
@@ -527,7 +527,7 @@
      "net_price": 3.48,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 22, 12:08 AM",
+     "last_updated": "Nov 22, 04:06 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
      "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -539,48 +539,15 @@
    "zip": "07601",
    "stations": [
     {
-     "name": "Wawa",
-     "price": 3.69,
-     "net_price": 3.54,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 21, 04:02 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07601",
-     "waze_link": "https://waze.com/ul?q=Wawa+07601&navigate=yes"
-    },
-    {
      "name": "QuickChek",
      "price": 3.74,
      "net_price": 3.59,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 22, 01:02 AM",
+     "last_updated": "Nov 22, 04:03 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
      "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
-    },
-    {
-     "name": "BP",
-     "price": 3.75,
-     "net_price": 3.6,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 21, 02:38 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07601",
-     "waze_link": "https://waze.com/ul?q=BP+07601&navigate=yes"
-    },
-    {
-     "name": "Sunoco",
-     "price": 3.81,
-     "net_price": 3.66,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 21, 02:37 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07601",
-     "waze_link": "https://waze.com/ul?q=Sunoco+07601&navigate=yes"
     },
     {
      "name": "Shell",
@@ -592,6 +559,17 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07601",
      "waze_link": "https://waze.com/ul?q=Shell+07601&navigate=yes"
+    },
+    {
+     "name": "Sunoco",
+     "price": 3.89,
+     "net_price": 3.73,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 21, 10:14 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Sunoco+07601",
+     "waze_link": "https://waze.com/ul?q=Sunoco+07601&navigate=yes"
     }
    ]
   },
@@ -599,17 +577,6 @@
    "label": "North Bergen (Tonnelle Ave)",
    "zip": "07047",
    "stations": [
-    {
-     "name": "Delta",
-     "price": 3.61,
-     "net_price": 3.47,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 21, 03:26 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07047",
-     "waze_link": "https://waze.com/ul?q=Delta+07047&navigate=yes"
-    },
     {
      "name": "Fuel Stop",
      "price": 3.65,
@@ -620,6 +587,17 @@
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Fuel+Stop+07047",
      "waze_link": "https://waze.com/ul?q=Fuel+Stop+07047&navigate=yes"
+    },
+    {
+     "name": "BP",
+     "price": 3.65,
+     "net_price": 3.5,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 22, 02:48 AM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07047",
+     "waze_link": "https://waze.com/ul?q=BP+07047&navigate=yes"
     },
     {
      "name": "BP",
@@ -657,23 +635,6 @@
    ]
   },
   {
-   "label": "Kearny (Rt 7 / ~2 mi West)",
-   "zip": "07032",
-   "stations": [
-    {
-     "name": "Exxon",
-     "price": 3.89,
-     "net_price": 3.73,
-     "best_card": "Citi 4% / Amex 3%",
-     "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 21, 02:40 PM",
-     "stale": false,
-     "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07032",
-     "waze_link": "https://waze.com/ul?q=Exxon+07032&navigate=yes"
-    }
-   ]
-  },
-  {
    "label": "Jersey City (Route 440)",
    "zip": "07305",
    "stations": [
@@ -700,7 +661,7 @@
      "net_price": 3.49,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 22, 12:08 AM",
+     "last_updated": "Nov 22, 04:06 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
      "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -711,7 +672,7 @@
      "net_price": 3.64,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 22, 01:02 AM",
+     "last_updated": "Nov 22, 04:03 AM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
@@ -742,7 +703,6 @@
   }
  ],
  "prediction_lines": [
-  "Yesterday's call: $3.890 → actual $3.890. Good: off by +0.0¢, inside the range.",
   "Tomorrow (Norwalk cheapest): $3.890, likely range $3.506–$4.274, 43% chance it stays within 2¢ (recent days that did).",
   "Last 30 days: average miss 14.2¢, inside range 60%, direction right 30%. Range now ±38¢, sized from recent daily jumps."
  ],
@@ -750,7 +710,7 @@
   "Buy only what you need — prices are likely to ease.",
   "Next week (NY/NJ average): 100% chance prices fall, expected -10.7¢/gal (typical error ±3.1¢). Confidence: High.",
   "Expect about -11¢/gal next week; waiting on a full fill saves ~$1.99. Today's price is already low versus recent weeks, so filling now is reasonable.",
-  "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 42 logged days.",
+  "Is today's price low? It is low: cheaper than or equal to 100% of this station's last 46 logged days.",
   "Model record since 2008: right 77% of 984 weeks vs 56% for always guessing the usual direction. When it leaned this hard before it was right 92% of 314 weeks."
  ]
 }
