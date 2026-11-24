@@ -103,6 +103,25 @@ class DashboardTests(unittest.TestCase):
         self.assertNotIn("@", out)
         self.assertIn("$3.77 at Costco", out)
 
+    def test_costco_coordinates_reach_the_board(self):
+        bayonne = {**station("Costco", "07002", 3.85, "Bayonne (Costco)"), "lat": 40.6694, "lon": -74.1080}
+        board = gd.build([bayonne], NOW, [], zip_order=["07002"])
+        c = {c["zip"]: c for c in board["costco"]}["07002"]
+        self.assertEqual((c["lat"], c["lon"]), (40.6694, -74.1080))
+
+    def test_extra_costcos_are_listed_once(self):
+        bayonne = {**station("Costco", "07002", 3.85, "Bayonne (Costco)"), "lat": 40.6694, "lon": -74.1080}
+        same_seen_from_jc = {**station("Costco", "07306", 3.85, "Jersey City"), "lat": 40.6696, "lon": -74.1078,
+                             "city": "Jersey City", "state": "NJ"}
+        other = {**station("Costco Wholesale", "06901", 3.49, "Stamford"), "lat": 41.06, "lon": -73.53,
+                 "city": "Stamford", "state": "CT"}
+        no_coords = station("Costco", "06854", 3.59, "Norwalk (Home)")
+        board = gd.build([bayonne, same_seen_from_jc, other, no_coords], NOW, [], zip_order=["07002"])
+        wheres = [c["where"] for c in board["costco"]]
+        self.assertEqual(wheres[:3], [w for _, w in gd.COSTCOS])          # the fixed three keep their place
+        self.assertEqual(wheres[3:], ["near Stamford, CT"])               # Bayonne isn't repeated; no-coords skipped
+        self.assertEqual(board["costco"][3]["price"], 3.49)
+
     def test_areas_keep_top_five_by_net_price(self):
         stations = [station(f"S{i}", "06854", 4.00 + i / 100, "Norwalk") for i in range(8, 0, -1)]
         area = gd.build(stations, NOW, [], zip_order=["06854"])["areas"][0]

@@ -266,6 +266,10 @@ async def fetch_gas_prices():
                     stations_data.append({
                         "name": name,
                         "zip": zip_code,
+                        "station_id": station.get("id"),
+                        "address": (station.get("address") or {}).get("line1"),
+                        "lat": station.get("latitude"),     # used by the phone widget and page
+                        "lon": station.get("longitude"),    # to find the Costco nearest you
                         "city": meta["city"],
                         "state": meta["state"],
                         "area_label": meta["label"],

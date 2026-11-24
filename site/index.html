@@ -88,6 +88,13 @@
   ul.lines li { margin: 4px 0; }
   footer { color: var(--muted); font-size: 12px; margin-top: 18px; }
   .skeleton { color: var(--muted); }
+  .near-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; padding-bottom: 6px; }
+  .near-top .name { font-size: 18px; font-weight: 650; text-decoration: none; }
+  .near-top .price { text-align: right; font-variant-numeric: tabular-nums; }
+  .near-top .hero-price { font-size: 34px; }
+  .listed { font-size: 12px; color: var(--muted); }
+  .btn.primary { display: block; width: 100%; background: var(--s1); color: #fff; border-color: transparent;
+                 font: inherit; font-weight: 600; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -227,6 +234,111 @@ function mountEmail(el, html) {
     }</style><div class="wrap" style="${esc(doc.body.getAttribute("style") || "")};padding:0;background:transparent">${doc.body.innerHTML}</div>`;
 }
 
+// ---------- Costco nearest you ----------
+// Uses this phone's location in the browser. Only a rounded point (about 1 km) goes to the free OSRM
+// route server for road miles. Costco gas list: data/costco_locations.json (OpenStreetMap, ODbL).
+// Testing hook: ?near=41.12,-73.41 uses that point instead of asking for the location.
+const NEAR = { status: "idle", html: "", fixAt: 0, list: null, err: "" };
+const MI_PER_M = 1 / 1609.344;
+function hav(a, b, c, d) {
+  const r = x => x * Math.PI / 180;
+  const h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2;
+  return 2 * 3958.8 * Math.asin(Math.sqrt(h));
+}
+async function costcoList() {
+  if (NEAR.list) return NEAR.list;
+  try { const j = await fetch(raw("data/costco_locations.json")).then(r => r.ok ? r.json() : null); NEAR.list = (j && j.stations) || []; }
+  catch { NEAR.list = []; }
+  return NEAR.list;
+}
+function nearHook() {
+  const q = new URLSearchParams(location.search).get("near");
+  return q && /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/.test(q) ? q.split(",").map(Number) : null;
+}
+function wherePoint() {
+  const hook = nearHook();
+  if (hook) return Promise.resolve({lat: hook[0], lon: hook[1]});
+  return new Promise((ok, no) => navigator.geolocation
+    ? navigator.geolocation.getCurrentPosition(p => ok({lat: p.coords.latitude, lon: p.coords.longitude}), no,
+        {enableHighAccuracy: false, timeout: 12000, maximumAge: 600000})
+    : no(new Error("This browser has no location")));
+}
+const miles = x => `${x.approx ? "~" : ""}${x.mi < 10 ? x.mi.toFixed(1) : Math.round(x.mi)} mi${x.min != null ? ` · ${Math.round(x.min)} min` : ""}`;
+const costcoName = x => `Costco ${esc(x.c ? x.c.where : (x.label || "gas"))}`;
+const dirLink = x => `https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}`;
+const freshC = x => (x.c && x.c.price != null && !x.c.stale ? x.c : null);
+function nearestHTML(list, cheap, road) {
+  const top = list[0], c = freshC(top);
+  return `<h2>Costco nearest you</h2>
+    <div class="near-top">
+      <div><a class="name" href="${dirLink(top)}" target="_blank" rel="noopener">${costcoName(top)}</a>
+        <div class="hero-sub">${miles(top)}${road ? " by road" : " in a straight line"}</div></div>
+      <div class="price">${c ? `<div class="hero-price">${usd(c.price)}</div><div class="listed">${usd(c.net_price)} with ${esc(c.best_card)}</div>`
+                              : `<div class="listed">price not tracked here</div>`}</div>
+    </div>
+    ${list.slice(1).map(x => { const k = freshC(x); return `<div class="row"><div><a class="name" href="${dirLink(x)}" target="_blank" rel="noopener">${costcoName(x)}</a>
+      <div class="meta">${miles(x)}</div></div><div class="price">${k ? `<div class="net">${usd(k.price)}</div><div class="listed">${usd(k.net_price)} net</div>` : `<div class="listed">not tracked</div>`}</div></div>`; }).join("")}
+    ${cheap && cheap !== top ? `<p class="note">Cheapest tracked: <b>${costcoName(cheap)}</b> ${usd(cheap.c.price)} (${usd(cheap.c.net_price)} net) · ${miles(cheap)}</p>` : ""}
+    <p class="note">Found with this phone's location; only a rounded point goes to the OSRM route server. Costco list © OpenStreetMap contributors.</p>`;
+}
+function paintNearest() {
+  const el = $("#nearest"); if (!el) return;
+  const button = label => `<button class="btn primary" id="near-btn" type="button">${label}</button>`;
+  if (NEAR.status === "done") el.innerHTML = NEAR.html;
+  else if (NEAR.status === "busy") el.innerHTML = `<h2>Costco nearest you</h2><p class="note">Finding the Costco nearest you…</p>`;
+  else if (NEAR.status === "denied") el.innerHTML = `<h2>Costco nearest you</h2>${button("📍 Try again")}
+    <p class="note">Location is off for this page. Turn it on in Settings › Apps › Safari › Location, then try again.</p>`;
+  else if (NEAR.status === "error") el.innerHTML = `<h2>Costco nearest you</h2>${button("📍 Try again")}<p class="note">${esc(NEAR.err)}</p>`;
+  else el.innerHTML = `<h2>Costco nearest you</h2>${button("📍 Find the Costco nearest me")}
+    <p class="note">Shows the nearest Costco gas station with road miles and its price when your tracker covers it.</p>`;
+  const btn = $("#near-btn"); if (btn) btn.onclick = () => findNearest(last);
+}
+async function findNearest(b) {
+  if (!b || NEAR.status === "busy") return;
+  NEAR.status = "busy"; paintNearest();
+  try {
+    const me = await wherePoint();
+    const lat = Math.round(me.lat * 100) / 100, lon = Math.round(me.lon * 100) / 100;
+    const tracked = (b.costco || []).filter(c => c.lat != null && c.lon != null);
+    const cands = tracked.map(c => ({lat: c.lat, lon: c.lon, label: c.where, c}));
+    for (const [a, o, label] of await costcoList()) {
+      if (!cands.some(x => hav(x.lat, x.lon, a, o) < 0.25)) cands.push({lat: a, lon: o, label, c: null});
+    }
+    if (!cands.length) throw new Error("No Costco list yet; it arrives with the next tracker update.");
+    cands.forEach(x => { x.line = hav(lat, lon, x.lat, x.lon); });
+    const pick = cands.sort((p, q) => p.line - q.line).slice(0, 6);
+    const fresh = tracked.filter(c => c.price != null && !c.stale);
+    const cheapC = fresh.length ? fresh.reduce((m, c) => (c.net_price < m.net_price ? c : m)) : null;
+    let cheap = cheapC ? pick.find(x => x.c === cheapC) : null;
+    if (cheapC && !cheap) { cheap = {lat: cheapC.lat, lon: cheapC.lon, label: cheapC.where, c: cheapC, line: hav(lat, lon, cheapC.lat, cheapC.lon)}; }
+    const all = cheap && !pick.includes(cheap) ? [...pick, cheap] : pick;
+    let road = false;
+    try {
+      const url = `https://router.project-osrm.org/table/v1/driving/${lon},${lat};` + all.map(x => `${x.lon},${x.lat}`).join(";") +
+        "?sources=0&annotations=distance,duration";
+      const j = await fetch(url).then(r => r.json());
+      if (j.code === "Ok") {
+        all.forEach((x, i) => { const m = j.distances[0][i + 1], s = j.durations[0][i + 1]; if (m != null) { x.mi = m * MI_PER_M; x.min = s / 60; } });
+        road = true;
+      }
+    } catch {}
+    all.forEach(x => { if (x.mi == null) { x.mi = x.line; x.approx = true; } });
+    NEAR.html = nearestHTML([...pick].sort((p, q) => p.mi - q.mi).slice(0, 3), cheap, road);
+    NEAR.status = "done"; NEAR.fixAt = Date.now();
+  } catch (e) {
+    NEAR.status = e && e.code === 1 ? "denied" : "error";
+    NEAR.err = e && e.code === 3 ? "Finding your location took too long. Try again." : (e && e.message) || "Something went wrong.";
+  }
+  paintNearest();
+}
+function autoNearest(b) {
+  if (NEAR.status === "busy" || (NEAR.status === "done" && Date.now() - NEAR.fixAt < 10 * 60000)) return;
+  if (nearHook()) return findNearest(b);
+  if (navigator.permissions && navigator.permissions.query) {
+    navigator.permissions.query({name: "geolocation"}).then(p => { if (p.state === "granted") findNearest(b); }).catch(() => {});
+  }
+}
+
 function render(b, snap, email) {
   const f = freshness(b.fetched_at);
   const css = getComputedStyle(document.documentElement);
@@ -242,6 +354,7 @@ function render(b, snap, email) {
       <p class="note">The Mac fetched ${ago(Date.now() - new Date(snap.fetched_at))}, but the cloud run hasn't processed them.
       Check <a href="https://github.com/${REPO}/actions">GitHub Actions</a>.</p></div>`);
   }
+  parts.push(`<section class="card" id="nearest"></section>`);
   const costco = (b.costco || []).filter(c => c.price != null && !c.stale);   // only current prices
   if (costco.length) {
     parts.push(`<section class="card area"><h2>Costco right now</h2>${costco.map(costcoRow).join("")}</section>`);
@@ -256,6 +369,8 @@ function render(b, snap, email) {
     <details><summary>Show as a table</summary><table id="trend-table"></table></details>
   </section>`);
   $("#app").innerHTML = parts.join("");
+  paintNearest();
+  autoNearest(b);
   if (email) mountEmail($("#email"), email);
 
   const series = [{name: "Norwalk", color: c1, points: trend.norwalk || []}, {name: "NJ Costco", color: c2, points: trend.nj_costco || []}];
