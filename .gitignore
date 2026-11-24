@@ -16,6 +16,7 @@ __pycache__/
 # Mac -> cloud gas hand-off and the phone dashboard's data (both public prices, no secrets)
 !data/gas_snapshot.json
 !data/gas_dashboard.json
+!data/costco_locations.json
 data/cache/
 preview.html
 inr_usd_preview.html

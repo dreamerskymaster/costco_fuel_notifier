@@ -88,6 +88,13 @@
   ul.lines li { margin: 4px 0; }
   footer { color: var(--muted); font-size: 12px; margin-top: 18px; }
   .skeleton { color: var(--muted); }
+  .near-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; padding-bottom: 6px; }
+  .near-top .name { font-size: 18px; font-weight: 650; text-decoration: none; }
+  .near-top .price { text-align: right; font-variant-numeric: tabular-nums; }
+  .near-top .hero-price { font-size: 34px; }
+  .listed { font-size: 12px; color: var(--muted); }
+  .btn.primary { display: block; width: 100%; background: var(--s1); color: #fff; border-color: transparent;
+                 font: inherit; font-weight: 600; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -227,6 +234,145 @@ function mountEmail(el, html) {
     }</style><div class="wrap" style="${esc(doc.body.getAttribute("style") || "")};padding:0;background:transparent">${doc.body.innerHTML}</div>`;
 }
 
+// ---------- Best gas near you ----------
+// Ranks every station the tracker priced near you by what a fill really costs: the price after
+// your best card (the tracker's card rules) plus the gas to drive there and back, for a FILL_GAL
+// fill at MPG. Only stations within MAX_DETOUR_MI road miles are recommended (wider only if none
+// are). Uses this phone's location in the browser; only a rounded point (about 1 km) goes to the
+// free OSRM route server. Costco gas list: data/costco_locations.json (OpenStreetMap, ODbL).
+// Testing hook: ?near=41.12,-73.41 uses that point instead of asking for the location.
+const FILL_GAL = 15, MPG = 28, MAX_LINE_MI = 40, MAX_DETOUR_MI = 12, SHOW_SAVING = 0.5;
+const NEAR = { status: "idle", html: "", fixAt: 0, list: null, err: "" };
+function hav(a, b, c, d) {
+  const r = x => x * Math.PI / 180;
+  const h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2;
+  return 2 * 3958.8 * Math.asin(Math.sqrt(h));
+}
+async function costcoList() {
+  if (NEAR.list) return NEAR.list;
+  try { const j = await fetch(raw("data/costco_locations.json")).then(r => r.ok ? r.json() : null); NEAR.list = (j && j.stations) || []; }
+  catch { NEAR.list = []; }
+  return NEAR.list;
+}
+function nearHook() {
+  const q = new URLSearchParams(location.search).get("near");
+  return q && /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/.test(q) ? q.split(",").map(Number) : null;
+}
+function wherePoint() {
+  const hook = nearHook();
+  if (hook) return Promise.resolve({lat: hook[0], lon: hook[1]});
+  return new Promise((ok, no) => navigator.geolocation
+    ? navigator.geolocation.getCurrentPosition(p => ok({lat: p.coords.latitude, lon: p.coords.longitude}), no,
+        {enableHighAccuracy: false, timeout: 12000, maximumAge: 600000})
+    : no(new Error("This browser has no location")));
+}
+const town = s => String(s || "").replace(/^near /, "").replace(/\s*\(.*\)$/, "");
+const stName = x => /costco/i.test(x.s.name) ? `Costco ${esc(town(x.where))}` : `${esc(x.s.name)} <span class="meta">${esc(town(x.where))}</span>`;
+const miles = x => `${x.approx ? "~" : ""}${x.mi < 10 ? x.mi.toFixed(1) : Math.round(x.mi)} mi${x.min != null ? ` · ${Math.round(x.min)} min` : ""}`;
+const dirLink = x => `https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}`;
+const realPrice = x => x.s.net_price + (2 * x.mi / MPG) * x.s.net_price / FILL_GAL;
+function trackedStations(b) {
+  const fresh = s => s && s.price != null && s.net_price != null && !s.stale && s.lat != null && s.lon != null;
+  const out = [];
+  const add = (s, where) => {
+    if (!fresh(s)) return;
+    const twin = out.find(o => hav(o.lat, o.lon, s.lat, s.lon) < 0.1);
+    if (twin) { if (s.net_price < twin.s.net_price) Object.assign(twin, {s, where}); return; }
+    out.push({lat: s.lat, lon: s.lon, s, where});
+  };
+  for (const a of b.areas || []) for (const s of a.stations || []) add(s, a.label);
+  for (const c of b.costco || []) add(c, c.where);
+  return out;
+}
+function bestHTML(r) {
+  const b = r.best;
+  const rows = r.ranked.slice(1, 3).map(x => `<div class="row"><div><a class="name" href="${dirLink(x)}" target="_blank" rel="noopener">${stName(x)}</a>
+      <div class="meta">${miles(x)} · ${esc(x.s.best_card)}</div></div>
+      <div class="price"><div class="net">${usd(x.s.net_price)}</div><div class="listed">${usd(x.s.price)} listed</div></div></div>`).join("");
+  const c = r.costco;
+  const costcoNote = c && !(r.best && /costco/i.test(b.s.name) && hav(c.lat, c.lon, b.lat, b.lon) < 0.1)
+    ? `<p class="note">Nearest Costco: <b>${esc(town(c.where)) || "Costco"}</b> · ${miles(c)} · ${c.priced ? `${usd(c.s.price)} (${usd(c.s.net_price)} net)` : "price not tracked"}</p>` : "";
+  return `<h2>Best gas near you</h2>
+    <div class="near-top">
+      <div><a class="name" href="${dirLink(b)}" target="_blank" rel="noopener">${stName(b)}</a>
+        <div class="hero-sub">${miles(b)}${r.road ? " by road" : " (rough)"} · ${esc(b.s.best_card)}</div></div>
+      <div class="price"><div class="hero-price">${usd(b.s.net_price)}</div><div class="listed">${usd(b.s.price)} listed · net after card</div></div>
+    </div>
+    ${r.saving >= SHOW_SAVING ? `<p class="note good-text">Saves $${r.saving.toFixed(2)} on ${FILL_GAL} gal vs ${stName(r.closest)} (${miles(r.closest)}), drive included.</p>` : ""}
+    ${rows}
+    ${costcoNote}
+    <p class="note">Ranked by price after your best card plus the gas to drive there and back (${FILL_GAL} gal, ${MPG} mpg), within ${MAX_DETOUR_MI} road miles.
+      Only a rounded point goes to the OSRM route server. Costco list © OpenStreetMap contributors.</p>`;
+}
+function paintNearest() {
+  const el = $("#nearest"); if (!el) return;
+  const button = label => `<button class="btn primary" id="near-btn" type="button">${label}</button>`;
+  if (NEAR.status === "done") el.innerHTML = NEAR.html;
+  else if (NEAR.status === "busy") el.innerHTML = `<h2>Best gas near you</h2><p class="note">Finding the best deal near you…</p>`;
+  else if (NEAR.status === "denied") el.innerHTML = `<h2>Best gas near you</h2>${button("📍 Try again")}
+    <p class="note">Location is off for this page. Turn it on in Settings › Apps › Safari › Location, then try again.</p>`;
+  else if (NEAR.status === "error") el.innerHTML = `<h2>Best gas near you</h2>${button("📍 Try again")}<p class="note">${esc(NEAR.err)}</p>`;
+  else el.innerHTML = `<h2>Best gas near you</h2>${button("📍 Find the best gas near me")}
+    <p class="note">Ranks the stations your tracker priced near you by price after your card and the drive there, and shows the nearest Costco.</p>`;
+  const btn = $("#near-btn"); if (btn) btn.onclick = () => findNearest(last);
+}
+async function findNearest(b) {
+  if (!b || NEAR.status === "busy") return;
+  NEAR.status = "busy"; paintNearest();
+  try {
+    const me = await wherePoint();
+    const lat = Math.round(me.lat * 100) / 100, lon = Math.round(me.lon * 100) / 100;
+    const tracked = trackedStations(b);
+    tracked.forEach(x => { x.line = hav(lat, lon, x.lat, x.lon); });
+    const inRange = tracked.filter(x => x.line <= MAX_LINE_MI).sort((p, q) => p.line - q.line);
+    const near = [...new Set([...inRange.slice(0, 15), ...inRange.filter(x => /costco/i.test(x.s.name))])];
+    const costcos = tracked.filter(x => /costco/i.test(x.s.name)).map(x => ({...x, priced: true}));
+    for (const [a, o, label] of await costcoList()) {
+      if (!costcos.some(x => hav(x.lat, x.lon, a, o) < 0.25)) costcos.push({lat: a, lon: o, where: label, s: {name: "Costco"}, priced: false});
+    }
+    costcos.forEach(x => { x.line = hav(lat, lon, x.lat, x.lon); });
+    const costco = costcos.sort((p, q) => p.line - q.line)[0] || null;
+    const twin = costco ? near.find(x => hav(x.lat, x.lon, costco.lat, costco.lon) < 0.1) : null;
+    const dests = costco && !twin ? [...near, costco] : near;
+    if (!dests.length) throw new Error("No Costco list yet; it arrives with the next tracker update.");
+    let road = false;
+    try {
+      const url = `https://router.project-osrm.org/table/v1/driving/${lon},${lat};` + dests.map(x => `${x.lon},${x.lat}`).join(";") +
+        "?sources=0&annotations=distance,duration";
+      const j = await fetch(url).then(r => r.json());
+      if (j.code === "Ok") {
+        dests.forEach((x, i) => { const m = j.distances[0][i + 1], s = j.durations[0][i + 1]; if (m != null) { x.mi = m / 1609.344; x.min = s / 60; } });
+        road = true;
+      }
+    } catch {}
+    dests.forEach(x => { if (x.mi == null) { x.mi = x.line * 1.25; x.approx = true; } });
+    if (twin) Object.assign(costco, {mi: twin.mi, min: twin.min, approx: twin.approx, s: twin.s, priced: true});
+    if (!near.length) {
+      NEAR.html = `<h2>Best gas near you</h2><p class="note">No tracked prices within ${MAX_LINE_MI} miles; your tracker covers CT–NY–NJ.</p>
+        ${costco ? `<p class="note">Nearest Costco: <b>${esc(town(costco.where))}</b> · ${miles(costco)}</p>` : ""}`;
+    } else {
+      const within = near.filter(x => x.mi <= MAX_DETOUR_MI);
+      const ranked = [...(within.length ? within : near)].sort((p, q) => realPrice(p) - realPrice(q));
+      const closest = [...near].sort((p, q) => p.mi - q.mi)[0];
+      const best = ranked[0];
+      const saving = best !== closest ? (realPrice(closest) - realPrice(best)) * FILL_GAL : 0;
+      NEAR.html = bestHTML({best, ranked, closest, saving, costco, road});
+    }
+    NEAR.status = "done"; NEAR.fixAt = Date.now();
+  } catch (e) {
+    NEAR.status = e && e.code === 1 ? "denied" : "error";
+    NEAR.err = e && e.code === 3 ? "Finding your location took too long. Try again." : (e && e.message) || "Something went wrong.";
+  }
+  paintNearest();
+}
+function autoNearest(b) {
+  if (NEAR.status === "busy" || (NEAR.status === "done" && Date.now() - NEAR.fixAt < 10 * 60000)) return;
+  if (nearHook()) return findNearest(b);
+  if (navigator.permissions && navigator.permissions.query) {
+    navigator.permissions.query({name: "geolocation"}).then(p => { if (p.state === "granted") findNearest(b); }).catch(() => {});
+  }
+}
+
 function render(b, snap, email) {
   const f = freshness(b.fetched_at);
   const css = getComputedStyle(document.documentElement);
@@ -242,6 +388,7 @@ function render(b, snap, email) {
       <p class="note">The Mac fetched ${ago(Date.now() - new Date(snap.fetched_at))}, but the cloud run hasn't processed them.
       Check <a href="https://github.com/${REPO}/actions">GitHub Actions</a>.</p></div>`);
   }
+  parts.push(`<section class="card" id="nearest"></section>`);
   const costco = (b.costco || []).filter(c => c.price != null && !c.stale);   // only current prices
   if (costco.length) {
     parts.push(`<section class="card area"><h2>Costco right now</h2>${costco.map(costcoRow).join("")}</section>`);
@@ -256,6 +403,8 @@ function render(b, snap, email) {
     <details><summary>Show as a table</summary><table id="trend-table"></table></details>
   </section>`);
   $("#app").innerHTML = parts.join("");
+  paintNearest();
+  autoNearest(b);
   if (email) mountEmail($("#email"), email);
 
   const series = [{name: "Norwalk", color: c1, points: trend.norwalk || []}, {name: "NJ Costco", color: c2, points: trend.nj_costco || []}];

@@ -22,7 +22,8 @@ NJ_COSTCO_ZIPS = ("07002", "07608")    # Bayonne, Teterboro
 TREND_DAYS = 90
 TOP_PER_AREA = 5
 STATION_FIELDS = ("name", "price", "net_price", "best_card", "card_note", "last_updated", "stale",
-                  "maps_link", "waze_link")
+                  "maps_link", "waze_link", "lat", "lon")
+SAME_PLACE_KM = 0.4    # two reports this close are the same Costco (one station can show up in two ZIP searches)
 
 
 def _daily_lows(history: list[dict], keep) -> list[list]:
@@ -35,6 +36,14 @@ def _daily_lows(history: list[dict], keep) -> list[list]:
 
 def _station(s: dict) -> dict:
     return {k: s.get(k) for k in STATION_FIELDS}
+
+
+def _km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Great-circle distance in km."""
+    from math import asin, cos, radians, sin, sqrt
+    p1, p2 = radians(lat1), radians(lat2)
+    h = sin((p2 - p1) / 2) ** 2 + cos(p1) * cos(p2) * sin(radians(lon2 - lon1) / 2) ** 2
+    return 2 * 6371.0 * asin(sqrt(h))
 
 
 def build(stations: list[dict], fetched_at: datetime, history: list[dict], *, zip_order: list[str] = (),
@@ -61,6 +70,14 @@ def build(stations: list[dict], fetched_at: datetime, history: list[dict], *, zi
     for z, where in COSTCOS:
         found = [s for s in stations if s["zip"] == z and "costco" in s["name"].lower()]
         costco.append({"zip": z, "where": where, **(_station(min(found, key=lambda s: s["net_price"])) if found else {})})
+    # Any other Costco a ZIP search turned up, once each, so the phone can pick the one nearest you.
+    for s in sorted(stations, key=lambda s: s["net_price"]):
+        if "costco" not in s["name"].lower() or s.get("lat") is None or s.get("lon") is None:
+            continue
+        if any(c.get("lat") is not None and _km(c["lat"], c["lon"], s["lat"], s["lon"]) < SAME_PLACE_KM for c in costco):
+            continue
+        near = ", ".join(x for x in (s.get("city"), s.get("state")) if x) or s["area_label"]
+        costco.append({"zip": s["zip"], "where": f"near {near}", **_station(s)})
 
     best = min(stations, key=lambda s: s["net_price"])
     return {
