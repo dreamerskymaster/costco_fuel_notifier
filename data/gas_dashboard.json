@@ -1,20 +1,30 @@
 {
- "fetched_at": "2026-11-26T16:45:40+00:00",
- "generated_at": "2026-11-26T16:46:02+00:00",
+ "fetched_at": "2026-11-26T19:50:54+00:00",
+ "generated_at": "2026-11-26T19:51:17+00:00",
  "best": {
   "name": "QuickChek",
   "price": 3.55,
   "net_price": 3.41,
   "best_card": "Citi 4% / Amex 3%",
   "card_note": "Standalone Gas Station",
-  "last_updated": "Nov 26, 11:32 AM",
+  "last_updated": "Nov 26, 02:31 PM",
   "stale": false,
   "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
   "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
   "area": "Ridgefield (Rt 46 / GWB Exit)"
  },
  "home": {
-  "cheapest": null,
+  "cheapest": {
+   "name": "Global",
+   "price": 3.79,
+   "net_price": 3.64,
+   "best_card": "Citi 4% / Amex 3%",
+   "card_note": "Standalone Gas Station",
+   "last_updated": "Nov 26, 12:12 PM",
+   "stale": false,
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
+   "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
+  },
   "low_90d": {
    "date": "2026-11-25",
    "price": 3.75
@@ -198,6 +208,10 @@
    [
     "2026-11-25",
     3.75
+   ],
+   [
+    "2026-11-26",
+    3.79
    ]
   ],
   "nj_costco": [
@@ -412,7 +426,7 @@
    "net_price": 3.41,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 26, 11:05 AM",
+   "last_updated": "Nov 26, 01:05 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -425,7 +439,7 @@
    "net_price": 3.41,
    "best_card": "Citi Costco (4%)",
    "card_note": "Visa Only",
-   "last_updated": "Nov 26, 11:05 AM",
+   "last_updated": "Nov 26, 01:05 PM",
    "stale": false,
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -437,6 +451,23 @@
  ],
  "areas": [
   {
+   "label": "Norwalk (Home)",
+   "zip": "06854",
+   "stations": [
+    {
+     "name": "Global",
+     "price": 3.79,
+     "net_price": 3.64,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 26, 12:12 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Global+06854",
+     "waze_link": "https://waze.com/ul?q=Global+06854&navigate=yes"
+    }
+   ]
+  },
+  {
    "label": "Ridgefield (Rt 46 / GWB Exit)",
    "zip": "07657",
    "stations": [
@@ -446,10 +477,21 @@
      "net_price": 3.41,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 26, 11:32 AM",
+     "last_updated": "Nov 26, 02:31 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657",
      "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes"
+    },
+    {
+     "name": "Delta",
+     "price": 3.59,
+     "net_price": 3.45,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 26, 12:28 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Delta+07657",
+     "waze_link": "https://waze.com/ul?q=Delta+07657&navigate=yes"
     }
    ]
   },
@@ -463,7 +505,7 @@
      "net_price": 3.41,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 26, 11:05 AM",
+     "last_updated": "Nov 26, 01:05 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608",
      "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes"
@@ -480,10 +522,27 @@
      "net_price": 3.5,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 26, 11:32 AM",
+     "last_updated": "Nov 26, 02:31 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601",
      "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes"
+    }
+   ]
+  },
+  {
+   "label": "Jersey City (Westside Ave)",
+   "zip": "07306",
+   "stations": [
+    {
+     "name": "Shell",
+     "price": 3.67,
+     "net_price": 3.52,
+     "best_card": "Citi 4% / Amex 3%",
+     "card_note": "Standalone Gas Station",
+     "last_updated": "Nov 26, 01:10 PM",
+     "stale": false,
+     "maps_link": "https://www.google.com/maps/search/?api=1&query=Shell+07306",
+     "waze_link": "https://waze.com/ul?q=Shell+07306&navigate=yes"
     }
    ]
   },
@@ -525,7 +584,7 @@
      "net_price": 3.41,
      "best_card": "Citi Costco (4%)",
      "card_note": "Visa Only",
-     "last_updated": "Nov 26, 11:05 AM",
+     "last_updated": "Nov 26, 01:05 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002",
      "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes"
@@ -536,7 +595,7 @@
      "net_price": 3.54,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 26, 11:00 AM",
+     "last_updated": "Nov 26, 02:01 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
@@ -547,7 +606,7 @@
      "net_price": 3.6,
      "best_card": "Citi 4% / Amex 3%",
      "card_note": "Standalone Gas Station",
-     "last_updated": "Nov 26, 11:31 AM",
+     "last_updated": "Nov 26, 02:31 PM",
      "stale": false,
      "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002",
      "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes"
@@ -567,7 +626,9 @@
   }
  ],
  "prediction_lines": [
-  "Last 30 days: average miss 14.5¢, inside range 60%, direction right 30%. Range now ±38¢, sized from recent daily jumps."
+  "Yesterday's call: $3.750 → actual $3.790. Good: off by +4.0¢, inside the range; called flat, was up.",
+  "Tomorrow (Norwalk cheapest): $3.790, likely range $3.406–$4.174, 40% chance it stays within 2¢ (recent days that did).",
+  "Last 30 days: average miss 14.4¢, inside range 63%, direction right 27%. Range now ±38¢, sized from recent daily jumps."
  ],
  "outlook_lines": [
   "Buy only what you need — prices are likely to ease.",
