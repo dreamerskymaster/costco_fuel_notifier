@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-26T19:50:54+00:00",
+ "fetched_at": "2026-11-26T23:01:44+00:00",
  "source": "mac",
  "stations": [
   {
@@ -16,7 +16,7 @@
    "formatted_net_price": "$3.41",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 26, 02:31 PM",
+   "last_updated": "Nov 26, 05:31 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07657"
   },
@@ -34,7 +34,7 @@
    "formatted_net_price": "$3.41",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 26, 01:05 PM",
+   "last_updated": "Nov 26, 04:05 PM",
    "waze_link": "https://waze.com/ul?q=Costco+07608&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07608"
   },
@@ -70,7 +70,7 @@
    "formatted_net_price": "$3.41",
    "card_note": "Visa Only",
    "stale": false,
-   "last_updated": "Nov 26, 01:05 PM",
+   "last_updated": "Nov 26, 04:05 PM",
    "waze_link": "https://waze.com/ul?q=Costco+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Costco+07002"
   },
@@ -109,6 +109,24 @@
    "last_updated": "Nov 25, 01:40 PM",
    "waze_link": "https://waze.com/ul?q=Lukoil+07657&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Lukoil+07657"
+  },
+  {
+   "name": "Wawa",
+   "zip": "07601",
+   "city": "Hackensack",
+   "state": "NJ",
+   "area_label": "Hackensack (Rt 17 Corridor)",
+   "distance": "N/A",
+   "price": 3.59,
+   "formatted_price": "$3.59",
+   "best_card": "Citi 4% / Amex 3%",
+   "net_price": 3.45,
+   "formatted_net_price": "$3.45",
+   "card_note": "Standalone Gas Station",
+   "stale": false,
+   "last_updated": "Nov 26, 04:23 PM",
+   "waze_link": "https://waze.com/ul?q=Wawa+07601&navigate=yes",
+   "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07601"
   },
   {
    "name": "US Gas",
@@ -160,7 +178,7 @@
    "formatted_net_price": "$3.50",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 26, 02:31 PM",
+   "last_updated": "Nov 26, 05:06 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07601&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07601"
   },
@@ -199,24 +217,6 @@
    "last_updated": "Nov 26, 08:26 AM",
    "waze_link": "https://waze.com/ul?q=Speedway+07305&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Speedway+07305"
-  },
-  {
-   "name": "Express Gas",
-   "zip": "07032",
-   "city": "Kearny",
-   "state": "NJ",
-   "area_label": "Kearny (Rt 7 / ~2 mi West)",
-   "distance": "N/A",
-   "price": 3.67,
-   "formatted_price": "$3.67",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.52,
-   "formatted_net_price": "$3.52",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 24, 05:55 PM",
-   "waze_link": "https://waze.com/ul?q=Express+Gas+07032&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Express+Gas+07032"
   },
   {
    "name": "Broadway Diesel & Gas",
@@ -309,24 +309,6 @@
    "maps_link": "https://www.google.com/maps/search/?api=1&query=BP+07601"
   },
   {
-   "name": "Wawa",
-   "zip": "07601",
-   "city": "Hackensack",
-   "state": "NJ",
-   "area_label": "Hackensack (Rt 17 Corridor)",
-   "distance": "N/A",
-   "price": 3.69,
-   "formatted_price": "$3.69",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.54,
-   "formatted_net_price": "$3.54",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 25, 11:33 AM",
-   "waze_link": "https://waze.com/ul?q=Wawa+07601&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07601"
-  },
-  {
    "name": "BP",
    "zip": "07047",
    "city": "North Bergen",
@@ -358,7 +340,7 @@
    "formatted_net_price": "$3.54",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 26, 02:01 PM",
+   "last_updated": "Nov 26, 05:00 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -379,24 +361,6 @@
    "last_updated": "Nov 25, 01:44 PM",
    "waze_link": "https://waze.com/ul?q=Exxon+07306&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Exxon+07306"
-  },
-  {
-   "name": "Atlantis",
-   "zip": "06854",
-   "city": "Norwalk",
-   "state": "CT",
-   "area_label": "Norwalk (Home)",
-   "distance": "N/A",
-   "price": 3.75,
-   "formatted_price": "$3.75",
-   "best_card": "Citi 4% / Amex 3%",
-   "net_price": 3.6,
-   "formatted_net_price": "$3.60",
-   "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 24, 05:47 PM",
-   "waze_link": "https://waze.com/ul?q=Atlantis+06854&navigate=yes",
-   "maps_link": "https://www.google.com/maps/search/?api=1&query=Atlantis+06854"
   },
   {
    "name": "Sunoco",
@@ -520,7 +484,7 @@
    "formatted_net_price": "$3.60",
    "card_note": "Standalone Gas Station",
    "stale": false,
-   "last_updated": "Nov 26, 02:31 PM",
+   "last_updated": "Nov 26, 05:31 PM",
    "waze_link": "https://waze.com/ul?q=QuickChek+07002&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=QuickChek+07002"
   },
@@ -699,8 +663,8 @@
    "net_price": 3.7,
    "formatted_net_price": "$3.70",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 25, 03:10 PM",
+   "stale": false,
+   "last_updated": "Nov 26, 04:23 PM",
    "waze_link": "https://waze.com/ul?q=Wawa+07032&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Wawa+07032"
   },
@@ -789,8 +753,8 @@
    "net_price": 3.79,
    "formatted_net_price": "$3.79",
    "card_note": "Standalone Gas Station",
-   "stale": true,
-   "last_updated": "Nov 25, 10:45 AM",
+   "stale": false,
+   "last_updated": "Nov 26, 05:40 PM",
    "waze_link": "https://waze.com/ul?q=Conoco+10801&navigate=yes",
    "maps_link": "https://www.google.com/maps/search/?api=1&query=Conoco+10801"
   },
